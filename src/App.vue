@@ -18,12 +18,14 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+:root {
+  background: var(--color-background);
+}
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: var(--color-text);
-  background: var(--color-background);
   &:before {
     content: "";
     pointer-events: none;
@@ -33,16 +35,13 @@ export default defineComponent({
     top: 0;
     left: 0;
     width: 100vw;
-    height: 100vh;
-    opacity: 0.05;
-    z-index: 0;
+    height: 100%;
+    opacity: 0.06;
+    z-index: -1;
   }
 }
-
 #view {
   overflow: hidden;
   flex-grow: 1;
-  position: relative;
-  z-index: 1;
 }
 </style>

@@ -1,0 +1,37 @@
+body {
+  overflow: hidden;
+}
+
+h1 {
+  font-size: 80px;
+  color: var(--color-primary);
+  margin-top: 12px;
+  margin-bottom: 10px;
+}
+
+h2 {
+  font-size: 34px;
+  color: var(--color-primary);
+  margin-top: 8px;
+  margin-bottom: 6px;
+}
+
+a {
+  font-weight: bold;
+  color: inherit;
+}
+
+a.router-link-exact-active {
+  color: var(--color-primary);
+}
+
+.alt-color {
+  color: var(--color-secondary);
+  font-weight: 900;
+  text-decoration: underline;
+}
+
+.section,
+section {
+  padding: 40px 0 60px 0;
+}

@@ -1,6 +1,6 @@
 <template>
   <div class="layout">
-    <slot>Column 1</slot>
+    <slot></slot>
   </div>
 </template>
 
@@ -10,6 +10,7 @@
   display: flex;
   flex-direction: row;
   justify-content: space-around;
+  flex-wrap: wrap;
   gap: 20px;
 }
 </style>

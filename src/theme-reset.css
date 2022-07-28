@@ -9,42 +9,14 @@
   --color-text-alt: #fcf5e6dd;
   --color-background: #171f1f;
   --color-background-alt: #232f2f;
+
   --color-primary: #ff3366;
   --color-primary-rgb: 255, 51, 102;
-  --color-primary-shade: #ff336622;
   --color-primary-alt: #fa527c;
   --color-secondary: #f4c95d;
-  --color-secondary-shade: #f4c95d22;
   --color-tertiary: #670ea1;
-}
 
-body {
-  overflow-x: hidden;
-  overflow-y: hidden;
-}
-
-h1 {
-  font-size: 80px;
-  color: var(--color-primary);
-  margin-top: 12px;
-  margin-bottom: 10px;
-}
-
-h2 {
-  font-size: 34px;
-  color: var(--color-primary);
-  margin-top: 8px;
-  margin-bottom: 6px;
-}
-
-a {
-  font-weight: bold;
-  color: inherit;
-
-}
-
-a.router-link-exact-active {
-  color: var(--color-primary);
+  --gradient-primary-secondary: linear-gradient(115deg, var(--color-primary), var(--color-secondary));
 }
 
 .p-sidebar {
@@ -134,4 +106,15 @@ a.router-link-exact-active {
   background: rgba(var(--color-primary-rgb), 0.15);
   border-color: var(--color-primary-alt);
   color: var(--color-primary-alt);
+}
+
+.p-button.p-button-gradient {
+  background: var(--gradient-primary-secondary);
+  border: none;
+}
+
+.p-button.p-button-gradient:enabled:hover {
+  background: var(--gradient-primary-secondary);
+  filter: brightness(110%);
+  transition: filter 0.1s ease-in-out;
 }

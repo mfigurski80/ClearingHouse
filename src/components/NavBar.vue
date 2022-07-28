@@ -20,7 +20,7 @@
             <i class="pi pi-home" />
           </router-link>
           <router-link to="/dashboard">
-            <i class="pi pi-chart-line" />
+            <i class="pi pi-chart-bar" />
           </router-link>
           <router-link to="/bond">
             <i class="pi pi-search" />
@@ -132,7 +132,9 @@ export default defineComponent({
   }
 }
 main {
+  overflow: hidden;
   overflow-y: auto;
+  height: 100vh;
   flex: 1;
 }
 </style>
