@@ -1,0 +1,29 @@
+name: Publish Website
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - 'master'
+jobs:
+
+  deploy-pages:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Node.js Environment
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+          cache: npm
+      - uses: c-hive/gha-npm-cache@v1
+      - name: Install project dependencies
+        run: npm ci
+
+      - name: Build site
+        run: npm run build:site
+
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4.3.4
+        with:
+          folder: dist
