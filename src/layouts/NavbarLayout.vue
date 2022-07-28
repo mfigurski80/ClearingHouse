@@ -88,9 +88,9 @@ export default defineComponent({
   height: 100vh;
 }
 .nav {
-  width: 80px;
-  flex: 0 0 80px;
-  background: var(--color-background-alt);
+  width: 100px;
+  flex: 0 0 100px;
+  background: inherit;
   &.mobile {
     width: 0;
     flex: 0 0 0px;
@@ -116,6 +116,20 @@ export default defineComponent({
 main {
   overflow-y: auto;
   flex: 1;
+  &:before {
+    content: "";
+    // pass through mouse events
+    pointer-events: none;
+    background: url(@/assets/grain-texture-2.png) left top;
+    background-size: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.05;
+    z-index: 0;
+  }
 }
 </style>
 <style lang="scss">

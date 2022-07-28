@@ -13,11 +13,20 @@
             <Button label="Read More" class="p-button-outlined" />
           </span>
         </div>
-        <img alt="Vue logo" src="@/assets/logo.png" />
+        <img
+          alt="ClearingHouse Logo"
+          src="@/assets/Group_12.svg"
+          height="290"
+          width="300"
+        />
       </ContainerLayout>
     </header>
 
-    <section class="features"></section>
+    <section class="features">
+      <ContainerLayout class="features-layout">
+        <h2>Features</h2>
+      </ContainerLayout>
+    </section>
 
     <section class="contracts"></section>
 
@@ -45,11 +54,16 @@ header.landing {
     height: 100vh;
     display: flex;
     align-items: center;
-    justify-content: space-evenly;
+    justify-content: space-between;
     & > .landing-text > * {
       margin-bottom: 40px;
       max-width: 500px;
     }
+    & > img {
+      margin: 0 70px;
+    }
   }
+}
+section.features {
 }
 </style>
