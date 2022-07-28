@@ -97,11 +97,12 @@ export default defineComponent({
 .layout {
   display: flex;
   flex-direction: row;
+  gap: 0;
   height: 100vh;
 }
 .nav-container {
-  width: 100px;
-  flex: 0 0 100px;
+  width: 70px;
+  flex: 0 0 70px;
   background: inherit;
   &.mobile {
     width: 0;

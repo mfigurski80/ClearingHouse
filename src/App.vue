@@ -18,10 +18,6 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-body {
-  overflow: hidden;
-}
-
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -30,7 +26,6 @@ body {
   background: var(--color-background);
   &:before {
     content: "";
-    // pass through mouse events
     pointer-events: none;
     background: url(@/assets/grain-texture-2.png) left top;
     background-size: cover;
@@ -44,24 +39,10 @@ body {
   }
 }
 
-h1 {
-  font-size: 80px;
-  color: var(--color-primary);
-  margin-top: 12px;
-  margin-bottom: 10px;
-}
-h2 {
-  color: var(--color-primary);
-}
-a {
-  font-weight: bold;
-  color: inherit;
-  &.router-link-exact-active {
-    color: var(--color-primary);
-  }
-}
 #view {
+  overflow: hidden;
   flex-grow: 1;
-  overflow: auto;
+  position: relative;
+  z-index: 1;
 }
 </style>

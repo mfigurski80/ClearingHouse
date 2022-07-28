@@ -18,6 +18,35 @@
   --color-tertiary: #670ea1;
 }
 
+body {
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+
+h1 {
+  font-size: 80px;
+  color: var(--color-primary);
+  margin-top: 12px;
+  margin-bottom: 10px;
+}
+
+h2 {
+  font-size: 34px;
+  color: var(--color-primary);
+  margin-top: 8px;
+  margin-bottom: 6px;
+}
+
+a {
+  font-weight: bold;
+  color: inherit;
+
+}
+
+a.router-link-exact-active {
+  color: var(--color-primary);
+}
+
 .p-sidebar {
   background: var(--color-background-alt);
   border: none;
