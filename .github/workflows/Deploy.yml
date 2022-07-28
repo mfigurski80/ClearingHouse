@@ -4,9 +4,8 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - 'master'
+      - "master"
 jobs:
-
   deploy-pages:
     runs-on: ubuntu-latest
     steps:
@@ -21,7 +20,7 @@ jobs:
         run: npm ci
 
       - name: Build site
-        run: npm run build:site
+        run: npm run build
 
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4.3.4
