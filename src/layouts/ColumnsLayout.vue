@@ -12,5 +12,8 @@
   justify-content: space-around;
   flex-wrap: wrap;
   gap: 20px;
+  // collumns gap
+  column-gap: 20px;
+  row-gap: 5px;
 }
 </style>

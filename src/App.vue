@@ -1,6 +1,8 @@
 <template>
   <NavBar>
-    <router-view id="view" />
+    <div id="view">
+      <router-view />
+    </div>
   </NavBar>
 </template>
 
@@ -36,7 +38,7 @@ export default defineComponent({
     left: 0;
     width: 100vw;
     height: 100%;
-    opacity: 0.06;
+    opacity: 0.05;
     z-index: -1;
   }
 }
