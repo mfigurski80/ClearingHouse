@@ -9,10 +9,15 @@
             NFT tokens
           </p>
           <span class="p-buttonset">
-            <Button label="Connect a Wallet" class="p-button-rounded" />
+            <Button
+              label="Connect a Wallet"
+              class="p-button-rounded"
+              icon="pi pi-wallet"
+            />
             <Button
               label="Read More"
               class="p-button-rounded p-button-outlined"
+              icon="pi pi-angle-double-down"
             />
           </span>
         </div>
@@ -26,7 +31,7 @@
     </header>
 
     <section class="features">
-      <ContainerLayout class="features-layout">
+      <ContainerLayout>
         <h2>Features</h2>
       </ContainerLayout>
     </section>

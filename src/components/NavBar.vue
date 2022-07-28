@@ -1,6 +1,6 @@
 <template>
   <div class="layout">
-    <div class="nav" :class="{ mobile: isMobileVersion }">
+    <div class="nav-container" :class="{ mobile: isMobileVersion }">
       <Sidebar
         :visible="visibleLeft || !isMobileVersion"
         @hide="hideSidebar()"
@@ -15,8 +15,20 @@
           ></div>
           <slot name="header"></slot>
         </template>
-        <nav class="nav-layout">
-          <slot name="navigation"></slot>
+        <nav class="nav">
+          <router-link to="/">
+            <i class="pi pi-home" />
+          </router-link>
+          <router-link to="/dashboard">
+            <i class="pi pi-chart-line" />
+          </router-link>
+          <router-link to="/bond">
+            <i class="pi pi-search" />
+          </router-link>
+          <div style="flex: 1"></div>
+          <router-link to="/settings">
+            <i class="pi pi-user"></i>
+          </router-link>
         </nav>
       </Sidebar>
       <Button
@@ -87,7 +99,7 @@ export default defineComponent({
   flex-direction: row;
   height: 100vh;
 }
-.nav {
+.nav-container {
   width: 100px;
   flex: 0 0 100px;
   background: inherit;
@@ -97,11 +109,17 @@ export default defineComponent({
     background: red;
   }
 }
-.nav-layout {
+.nav {
   color: var(--color-text);
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: stretch;
+  text-align: center;
+  & i.pi {
+    font-size: 20px;
+    padding: 19px 0;
+  }
 }
 .toggle-sidebar-button {
   position: absolute;
@@ -109,27 +127,12 @@ export default defineComponent({
   left: 10px;
   z-index: 2000;
   &-spacing {
-    height: 55px;
-    background: red;
+    height: 50px;
   }
 }
 main {
   overflow-y: auto;
   flex: 1;
-  &:before {
-    content: "";
-    // pass through mouse events
-    pointer-events: none;
-    background: url(@/assets/grain-texture-2.png) left top;
-    background-size: cover;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0.05;
-    z-index: 0;
-  }
 }
 </style>
 <style lang="scss">

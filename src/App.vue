@@ -1,20 +1,16 @@
 <template>
-  <NavbarLayout>
-    <template v-slot:navigation>
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </template>
+  <NavBar>
     <router-view id="view" />
-  </NavbarLayout>
+  </NavBar>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
 
-import NavbarLayout from "@/layouts/NavbarLayout.vue";
+import NavBar from "@/components/NavBar.vue";
 
 export default defineComponent({
-  components: { NavbarLayout },
+  components: { NavBar },
   data: () => ({
     visibleLeft: true,
   }),
@@ -22,12 +18,30 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+body {
+  overflow: hidden;
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: var(--color-text);
   background: var(--color-background);
+  &:before {
+    content: "";
+    // pass through mouse events
+    pointer-events: none;
+    background: url(@/assets/grain-texture-2.png) left top;
+    background-size: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    opacity: 0.05;
+    z-index: 0;
+  }
 }
 
 h1 {
