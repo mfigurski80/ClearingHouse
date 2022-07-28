@@ -134,6 +134,6 @@ main {
 </style>
 <style lang="scss">
 .p-sidebar.p-sidebar-active {
-  width: 80px;
+  width: 70px;
 }
 </style>

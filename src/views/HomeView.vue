@@ -9,8 +9,11 @@
             NFT tokens
           </p>
           <span class="p-buttonset">
-            <Button label="Connect a Wallet" />
-            <Button label="Read More" class="p-button-outlined" />
+            <Button label="Connect a Wallet" class="p-button-rounded" />
+            <Button
+              label="Read More"
+              class="p-button-rounded p-button-outlined"
+            />
           </span>
         </div>
         <img

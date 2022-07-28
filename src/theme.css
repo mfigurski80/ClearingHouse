@@ -48,6 +48,7 @@
   background: var(--color-primary);
   border-color: var(--color-primary);
   cursor: pointer;
+  padding-top: 15px;
 }
 
 .p-button:focus {
