@@ -1,30 +1,53 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view />
+  <NavbarLayout>
+    <template v-slot:navigation>
+      <router-link to="/">Home</router-link> |
+      <router-link to="/about">About</router-link>
+    </template>
+    <router-view id="view" />
+  </NavbarLayout>
 </template>
+
+<script lang="ts">
+import { defineComponent } from "vue";
+
+import NavbarLayout from "@/layouts/NavbarLayout.vue";
+
+export default defineComponent({
+  components: { NavbarLayout },
+  data: () => ({
+    visibleLeft: true,
+  }),
+});
+</script>
 
 <style lang="scss">
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+  color: var(--color-text);
+  background: var(--color-background);
 }
 
-nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
+h1 {
+  font-size: 80px;
+  color: var(--color-primary);
+  margin-top: 12px;
+  margin-bottom: 10px;
+}
+h2 {
+  color: var(--color-primary);
+}
+a {
+  font-weight: bold;
+  color: inherit;
+  &.router-link-exact-active {
+    color: var(--color-primary);
   }
+}
+#view {
+  flex-grow: 1;
+  overflow: auto;
 }
 </style>
