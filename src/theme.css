@@ -1,0 +1,105 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --color-text: #fcf5e6;
+  --color-text-alt: #fcf5e6dd;
+  --color-background: #171f1f;
+  --color-background-alt: #232f2f;
+  --color-primary: #ff3366;
+  --color-primary-rgb: 255, 51, 102;
+  --color-primary-shade: #ff336622;
+  --color-primary-alt: #fa527c;
+  --color-secondary: #f4c95d;
+  --color-secondary-shade: #f4c95d22;
+  --color-tertiary: #670ea1;
+}
+
+.p-sidebar {
+  background: var(--color-background-alt);
+  border: none;
+}
+
+.p-sidebar.p-sidebar-md {
+  width: 150px;
+}
+
+.p-sidebar .p-sidebar-header {
+  padding: 10px;
+  padding-bottom: 15px;
+  justify-content: flex-start;
+}
+
+.p-sidebar .p-sidebar-content {
+  padding: 10px;
+}
+
+
+.p-buttonset>* {
+  margin-right: 25px;
+  margin-top: 25px;
+}
+
+.p-button {
+  color: var(--color-background);
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  cursor: pointer;
+}
+
+.p-button:focus {
+  /* box-shadow: 0 0 0 1px #eee1, 0 0 2px 4px rgba(var(--color-primary-rgb), 0.3), 0 0px 2px 0 #fff3; */
+  box-shadow: 0 0 0 2px #fff2;
+}
+
+.p-button:enabled:hover {
+  background: var(--color-primary-alt);
+  border-color: var(--color-primary-alt);
+}
+
+.p-button.p-button-icon-only {
+  text-align: center;
+  padding: 0;
+  padding-top: 3px;
+  padding-right: 1px;
+}
+
+.p-button.p-button-icon-only.p-button-sm {
+  width: 2rem;
+  height: 2rem;
+  padding-top: 1px;
+  line-height: 2rem;
+}
+
+.p-button.p-button-icon-only>.p-button-label {
+  display: none;
+  width: 0;
+}
+
+.p-button.p-button-text {
+  color: var(--color-primary);
+}
+
+.p-button.p-button-text:enabled:hover {
+  color: var(--color-primary-alt);
+  background: rgba(var(--color-primary-rgb), 0.15);
+}
+
+.p-button.p-button-outlined {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.p-button.p-button-outlined:enabled:hover {
+  border-color: var(--color-primary-alt);
+  color: var(--color-primary-alt);
+}
+
+.p-button.p-button-outlined:enabled:active {
+  background: rgba(var(--color-primary-rgb), 0.15);
+  border-color: var(--color-primary-alt);
+  color: var(--color-primary-alt);
+}
