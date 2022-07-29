@@ -63,10 +63,12 @@ i.pi::before {
   border-radius: 16px;
 }
 
+
 .p-inputtext {
   color: var(--color-text);
   background: var(--color-background);
   border-color: var(--color-background-alt);
+  padding-top: 14px;
 }
 
 .p-inputtext:enabled:hover {
@@ -87,8 +89,9 @@ i.pi::before {
   color: var(--color-text);
   background: var(--color-background);
   border-color: var(--color-background-alt);
-  padding-top: 5px;
-  padding-bottom: 5px;
+  padding-top: 3px;
+  padding-bottom: 2px;
+  max-width: 100%;
 }
 
 .p-multiselect:not(.p-disabled):hover {
@@ -109,6 +112,10 @@ i.pi::before {
   background: var(--color-background-alt);
   border-color: var(--color-background);
   color: var(--color-text);
+}
+
+.p-multiselect-panel .p-multiselect-items {
+  padding: 0;
 }
 
 .p-multiselect-panel .p-multiselect-items .p-multiselect-item.p-highlight {

@@ -72,12 +72,22 @@
         Contracts
       </h2>
       <columns-layout>
-        <div class="contracts-base">
-          <p>Basic Contracts</p>
+        <div class="grow" />
+        <div class="contract">
+          <h3>LBondManager</h3>
+          <h5>Deploy at: ...</h5>
+          <p>Library of methods for interacting with Core BOND contract</p>
         </div>
-        <div class="contracts-clearing">
+
+        <div class="contract">
+          <h3>Core BOND</h3>
+          <h5>Deploy at: ...</h5>
+        </div>
+        <div class="grow" />
+        <div class="contract">
           <p>Upcoming clearinghouse contracts</p>
         </div>
+        <div class="grow" />
       </columns-layout>
     </container-layout>
   </section>
@@ -85,14 +95,14 @@
   <section id="signup">
     <container-layout>
       <h2 class="section-header-text" @click="copySectionLink('signup')">
-        Test User Registration
+        Subscribe + Testing Program
       </h2>
       <p>
         The product is currently in beta/testing phase, slated to fully release
         towards the end of 2022. Sign up to receive regular development updates
         or to directly contribute to the testing effort!
       </p>
-      <test-user-form />
+      <subscribe-form />
     </container-layout>
   </section>
 
@@ -115,7 +125,7 @@ import Button from "primevue/button";
 
 import ContainerLayout from "@/layouts/ContainerLayout.vue";
 import ColumnsLayout from "@/layouts/ColumnsLayout.vue";
-import TestUserForm from "@/components/TestUserForm.vue";
+import SubscribeForm from "@/components/SubscribeForm.vue";
 
 export default defineComponent({
   name: "HomeView",
@@ -123,7 +133,7 @@ export default defineComponent({
     Button,
     ContainerLayout,
     ColumnsLayout,
-    TestUserForm,
+    SubscribeForm,
   },
   methods: {
     copySectionLink(sectionId: string) {
@@ -194,6 +204,24 @@ section#features {
 }
 
 section#contracts {
+  p {
+    max-width: 700px;
+  }
+  .grow {
+    flex: 1;
+    flex-shrink: 1;
+  }
+  .contract {
+    width: 300px;
+    padding: 20px;
+    padding-top: 10px;
+    margin: 30px 0 20px;
+    border-radius: 20px;
+    background: var(--color-background-alt);
+    & > * {
+      margin: 16px 0 0;
+    }
+  }
 }
 
 section#signup {
