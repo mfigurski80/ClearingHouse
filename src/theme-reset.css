@@ -63,6 +63,10 @@ i.pi::before {
   border-radius: 16px;
 }
 
+.p-card .p-card-footer {
+  padding: 0;
+}
+
 
 .p-inputtext {
   color: var(--color-text);
@@ -194,6 +198,7 @@ i.pi::before {
   width: 2rem;
   height: 2rem;
   padding-top: 1px;
+  padding-left: 1px;
   line-height: 2rem;
 }
 

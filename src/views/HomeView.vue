@@ -70,26 +70,37 @@
   <section id="contracts">
     <container-layout>
       <h2 class="section-header-text" @click="copySectionLink('contracts')">
-        Contracts
+        Contracts (v0.7)
       </h2>
       <columns-layout>
-        <div class="grow" />
-        <div class="contract">
-          <h3>LBondManager</h3>
-          <h5>Deploy at: ...</h5>
-          <p>Library of methods for interacting with Core BOND contract</p>
+        <div class="group dominant">
+          <ContractCard
+            name="LBondManager"
+            address="0xdeDA2195485D97f8f81d51a32E80096821461ebe"
+            description="Series of utilities for reading and writing bonds to the heavily-compressed BOND data structure"
+            abiLink="https://mfigurski80.github.io/karmaToken/contracts/LBondManager.json"
+          />
+          <ContractCard
+            name="BOND Core"
+            address="0x33327636152A4FDb8711B895d790c790268D2023"
+            description="Core BOND protocol exposing the creation and management of tokens, management of collateral, access control, currency listings, while using data compression to ensure low gas costs"
+            abiLink="https://mfigurski80.github.io/karmaToken/contracts/Core.json"
+          />
         </div>
-
-        <div class="contract">
-          <h3>Core BOND</h3>
-          <h5>Deploy at: ...</h5>
+        <div class="group">
+          <ContractCard name="ClearingHouse" address="PENDING!" class="pending">
+            <h5>This contract is currently under development!</h5>
+            <p>
+              ClearingHouse protocol will allow 3rd party services to
+              trustlessly service non-ether debt on behalf of the debtor
+            </p>
+          </ContractCard>
         </div>
-        <div class="grow" />
-        <div class="contract">
-          <p>Upcoming clearinghouse contracts</p>
-        </div>
-        <div class="grow" />
       </columns-layout>
+      <small class="annotation">
+        *Note that no contracts have been deployed onto the main chain yet --
+        addresses listed are locations on a test chain.
+      </small>
     </container-layout>
   </section>
 
@@ -129,6 +140,7 @@ import ContainerLayout from "@/layouts/ContainerLayout.vue";
 import ColumnsLayout from "@/layouts/ColumnsLayout.vue";
 import SubscribeForm from "@/components/SubscribeForm.vue";
 import SocialIcons from "@/components/SocialIcons.vue";
+import ContractCard from "@/components/ContractCard.vue";
 
 export default defineComponent({
   name: "HomeView",
@@ -138,6 +150,7 @@ export default defineComponent({
     ColumnsLayout,
     SubscribeForm,
     SocialIcons,
+    ContractCard,
   },
   methods: {
     copySectionLink(sectionId: string) {
@@ -216,23 +229,24 @@ section#features {
 }
 
 section#contracts {
-  p {
-    max-width: 700px;
-  }
-  .grow {
-    flex: 1;
-    flex-shrink: 1;
-  }
-  .contract {
-    width: 300px;
-    padding: 20px;
-    padding-top: 10px;
-    margin: 30px 0 20px;
-    border-radius: 20px;
-    background: var(--color-background-alt);
-    & > * {
-      margin: 16px 0 0;
+  .group {
+    margin: 20px 0;
+    flex: 1 2;
+    display: flex;
+    gap: 15px;
+    flex-direction: row;
+    justify-content: center;
+    align-items: stretch;
+    flex-wrap: wrap;
+    &.dominant {
+      flex: 2 0;
     }
+    .pending h5 {
+      padding-bottom: 14px;
+    }
+  }
+  .annotation {
+    color: var(--color-text-alt);
   }
 }
 
