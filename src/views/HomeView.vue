@@ -24,6 +24,7 @@
             icon="pi pi-angle-double-down"
           />
         </span>
+        <social-icons class="social-icons" />
       </div>
       <img alt="ClearingHouse Logo" src="@/assets/Group_12_2.png" width="300" />
     </container-layout>
@@ -107,6 +108,7 @@
   </section>
 
   <footer class="section">
+    <social-icons />
     <h5>
       Have questions or comments? Email me at
       <a href="mailto:miko.f80@gmail.com">miko.f80@gmail.com</a>!
@@ -126,6 +128,7 @@ import Button from "primevue/button";
 import ContainerLayout from "@/layouts/ContainerLayout.vue";
 import ColumnsLayout from "@/layouts/ColumnsLayout.vue";
 import SubscribeForm from "@/components/SubscribeForm.vue";
+import SocialIcons from "@/components/SocialIcons.vue";
 
 export default defineComponent({
   name: "HomeView",
@@ -134,6 +137,7 @@ export default defineComponent({
     ContainerLayout,
     ColumnsLayout,
     SubscribeForm,
+    SocialIcons,
   },
   methods: {
     copySectionLink(sectionId: string) {
@@ -178,9 +182,17 @@ header#landing {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    & > .landing-text > * {
-      margin-bottom: 40px;
+    & > .landing-text {
       max-width: 500px;
+      & > * {
+        margin-bottom: 35px;
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+      & > .social-icons {
+        font-size: 18px;
+      }
     }
     & > img {
       margin: 0 70px;
