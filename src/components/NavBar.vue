@@ -19,14 +19,14 @@
           <router-link to="/">
             <i class="pi pi-home" />
           </router-link>
-          <router-link to="/dashboard">
+          <router-link to="/not-implemented">
             <i class="pi pi-chart-bar" />
           </router-link>
-          <router-link to="/bond">
+          <router-link to="/not-implemented">
             <i class="pi pi-search" />
           </router-link>
           <div style="flex: 1"></div>
-          <router-link to="/settings">
+          <router-link to="/not-implemented">
             <i class="pi pi-user"></i>
           </router-link>
         </nav>

@@ -33,6 +33,11 @@ const routes: Array<RouteRecordRaw> = [
     name: "settings",
     component: () => import("@/views/SettingsView.vue"),
   },
+  {
+    path: "/not-implemented",
+    name: "not-implemented",
+    component: () => import("@/views/UnimplementedView.vue"),
+  },
 ];
 
 const router = createRouter({

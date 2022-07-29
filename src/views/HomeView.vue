@@ -72,18 +72,18 @@
       <h2 class="section-header-text" @click="copySectionLink('contracts')">
         Contracts (v0.7)
       </h2>
-      <columns-layout>
+      <columns-layout class="spaced">
         <div class="group dominant">
           <ContractCard
             name="LBondManager"
             address="0xdeDA2195485D97f8f81d51a32E80096821461ebe"
-            description="Series of utilities for reading and writing bonds to the heavily-compressed BOND data structure"
+            description="Provides a series of utilities for reading and writing bonds to the heavily-compressed BOND data structure."
             abiLink="https://mfigurski80.github.io/karmaToken/contracts/LBondManager.json"
           />
           <ContractCard
             name="BOND Core"
             address="0x33327636152A4FDb8711B895d790c790268D2023"
-            description="Core BOND protocol exposing the creation and management of tokens, management of collateral, access control, currency listings, while using data compression to ensure minimum gas usage"
+            description="BOND ERC721 protocol exposes the creation and management of tokens, management of collateral, access control, currency listings, while using data compression to ensure minimum gas usage."
             abiLink="https://mfigurski80.github.io/karmaToken/contracts/Core.json"
           />
         </div>
@@ -92,7 +92,7 @@
             <h5>This contract is currently under development!</h5>
             <p>
               ClearingHouse protocol will allow 3rd party services to
-              trustlessly service non-ether debt on behalf of the debtor
+              trustlessly service non-ether debt on behalf of the debtor.
             </p>
           </ContractCard>
         </div>
@@ -109,7 +109,7 @@
       <h2 class="section-header-text" @click="copySectionLink('signup')">
         Subscribe + Testing Program
       </h2>
-      <p>
+      <p class="squeeze">
         The product is currently in beta/testing phase, slated to fully release
         towards the end of 2022. Sign up to receive regular development updates
         or to directly contribute to the testing effort!
@@ -187,6 +187,13 @@ export default defineComponent({
       opacity: 1;
     }
   }
+}
+.squeeze {
+  max-width: 700px;
+}
+.spaced {
+  margin-top: 24px;
+  margin-bottom: 24px;
 }
 
 header#landing {
