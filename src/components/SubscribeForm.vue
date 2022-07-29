@@ -2,12 +2,13 @@
   <form
     action="https://getform.io/f/dda2d02f-e219-4356-9b93-04791bb1a963"
     method="POST"
-    @submit.prevent="handleSubmit($event)"
+    @submit.prevent="handleSubmit()"
     class="p-fluid"
   >
-    <columns-layout v-if="submissionState !== SubmissionState.DONE">
+    <columns-layout v-if="state !== FormState.DONE">
       <div class="full-col">
-        <div class="input-block">
+        <!-- NAME FIELD -->
+        <div class="input-field">
           <h4><label for="name">How should we address you?</label></h4>
           <input-text
             type="text"
@@ -17,7 +18,8 @@
             placeholder="John Doe"
           />
         </div>
-        <div class="input-block">
+        <!-- EMAIL FIELD -->
+        <div class="input-field">
           <h4><label for="email">What is your email address?</label></h4>
           <input-text
             type="email"
@@ -27,17 +29,8 @@
             placeholder="john@doe.com"
           />
         </div>
-        <div class="input-block">
-          <h4><label for="cat">How would you classify yourself?</label></h4>
-          <multi-select
-            v-model="categoriesChosen"
-            :options="categories"
-            optionLabel="value"
-            placeholder="Select Classificiation"
-            display="chip"
-          />
-        </div>
-        <div class="input-block inline">
+        <!-- TEST-USER INPUT -->
+        <div class="input-field inline">
           <Checkbox
             id="test-user"
             name="test-user"
@@ -51,9 +44,21 @@
         </div>
       </div>
       <div class="full-col">
-        <div class="input-block">
+        <!-- CATEGORY INPUT -->
+        <div class="input-field">
+          <h4><label for="cat">How would you classify yourself?</label></h4>
+          <multi-select
+            v-model="categoriesChosen"
+            :options="categories"
+            optionLabel="value"
+            placeholder="Select Classificiation"
+            display="chip"
+          />
+        </div>
+        <!-- MESSAGE INPUT -->
+        <div class="input-field">
           <h4><label for="message">Send us a message!</label></h4>
-          <Textarea v-model="message" rows="11" name="message" id="message" />
+          <Textarea v-model="message" rows="4" name="message" id="message" />
         </div>
       </div>
     </columns-layout>
@@ -63,12 +68,10 @@
     <Button
       type="submit"
       class="p-button-raised p-button-text submit-button"
-      :loading="submissionState === SubmissionState.LOADING"
-      :disabled="submissionState === SubmissionState.DONE"
-      :icon="`pi ${
-        submissionState === SubmissionState.DONE ? 'pi-check' : 'pi-upload'
-      }`"
-      :label="submissionState"
+      :loading="state === FormState.LOADING"
+      :disabled="state === FormState.DONE"
+      :icon="`pi ${state === FormState.DONE ? 'pi-check' : 'pi-upload'}`"
+      :label="buttonText[state] || 'Submit'"
     />
   </form>
 </template>
@@ -80,19 +83,26 @@ import MultiSelect from "primevue/multiselect";
 import Textarea from "primevue/textarea";
 import Button from "primevue/button";
 import Checkbox from "primevue/checkbox";
-// import { email, required } from "@vuelidate/validators";
-// import { useVuelidate } from "@vuelidate/core";
 
-enum SubmissionState {
-  INITIAL = "Send",
-  LOADING = "Sending...",
-  DONE = "Done",
+enum FormState {
+  INITIAL,
+  INPUT_ERROR,
+  LOADING,
+  SERVER_ERROR,
+  DONE,
 }
 
 import ColumnsLayout from "@/layouts/ColumnsLayout.vue";
 
 export default defineComponent({
   name: "TestUserForm",
+  setup: () => ({
+    FormState,
+    buttonText: {
+      [FormState.LOADING]: "Sending...",
+      [FormState.DONE]: "Done",
+    },
+  }),
   data: () => ({
     name: "",
     email: "",
@@ -106,8 +116,7 @@ export default defineComponent({
       { value: "Crypto Enthusiast" },
       { value: "Other" },
     ],
-    SubmissionState,
-    submissionState: SubmissionState.INITIAL,
+    state: FormState.INITIAL,
   }),
   components: {
     InputText,
@@ -119,10 +128,10 @@ export default defineComponent({
   },
   methods: {
     handleSubmit() {
-      this.submissionState = SubmissionState.LOADING;
+      this.state = FormState.LOADING;
       console.log("Submitting form");
       setTimeout(() => {
-        this.submissionState = SubmissionState.DONE;
+        this.state = FormState.DONE;
       }, 5000);
     },
   },
@@ -130,13 +139,12 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
-// Assuming this will be placed on a light background (ideally, primary gradient)
+// Assuming this will be placed on a light background (ideally, gradient primary-secondary)
 form {
   padding: 12px 0;
-  .input-block {
+  .input-field {
     margin-top: 25px;
     margin-bottom: 6px;
-    max-width: 700px;
     &.inline {
       display: flex;
       flex-direction: row;
@@ -151,13 +159,13 @@ form {
     }
     textarea {
       width: 100%;
-      min-width: 300px;
     }
     .p-checkbox .p-checkbox-box.p-highlight {
       background-color: #fff;
     }
   }
   .full-col {
+    min-width: 400px;
     flex: 1;
   }
   .p-button.submit-button {
