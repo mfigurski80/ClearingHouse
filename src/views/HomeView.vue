@@ -25,12 +25,7 @@
           />
         </span>
       </div>
-      <img
-        alt="ClearingHouse Logo"
-        src="@/assets/Group_12.svg"
-        height="290"
-        width="300"
-      />
+      <img alt="ClearingHouse Logo" src="@/assets/Group_12_2.png" width="300" />
     </container-layout>
   </header>
 
@@ -42,6 +37,7 @@
       <columns-layout>
         <div class="feature">
           <i class="pi pi-briefcase" />
+          <h3>Access</h3>
           <p>
             Gain <strong>granular, low-level access</strong> to the same
             investment vehicles that banks and investment funds use -- exposing
@@ -50,6 +46,7 @@
         </div>
         <div class="feature">
           <i class="pi pi-chart-line" />
+          <h3>Efficiency</h3>
           <p>
             Free the financial landscape from centralized finance with
             <strong>user-controlled interest rates</strong>, lowering entry
@@ -58,10 +55,11 @@
         </div>
         <div class="feature">
           <i class="pi pi-book" />
+          <h3>Security</h3>
           <p>
             Easily create, service, and manage various
-            <strong>types of debt derivatives</strong>, including shorts,
-            options, and more
+            <strong>forms of debt derivatives and instruments</strong>,
+            including: shorts, options, and more
           </p>
         </div>
       </columns-layout>
@@ -73,6 +71,14 @@
       <h2 class="section-header-text" @click="copySectionLink('contracts')">
         Contracts
       </h2>
+      <columns-layout>
+        <div class="contracts-base">
+          <p>Basic Contracts</p>
+        </div>
+        <div class="contracts-clearing">
+          <p>Upcoming clearinghouse contracts</p>
+        </div>
+      </columns-layout>
     </container-layout>
   </section>
 
@@ -81,12 +87,25 @@
       <h2 class="section-header-text" @click="copySectionLink('signup')">
         Test User Registration
       </h2>
-      <test-user-registration />
+      <p>
+        The product is currently in beta/testing phase, slated to fully release
+        towards the end of 2022. Sign up to receive regular development updates
+        or to directly contribute to the testing effort!
+      </p>
+      <test-user-form />
     </container-layout>
   </section>
 
   <footer class="section">
-    <p>Footer</p>
+    <h5>
+      Have questions or comments? Email me at
+      <a href="mailto:miko.f80@gmail.com">miko.f80@gmail.com</a>!
+    </h5>
+    <h5>
+      Check out more of my work <a href="https://meeksfigs.surge.sh">here</a>,
+      or read my <a href="https://devlog.surge.sh">blog</a> for updates!
+    </h5>
+    <h6>Copywrite Mikolaj Figurski (c) 2022</h6>
   </footer>
 </template>
 
@@ -96,7 +115,7 @@ import Button from "primevue/button";
 
 import ContainerLayout from "@/layouts/ContainerLayout.vue";
 import ColumnsLayout from "@/layouts/ColumnsLayout.vue";
-import TestUserRegistration from "@/components/TestUserRegistration.vue";
+import TestUserForm from "@/components/TestUserForm.vue";
 
 export default defineComponent({
   name: "HomeView",
@@ -104,7 +123,7 @@ export default defineComponent({
     Button,
     ContainerLayout,
     ColumnsLayout,
-    TestUserRegistration,
+    TestUserForm,
   },
   methods: {
     copySectionLink(sectionId: string) {
@@ -122,6 +141,7 @@ export default defineComponent({
   border-bottom: 2px solid transparent;
   transition: border-color 0.2s ease-in-out;
   padding-right: 43px;
+  margin-bottom: 12px;
   &::before {
     content: "\e9c1";
     font-family: "primeicons";
@@ -163,12 +183,17 @@ section#features {
   .feature {
     text-align: center;
     max-width: 300px;
-    margin-top: 30px;
+    margin-top: 22px;
+    & > * {
+      padding: 8px 0;
+    }
     i.pi {
       font-size: 26px;
-      padding-bottom: 30px;
     }
   }
+}
+
+section#contracts {
 }
 
 section#signup {
@@ -177,18 +202,25 @@ section#signup {
   border-radius: 30px;
   margin: 0 7px;
   margin-bottom: -40px;
+  position: relative;
+  z-index: 1;
   color: var(--color-background-alt);
   box-shadow: var(--shadow-1);
-
   h2 {
     color: var(--color-background-alt);
+  }
+  p {
+    max-width: 700px;
   }
 }
 
 footer {
-  position: relative;
-  z-index: -1;
   padding-top: 80px;
   background: var(--color-background-alt);
+  color: var(--color-text-alt);
+  text-align: center;
+  & > * {
+    padding: 6px;
+  }
 }
 </style>

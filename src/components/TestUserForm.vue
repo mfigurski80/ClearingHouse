@@ -64,7 +64,7 @@ import Button from "primevue/button";
 import ColumnsLayout from "@/layouts/ColumnsLayout.vue";
 
 export default defineComponent({
-  name: "TestUserRegistration",
+  name: "TestUserForm",
   data: () => ({
     name: "",
     email: "",
@@ -89,6 +89,7 @@ export default defineComponent({
   methods: {
     handleSubmit(e: Event) {
       e.preventDefault();
+      this.isSubmitting = true;
       console.log("Submitting form");
     },
   },
