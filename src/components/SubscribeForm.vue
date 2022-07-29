@@ -1,10 +1,5 @@
 <template>
-  <form
-    action="https://getform.io/f/dda2d02f-e219-4356-9b93-04791bb1a963"
-    method="POST"
-    @submit.prevent="handleSubmit()"
-    class="p-fluid"
-  >
+  <form @submit.prevent="handleSubmit()" class="p-fluid">
     <columns-layout v-if="state !== FormState.DONE">
       <div class="full-col">
         <!-- NAME FIELD -->
@@ -37,6 +32,7 @@
             :binary="true"
             v-model="isTestUser"
             class="checkbox"
+            tabindex="0"
           />
           <h4>
             <label for="test-user">Request beta access as a test user?</label>
@@ -84,6 +80,8 @@ import Textarea from "primevue/textarea";
 import Button from "primevue/button";
 import Checkbox from "primevue/checkbox";
 
+import ColumnsLayout from "@/layouts/ColumnsLayout.vue";
+
 enum FormState {
   INITIAL,
   INPUT_ERROR,
@@ -91,11 +89,15 @@ enum FormState {
   SERVER_ERROR,
   DONE,
 }
-
-import ColumnsLayout from "@/layouts/ColumnsLayout.vue";
+const COOKIE_KEY = "subscribe_form_submitted";
 
 export default defineComponent({
   name: "TestUserForm",
+  beforeMount() {
+    this.state = this.$cookies.isKey(COOKIE_KEY)
+      ? FormState.DONE
+      : FormState.INITIAL;
+  },
   setup: () => ({
     FormState,
     buttonText: {
@@ -106,7 +108,7 @@ export default defineComponent({
   data: () => ({
     name: "",
     email: "",
-    categoriesChosen: [],
+    categoriesChosen: [] as { value: string }[],
     isTestUser: false,
     message: "",
     categories: [
@@ -129,10 +131,27 @@ export default defineComponent({
   methods: {
     handleSubmit() {
       this.state = FormState.LOADING;
-      console.log("Submitting form");
-      setTimeout(() => {
-        this.state = FormState.DONE;
-      }, 5000);
+      let payload = JSON.stringify({
+        name: this.name,
+        email: this.email,
+        categories: this.categoriesChosen.map((c) => c.value),
+        isTestUser: this.isTestUser,
+        message: this.message,
+        time: new Date().toISOString(),
+      });
+      fetch("https://getform.io/f/dda2d02f-e219-4356-9b93-04791bb1a963", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: payload,
+      }).then((resp) => {
+        if (resp.ok) {
+          this.state = FormState.DONE;
+          this.$cookies.set(COOKIE_KEY, "_");
+        } else {
+          alert("An error occurred. Please try again later.");
+          this.state = FormState.SERVER_ERROR;
+        }
+      });
     },
   },
 });

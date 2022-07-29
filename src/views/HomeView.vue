@@ -83,7 +83,7 @@
           <ContractCard
             name="BOND Core"
             address="0x33327636152A4FDb8711B895d790c790268D2023"
-            description="Core BOND protocol exposing the creation and management of tokens, management of collateral, access control, currency listings, while using data compression to ensure low gas costs"
+            description="Core BOND protocol exposing the creation and management of tokens, management of collateral, access control, currency listings, while using data compression to ensure minimum gas usage"
             abiLink="https://mfigurski80.github.io/karmaToken/contracts/Core.json"
           />
         </div>
