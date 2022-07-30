@@ -184,7 +184,7 @@ form {
     }
   }
   .full-col {
-    min-width: 400px;
+    min-width: 300px;
     flex: 1;
   }
   .p-button.submit-button {
