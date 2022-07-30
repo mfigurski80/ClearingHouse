@@ -1,2 +1,2 @@
 "use strict";(self["webpackChunkclearing_house"]=self["webpackChunkclearing_house"]||[]).push([[665],{8665:function(n,e,s){s.r(e),s.d(e,{default:function(){return d}});var a=s(3396);const r={class:"bond-details"},u=(0,a._)("h1",null,"This is a bond-details page",-1),i=[u];function t(n,e){return(0,a.wg)(),(0,a.iD)("div",r,i)}var c=s(89);const l={},o=(0,c.Z)(l,[["render",t]]);var d=o}}]);
-//# sourceMappingURL=665.15601f10.js.map
+//# sourceMappingURL=665.285fe916.js.map
