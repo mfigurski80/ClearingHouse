@@ -1,32 +1,40 @@
 <template>
   <header id="landing">
     <container-layout class="landing-layout">
-      <div class="landing-text">
-        <h1>
-          <a class="alt-color" href="http://mfigurski80.github.io/karmaToken"
-            >BOND</a
-          >
-          Token ClearingHouse
-        </h1>
-        <p>
-          A user-oriented clearing house for virtual debt represented by BOND
-          NFT tokens
-        </p>
-        <span class="p-buttonset">
-          <Button
-            label="Connect a Wallet"
-            class="p-button-rounded p-button-gradient"
-            icon="pi pi-wallet"
-          />
-          <Button
-            label="Read More"
-            class="p-button-rounded p-button-outlined"
-            icon="pi pi-angle-double-down"
-          />
-        </span>
-        <social-icons class="social-icons" />
+      <div class="frame main">
+        <div class="landing-text">
+          <h1>
+            <a class="alt-color" href="http://mfigurski80.github.io/karmaToken"
+              >BOND</a
+            >
+            Token ClearingHouse
+          </h1>
+          <p>
+            A user-oriented clearing house for virtual debt represented by BOND
+            NFT tokens
+          </p>
+          <span class="p-buttonset">
+            <Button
+              label="Connect a Wallet"
+              class="p-button-rounded p-button-gradient"
+              icon="pi pi-wallet"
+            />
+            <Button
+              label="Read More"
+              class="p-button-rounded p-button-outlined"
+              icon="pi pi-angle-double-down"
+            />
+          </span>
+          <social-icons class="social-icons" />
+        </div>
       </div>
-      <img alt="ClearingHouse Logo" src="@/assets/Group_12_2.png" width="300" />
+      <div class="frame back">
+        <img
+          alt="ClearingHouse Logo"
+          src="@/assets/Group_12_2.png"
+          width="300"
+        />
+      </div>
     </container-layout>
   </header>
 
@@ -141,6 +149,7 @@ import ColumnsLayout from "@/layouts/ColumnsLayout.vue";
 import SubscribeForm from "@/components/SubscribeForm.vue";
 import SocialIcons from "@/components/SocialIcons.vue";
 import ContractCard from "@/components/ContractCard.vue";
+import StackedLayout from "@/layouts/StackedLayout.vue";
 
 export default defineComponent({
   name: "HomeView",
@@ -151,6 +160,7 @@ export default defineComponent({
     SubscribeForm,
     SocialIcons,
     ContractCard,
+    // StackedLayout,
   },
   methods: {
     copySectionLink(sectionId: string) {
@@ -199,26 +209,51 @@ export default defineComponent({
 header#landing {
   & > .landing-layout {
     height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    & > .landing-text {
-      max-width: 500px;
-      & > * {
-        margin-bottom: 35px;
-        &:last-child {
-          margin-bottom: 0;
+    position: relative;
+    & > .frame {
+      height: 100%;
+      width: calc(100% - 40px);
+      position: absolute;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      &.main {
+        justify-content: left;
+        z-index: 4;
+      }
+      &.back {
+        justify-content: right;
+        z-index: 3;
+      }
+      & > .landing-text {
+        max-width: 500px;
+        & > * {
+          margin-bottom: 35px;
+          &:last-child {
+            margin-bottom: 0;
+          }
+        }
+        & > .social-icons {
+          font-size: 18px;
         }
       }
-      & > .social-icons {
-        font-size: 18px;
+      & > img {
+        margin: 0 70px;
+        width: 300px;
+        height: 300px;
       }
-    }
-    & > img {
-      margin: 0 70px;
     }
   }
 }
+@media only screen and (max-width: 1000px) {
+  header#landing > .landing-layout > .frame.back {
+    opacity: 0.3;
+    & > img {
+      margin: 0 10px;
+    }
+  }
+}
+
 section#features {
   background: var(--color-background-alt);
   box-shadow: var(--shadow-1);

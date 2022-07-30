@@ -34,13 +34,13 @@
         </nav>
       </Sidebar>
       <Button
-        v-if="isMobileVersion && !visibleLeft"
+        v-if="!visibleLeft"
         @click="showSidebar"
         icon="pi pi-bars"
         class="p-button-rounded p-button-text p-button-icon-only toggle-sidebar-button"
       />
       <Button
-        v-if="isMobileVersion && visibleLeft"
+        v-if="visibleLeft"
         @click="hideSidebar"
         icon="pi pi-times"
         class="p-button-rounded p-button-text p-button-icon-only toggle-sidebar-button"
@@ -102,6 +102,7 @@ export default defineComponent({
   gap: 0;
   height: 100vh;
 }
+
 .nav-container {
   width: 70px;
   flex: 0 0 70px;
@@ -126,11 +127,12 @@ export default defineComponent({
 }
 .toggle-sidebar-button {
   position: absolute;
-  top: 10px;
-  left: 10px;
+  top: 20px;
+  left: 25px;
   z-index: 2000;
+  display: none;
   &-spacing {
-    height: 50px;
+    height: 65px;
   }
 }
 main {
@@ -139,14 +141,28 @@ main {
   height: 100vh;
   flex: 1;
 }
+@media only screen and (max-width: 1000px) {
+  .toggle-sidebar-button {
+    display: block;
+  }
+  .nav i.pi {
+    padding: 26px 0;
+  }
+}
 </style>
 <style lang="scss">
 .p-sidebar.p-sidebar-active.p-sidebar-sm {
   width: 70px;
 }
-@media only screen and (min-width: 1000px) {
+.p-sidebar-mask {
+  display: none;
+}
+@media only screen and (max-width: 1000px) {
+  .p-sidebar.p-sidebar-active.p-sidebar-sm {
+    width: 100px;
+  }
   .p-sidebar-mask {
-    display: none;
+    display: block;
   }
 }
 </style>

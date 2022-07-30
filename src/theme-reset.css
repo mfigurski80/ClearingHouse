@@ -19,6 +19,8 @@
   --gradient-primary-secondary: linear-gradient(125deg, var(--color-primary) -20%, var(--color-secondary) 100%);
 
   --shadow-1: 0px 0px 10px rgba(0, 0, 0, 0.3);
+
+  --mobile-breakpoint: 1000px;
 }
 
 
