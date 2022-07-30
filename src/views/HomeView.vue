@@ -149,7 +149,6 @@ import ColumnsLayout from "@/layouts/ColumnsLayout.vue";
 import SubscribeForm from "@/components/SubscribeForm.vue";
 import SocialIcons from "@/components/SocialIcons.vue";
 import ContractCard from "@/components/ContractCard.vue";
-import StackedLayout from "@/layouts/StackedLayout.vue";
 
 export default defineComponent({
   name: "HomeView",
@@ -160,7 +159,6 @@ export default defineComponent({
     SubscribeForm,
     SocialIcons,
     ContractCard,
-    // StackedLayout,
   },
   methods: {
     copySectionLink(sectionId: string) {
