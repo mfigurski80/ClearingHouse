@@ -5,8 +5,10 @@
         :visible="visibleLeft || !isMobileVersion"
         @hide="hideSidebar()"
         @show="showSidebar()"
+        dismissable="true"
+        modal="true"
         :showCloseIcon="false"
-        class="sidebar-container"
+        class="sidebar-container p-sidebar-sm"
       >
         <template v-slot:header>
           <div
@@ -139,7 +141,12 @@ main {
 }
 </style>
 <style lang="scss">
-.p-sidebar.p-sidebar-active {
+.p-sidebar.p-sidebar-active.p-sidebar-sm {
   width: 70px;
+}
+@media only screen and (min-width: 1000px) {
+  .p-sidebar-mask {
+    display: none;
+  }
 }
 </style>
