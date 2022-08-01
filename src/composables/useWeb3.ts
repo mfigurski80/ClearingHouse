@@ -21,7 +21,7 @@ const useWeb3Provider = () => {
   const signer = ref<providers.JsonRpcSigner | null>(null);
   const wallet = ref<string | null>(null);
 
-  const connect = async (askUser = true) => {
+  async function connect(byUser = true) {
     // Check if web3 is available
     if (!window.ethereum) {
       alert("No web3 detected. Please install MetaMask.");
@@ -37,7 +37,7 @@ const useWeb3Provider = () => {
       );
 
     // wait for user to confirm connection
-    if (askUser) await provider.value.send("eth_requestAccounts", []);
+    if (byUser) await provider.value.send("eth_requestAccounts", []);
 
     signer.value = provider.value.getSigner();
     if (signer.value === undefined) {
@@ -56,7 +56,7 @@ const useWeb3Provider = () => {
     provider.value
       .removeListener("accountsChanged", handleAccountsChanged)
       .on("accountsChanged", handleAccountsChanged);
-  };
+  }
 
   onMounted(() => {
     connect(false).catch(() => {

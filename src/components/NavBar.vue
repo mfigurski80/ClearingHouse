@@ -21,7 +21,7 @@
           <router-link to="/">
             <i class="pi pi-home" />
           </router-link>
-          <router-link to="/not-implemented">
+          <router-link to="/dashboard">
             <i class="pi pi-chart-bar" />
           </router-link>
           <router-link to="/not-implemented">
