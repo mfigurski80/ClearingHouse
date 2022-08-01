@@ -1,4 +1,4 @@
-import { ref, reactive, onMounted, onUnmounted } from "vue";
+import { ref, onMounted, onUnmounted } from "vue";
 import { ethers, providers } from "ethers";
 
 import { PromiseWithTimeout } from "@/utils/promWithTimout";

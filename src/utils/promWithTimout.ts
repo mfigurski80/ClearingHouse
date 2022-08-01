@@ -1,10 +1,13 @@
-export const PromiseWithTimeout = (promise: Promise<any>, timeout: number) => {
+export function PromiseWithTimeout<T>(
+  promise: Promise<T>,
+  timeout: number
+): Promise<T> {
   return Promise.race([
     promise,
-    new Promise((res, rej) =>
+    new Promise<T>((_res, rej) =>
       window.setTimeout(() => {
         rej("Timed out");
       }, timeout)
     ),
   ]);
-};
+}
