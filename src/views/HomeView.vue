@@ -14,17 +14,12 @@
             NFT tokens
           </p>
           <span class="p-buttonset">
-            <Button
-              label="Connect a Wallet"
-              class="p-button-rounded p-button-gradient"
-              icon="pi pi-wallet"
-            />
+            <connect-wallet-button />
             <Button
               label="Read More"
               class="p-button-rounded p-button-outlined"
               icon="pi pi-angle-double-down"
             />
-            <connect-wallet-button />
           </span>
           <social-icons class="social-icons" />
         </div>
