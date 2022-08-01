@@ -5,8 +5,8 @@
         :visible="visibleLeft || !isMobileVersion"
         @hide="hideSidebar()"
         @show="showSidebar()"
-        dismissable="true"
-        modal="true"
+        :dismissable="true"
+        :modal="true"
         :showCloseIcon="false"
         class="sidebar-container p-sidebar-sm"
       >

@@ -8,12 +8,6 @@ const routes: Array<RouteRecordRaw> = [
     component: HomeView,
   },
   {
-    path: "/connect",
-    name: "connect",
-    component: () =>
-      import(/* webpackChunkName: "about" */ "@/views/ConnectView.vue"),
-  },
-  {
     path: "/dashboard",
     name: "dashboard",
     component: () => import("@/views/DashboardView.vue"),

@@ -24,6 +24,7 @@
               class="p-button-rounded p-button-outlined"
               icon="pi pi-angle-double-down"
             />
+            <connect-wallet-button />
           </span>
           <social-icons class="social-icons" />
         </div>
@@ -149,6 +150,7 @@ import ColumnsLayout from "@/layouts/ColumnsLayout.vue";
 import SubscribeForm from "@/components/SubscribeForm.vue";
 import SocialIcons from "@/components/SocialIcons.vue";
 import ContractCard from "@/components/ContractCard.vue";
+import ConnectWalletButton from "@/components/ConnectWalletButton.vue";
 
 export default defineComponent({
   name: "HomeView",
@@ -159,6 +161,7 @@ export default defineComponent({
     SubscribeForm,
     SocialIcons,
     ContractCard,
+    ConnectWalletButton,
   },
   methods: {
     copySectionLink(sectionId: string) {
