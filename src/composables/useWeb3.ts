@@ -14,13 +14,12 @@ const handleAccountsChanged = () => {
   window.location.reload();
 };
 
-const useWeb3Provider = () => {
-  // Init all state
-  const status = ref<ConnectionStatus>(ConnectionStatus.DISCONNECTED);
-  const provider = ref<providers.Web3Provider | null>(null);
-  const signer = ref<providers.JsonRpcSigner | null>(null);
-  const wallet = ref<string | null>(null);
+export const status = ref<ConnectionStatus>(ConnectionStatus.DISCONNECTED);
+export const provider = ref<providers.Web3Provider | null>(null);
+export const signer = ref<providers.JsonRpcSigner | null>(null);
+export const wallet = ref<string | null>(null);
 
+const useWeb3Provider = () => {
   async function connect(byUser = true) {
     // Check if web3 is available
     if (!window.ethereum) {
@@ -29,7 +28,6 @@ const useWeb3Provider = () => {
       return;
     }
     // If it is, set the provider
-    status.value = ConnectionStatus.CONNECTING;
     if (!provider.value)
       provider.value = new ethers.providers.Web3Provider(
         window.ethereum,
@@ -37,7 +35,10 @@ const useWeb3Provider = () => {
       );
 
     // wait for user to confirm connection
-    if (byUser) await provider.value.send("eth_requestAccounts", []);
+    if (byUser) {
+      status.value = ConnectionStatus.CONNECTING;
+      await provider.value.send("eth_requestAccounts", []);
+    }
 
     signer.value = provider.value.getSigner();
     if (signer.value === undefined) {
@@ -59,6 +60,7 @@ const useWeb3Provider = () => {
   }
 
   onMounted(() => {
+    if (status.value !== ConnectionStatus.DISCONNECTED) return;
     connect(false).catch(() => {
       return;
     });

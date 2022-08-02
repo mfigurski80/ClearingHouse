@@ -1,5 +1,11 @@
 <template>
-  <div class="panel"></div>
+  <div class="panel">
+    <timeline :value="[4, 6, 8, 1, 2]" layout="horizontal">
+      <template #content="slotProps">
+        <p>{{ slotProps.item }}</p>
+      </template>
+    </timeline>
+  </div>
   <columns-layout class="section">
     <div class="column">
       <h3>Column 1</h3>
@@ -12,7 +18,7 @@
 </template>
 
 <script lang="ts" setup>
-import TabPanel from "primevue/tabpanel";
+import Timeline from "primevue/timeline";
 
 import ColumnsLayout from "@/layouts/ColumnsLayout.vue";
 import BondListing from "@/components/BondListing.vue";
@@ -20,12 +26,23 @@ import BondListing from "@/components/BondListing.vue";
 
 <style lang="scss" scoped>
 .column {
+  flex: 1 1 auto;
 }
 .panel {
   width: 100%;
-  padding: 30px;
+  padding: 30px 20px;
   border-radius: 30px;
   background: url(@/assets/grain-texture-2-.06.png) center center repeat,
     var(--gradient-primary-secondary);
+  color: var(--color-background-alt);
+  box-shadow: var(--shadow-1);
+}
+::v-deep(.p-timeline.p-timeline-horizontal) {
+  .p-timeline-event-opposite {
+    flex: 0;
+  }
+  .p-timeline-event-separator {
+    opacity: 0.4;
+  }
 }
 </style>

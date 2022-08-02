@@ -4,7 +4,7 @@ export interface RawBond {
   owner?: address;
   isWalletApprovedOperator?: boolean;
   id: number;
-  active: boolean;
+  flag: boolean;
   currencyRef: number;
   nPeriods: number;
   curPeriod: number;

@@ -13,7 +13,7 @@ import Column from "primevue/column";
 import ColumnGroup from "primevue/columngroup"; //optional for column grouping
 import Row from "primevue/row";
 
-import { RawBond } from "@/contracts.d.ts";
+import { RawBond } from "@/types";
 
 const props = defineProps<{ bondList: [RawBond] }>();
 console.log(props);
