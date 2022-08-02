@@ -113,7 +113,7 @@
   <section id="signup">
     <container-layout>
       <h2 class="section-header-text" @click="copySectionLink('signup')">
-        Subscribe + Testing Program
+        Subscribe + Testing
       </h2>
       <p class="squeeze">
         The product is currently in beta/testing phase, slated to fully release
