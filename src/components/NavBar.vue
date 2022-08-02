@@ -139,6 +139,7 @@ main {
   overflow: hidden;
   overflow-y: auto;
   height: 100vh;
+  scroll-behavior: smooth;
   flex: 1;
 }
 @media only screen and (max-width: 1000px) {

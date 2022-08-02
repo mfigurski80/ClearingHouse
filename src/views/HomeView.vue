@@ -15,11 +15,13 @@
           </p>
           <span class="p-buttonset">
             <connect-wallet-button />
-            <Button
-              label="Read More"
-              class="p-button-rounded p-button-outlined"
-              icon="pi pi-angle-double-down"
-            />
+            <a href="#features">
+              <Button
+                label="Read More"
+                class="p-button-rounded p-button-outlined"
+                icon="pi pi-angle-double-down"
+              />
+            </a>
           </span>
           <social-icons class="social-icons" />
         </div>

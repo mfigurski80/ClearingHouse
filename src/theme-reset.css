@@ -257,3 +257,21 @@ i.pi::before {
   filter: brightness(110%);
   transition: filter 0.1s ease-in-out;
 }
+
+
+.p-splitter {
+  background: transparent;
+  border-color: transparent;
+  border-radius: 12px;
+}
+
+.p-splitter .p-splitter-gutter {
+  background: var(--color-background-alt);
+  border-radius: 3px;
+  width: 3px;
+}
+
+.p-splitter .p-splitter-gutter .p-splitter-gutter-handle {
+  background: #ffffff1a;
+  border-radius: 4px;
+}

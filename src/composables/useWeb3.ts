@@ -1,7 +1,7 @@
 import { ref, onMounted, onUnmounted } from "vue";
 import { ethers, providers } from "ethers";
 
-import { PromiseWithTimeout } from "@/utils/promWithTimout";
+import { PromiseWithTimeout } from "@/utils";
 
 export enum ConnectionStatus {
   NEED_PROVIDER,
