@@ -21,6 +21,7 @@ import useWeb3, { ConnectionStatus } from "@/composables/useWeb3";
 const router = useRouter();
 
 const { status, wallet, connect } = useWeb3();
+console.log(status.value, wallet.value, connect);
 
 const handleConnect = computed(
   () => () => {

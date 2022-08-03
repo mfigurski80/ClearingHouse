@@ -6,17 +6,12 @@
   </NavBar>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
-
+<script lang="ts" setup>
+import useWeb3Provider from "@/providers/web3.ts";
 import NavBar from "@/components/NavBar.vue";
 
-export default defineComponent({
-  components: { NavBar },
-  data: () => ({
-    visibleLeft: true,
-  }),
-});
+// global state provider
+useWeb3Provider();
 </script>
 
 <style lang="scss">
