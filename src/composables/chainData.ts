@@ -1,53 +1,80 @@
 import { reactive } from "vue";
 
-import { RawBond } from "@/types";
+import { Bond, Currency, Collateral } from "@/types";
+import { CurrencyType } from "@/types/enums";
 
-export interface ChainData {
-  bonds: RawBond[];
-}
+export type ChainData = {
+  bonds: Bond[];
+  currencies: Currency[];
+  collateral: Collateral[];
+};
 
 const testData = reactive<ChainData>({
   bonds: [
     {
       id: 14,
-      flag: true,
+      active: true,
       currencyRef: 1,
-      nPeriods: 100,
-      curPeriod: 14,
-      startTime: new Date("2022-01-01T00:00:00.000Z").getTime() / 1000,
+      mintTime: new Date("2022-01-01T00:00:00.000Z"),
+      startTime: new Date("2022-01-01T00:00:00.000Z"),
+      maturityTime: new Date("2023-01-01T00:00:00.000Z"),
       periodDuration: 60 * 60 * 24,
+      periodsCompleted: 14,
+      periodsTotal: 100,
       couponSize: 10,
       faceValue: 100,
       beneficiary: "0x0000000000000000000000000000000000000000",
       minter: "0x2e7098b8eA74ed30dDF3d239f794385002dd3Ffe",
+      owner: "0x2e7098b8eA74ed30dDF3d239f794385002dd3Ffe",
+      approvedOperators: [],
+      isWalletAssociated: true,
     },
     {
-      id: 17,
-      flag: true,
+      id: 18,
+      active: true,
       currencyRef: 1,
-      nPeriods: 100,
-      curPeriod: 14,
-      startTime: new Date("2022-06-04T00:00:00.000Z").getTime() / 1000,
+      mintTime: new Date("2022-01-01T00:00:00.000Z"),
+      startTime: new Date("2022-01-01T00:00:00.000Z"),
+      maturityTime: new Date("2023-01-01T00:00:00.000Z"),
       periodDuration: 60 * 60 * 24,
+      periodsCompleted: 14,
+      periodsTotal: 100,
       couponSize: 10,
       faceValue: 100,
       beneficiary: "0x0000000000000000000000000000000000000000",
       minter: "0x2e7098b8eA74ed30dDF3d239f794385002dd3Ffe",
+      owner: "0x2e7098b8eA74ed30dDF3d239f794385002dd3Ffe",
+      approvedOperators: [],
+      isWalletAssociated: true,
     },
     {
       id: 24,
-      flag: true,
+      active: true,
       currencyRef: 1,
-      nPeriods: 12,
-      curPeriod: 3,
-      startTime: new Date("2022-01-01T00:00:00.000Z").getTime() / 1000,
-      periodDuration: 60 * 60 * 24 * 30,
+      mintTime: new Date("2022-01-01T00:00:00.000Z"),
+      startTime: new Date("2022-01-01T00:00:00.000Z"),
+      maturityTime: new Date("2023-01-01T00:00:00.000Z"),
+      periodDuration: 60 * 60 * 24,
+      periodsCompleted: 14,
+      periodsTotal: 100,
       couponSize: 10,
       faceValue: 100,
-      beneficiary: "0x2e7098b8eA74ed30dDF3d239f794385002dd3Ffe",
-      minter: "0x0000000000000000000000000000000000000000",
+      beneficiary: "0x0000000000000000000000000000000000000000",
+      minter: "0x2e7098b8eA74ed30dDF3d239f794385002dd3Ffe",
+      owner: "0x2e7098b8eA74ed30dDF3d239f794385002dd3Ffe",
+      approvedOperators: [],
+      isWalletAssociated: true,
     },
   ],
+  currencies: [
+    {
+      id: 1,
+      name: "GOLD",
+      location: "0x1141d0b1e0f3bbea8f8f8f8f8f8f8f8f8f8f8f8f8f",
+      type: CurrencyType.ERC20,
+    },
+  ],
+  collateral: [],
 });
 
 export const useChainData = () => {

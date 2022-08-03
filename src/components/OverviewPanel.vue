@@ -24,13 +24,11 @@ import { useChainData } from "@/composables/chainData";
 import ColumnsLayout from "@/layouts/ColumnsLayout.vue";
 import BondListing from "@/components/BondListing.vue";
 const { chainData } = useChainData();
-
-console.log(chainData);
 </script>
 
 <style lang="scss" scoped>
 .column {
-  flex: 1 1 auto;
+  flex: 1 1;
 }
 .panel {
   width: 100%;

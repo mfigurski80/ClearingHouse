@@ -15,3 +15,18 @@ export interface RawBond {
   beneficiary: address;
   minter: address;
 }
+
+export interface RawCurrency {
+  id: number;
+  location: address;
+  type: CurrencyType;
+  erc1155SmallTokenId: number;
+  erc1155TokenId: number;
+}
+
+export interface RawCollateral {
+  id: number;
+  bondId: number;
+  currencyRef: number;
+  amountOrId: number;
+}
