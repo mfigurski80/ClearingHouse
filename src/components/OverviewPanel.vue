@@ -9,7 +9,7 @@
   <columns-layout class="section">
     <div class="column">
       <h3>Column 1</h3>
-      <bond-listing :bondList="[]" />
+      <bond-listing :bondList="chainData.bonds" />
     </div>
     <div class="column">
       <h3>Column 2</h3>
@@ -20,8 +20,12 @@
 <script lang="ts" setup>
 import Timeline from "primevue/timeline";
 
+import { useChainData } from "@/composables/chainData";
 import ColumnsLayout from "@/layouts/ColumnsLayout.vue";
 import BondListing from "@/components/BondListing.vue";
+const { chainData } = useChainData();
+
+console.log(chainData);
 </script>
 
 <style lang="scss" scoped>

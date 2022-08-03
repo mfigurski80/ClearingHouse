@@ -16,5 +16,4 @@ import Row from "primevue/row";
 import { RawBond } from "@/types";
 
 const props = defineProps<{ bondList: [RawBond] }>();
-console.log(props);
 </script>

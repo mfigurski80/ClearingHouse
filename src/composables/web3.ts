@@ -1,4 +1,4 @@
-import { provide, ref, computed, onMounted, onUnmounted } from "vue";
+import { ref, onMounted, onUnmounted } from "vue";
 import { ethers, providers } from "ethers";
 
 import { PromiseWithTimeout } from "@/utils";
@@ -55,18 +55,16 @@ export const connect = async function (byUser = true) {
     .on("accountsChanged", handleAccountsChanged);
 };
 
-onMounted(() => {
-  if (status.value !== ConnectionStatus.DISCONNECTED) return;
-  connect(false).catch(() => {
-    return;
+export const useWeb3 = () => {
+  onMounted(() => {
+    if (status.value !== ConnectionStatus.DISCONNECTED) return;
+    connect(false).catch(() => {
+      return;
+    });
   });
-});
 
-onUnmounted(() => {
-  window.ethereum?.removeListener("accountsChanged", handleAccountsChanged);
-});
-
-const useWeb3Provider = () => {
-  provide("web3", { status, provider, signer, wallet, connect });
+  onUnmounted(() => {
+    window.ethereum?.removeListener("accountsChanged", handleAccountsChanged);
+  });
+  return { status, provider, signer, wallet, connect };
 };
-export default useWeb3Provider;

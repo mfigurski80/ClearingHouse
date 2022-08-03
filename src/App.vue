@@ -7,11 +7,9 @@
 </template>
 
 <script lang="ts" setup>
-import useWeb3Provider from "@/providers/web3.ts";
 import NavBar from "@/components/NavBar.vue";
 
 // global state provider
-useWeb3Provider();
 </script>
 
 <style lang="scss">

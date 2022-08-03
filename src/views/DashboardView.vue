@@ -1,18 +1,17 @@
 <template>
   <container-layout id="dashboard">
     <tab-view>
-      <tab-panel header="Overview" id="overview-panel">
+      <tab-panel header="Overview">
         <overview-panel />
       </tab-panel>
-      <tab-panel header="Alerts" id="alerts-panel"> </tab-panel>
-      <tab-panel header="Events" id="events-panel"> </tab-panel>
-      <tab-panel header="Mint Bond" id="mint-panel"> </tab-panel>
+      <tab-panel header="Alerts"> </tab-panel>
+      <tab-panel header="Events"> </tab-panel>
+      <tab-panel header="Mint Bond"> </tab-panel>
     </tab-view>
   </container-layout>
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
 import TabView from "primevue/tabview";
 import TabPanel from "primevue/tabpanel";
 
