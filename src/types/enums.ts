@@ -21,5 +21,5 @@ export enum Direction {
 }
 export enum EventType {
   SERVICE_PAYMENT,
-  BOND_COMPLETION,
+  FACE_PAYMENT,
 }

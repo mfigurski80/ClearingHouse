@@ -6,7 +6,7 @@
       </tab-panel>
       <tab-panel header="Alerts"> </tab-panel>
       <tab-panel header="Events"> </tab-panel>
-      <tab-panel header="Mint Bond"> </tab-panel>
+      <tab-panel header="Build"> </tab-panel>
     </tab-view>
   </container-layout>
 </template>

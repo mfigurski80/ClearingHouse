@@ -1,12 +1,13 @@
 import { reactive } from "vue";
 
-import { Bond, Currency, Collateral } from "@/types";
-import { CurrencyType } from "@/types/enums";
+import type { Bond, Currency, Collateral, Event } from "@/types";
+import { CurrencyType, EventType, Direction } from "@/types/enums";
 
 export type ChainData = {
   bonds: Bond[];
   currencies: Currency[];
   collateral: Collateral[];
+  events: Event[];
 };
 
 const testData = reactive<ChainData>({
@@ -55,10 +56,10 @@ const testData = reactive<ChainData>({
       startTime: new Date("2022-01-01T00:00:00.000Z"),
       maturityTime: new Date("2023-01-01T00:00:00.000Z"),
       periodDuration: 60 * 60 * 24,
-      periodsCompleted: 14,
-      periodsTotal: 100,
-      couponSize: 10,
-      faceValue: 100,
+      periodsCompleted: 112,
+      periodsTotal: 200,
+      couponSize: 4,
+      faceValue: 0,
       beneficiary: "0x0000000000000000000000000000000000000000",
       minter: "0x2e7098b8eA74ed30dDF3d239f794385002dd3Ffe",
       owner: "0x2e7098b8eA74ed30dDF3d239f794385002dd3Ffe",
@@ -75,6 +76,22 @@ const testData = reactive<ChainData>({
     },
   ],
   collateral: [],
+  events: [
+    {
+      completed: false,
+      bondId: 24,
+      eventType: EventType.SERVICE_PAYMENT,
+      direction: Direction.INCOMING,
+      timestamp: new Date("2022-08-01T00:00:00.000Z"),
+    },
+    {
+      completed: false,
+      bondId: 18,
+      eventType: EventType.FACE_PAYMENT,
+      direction: Direction.OUTGOING,
+      timestamp: new Date("2022-08-12T00:00:00.000Z"),
+    },
+  ],
 });
 
 export const useChainData = () => {

@@ -8,10 +8,10 @@
 </template>
 
 <script lang="ts" setup>
-import DataTable from "primevue/datatable";
-import Column from "primevue/column";
-import ColumnGroup from "primevue/columngroup"; //optional for column grouping
-import Row from "primevue/row";
+// import DataTable from "primevue/datatable";
+// import Column from "primevue/column";
+// import ColumnGroup from "primevue/columngroup"; //optional for column grouping
+// import Row from "primevue/row";
 
 import { RawBond } from "@/types";
 

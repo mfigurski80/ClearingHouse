@@ -17,6 +17,7 @@
   --color-secondary: #f4c95d;
   --color-secondary-alt: #f0cc71;
   --color-tertiary: #4ED0CE;
+  --color-success: #85C791;
 
   --gradient-primary-secondary: linear-gradient(125deg, var(--color-primary) -20%, var(--color-secondary) 100%);
 
@@ -305,7 +306,7 @@ i.pi::before {
   border: 1px solid transparent;
   overflow: hidden;
   margin: 0;
-  margin-right: 20px;
+  margin-right: 12px;
   padding: 12px;
   border-radius: 20px;
   font-size: 14px;

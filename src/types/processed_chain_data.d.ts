@@ -37,7 +37,9 @@ export interface Collateral {
 }
 
 export interface Event {
-  bond: Bond;
+  completed: boolean;
+  bondId: number;
+  bond?: Bond;
   eventType: EventType;
   direction: Direction;
   timestamp: Date;
