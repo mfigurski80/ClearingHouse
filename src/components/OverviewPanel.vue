@@ -6,7 +6,7 @@
       </template>
       <template #marker="props">
         <i
-          class="p-timeline-event-market marker pi pi-check"
+          class="p-timeline-event-market marker pi"
           :class="props.item.failed ? 'pi-times failed' : props.item.icon"
         />
       </template>
@@ -28,10 +28,11 @@
   <columns-layout class="section">
     <div class="column">
       <h3>Column 1</h3>
-      <bond-listing :bondList="chainData.bonds" />
+      <bond-listing :bondList="bondList[0]" />
     </div>
     <div class="column">
       <h3>Column 2</h3>
+      <bond-listing :bondList="bondList[1]" />
     </div>
   </columns-layout>
 </template>
@@ -48,6 +49,18 @@ import { useChainData } from "@/composables/chainData";
 const { chainData } = useChainData();
 
 import { EventType, Direction } from "@/types/enums";
+
+const bondList = computed(() =>
+  chainData.bonds.reduce(
+    (acc, bond) => {
+      if (!bond.isWalletAssociated) return acc;
+      // TODO: re-implement condition here
+      acc[bond.minter.startsWith("0x0") ? 0 : 1].push(bond);
+      return acc;
+    },
+    [[], []]
+  )
+);
 
 const eventsData = computed(() =>
   chainData.events
@@ -68,9 +81,7 @@ const eventsData = computed(() =>
             ? "Service Payment"
             : "Completion Payment",
         icon:
-          ev.eventType === EventType.FACE_PAYMENT
-            ? "pi-check"
-            : ev.direction === Direction.INCOMING
+          ev.direction === Direction.INCOMING
             ? "pi-arrow-down-right"
             : "pi-arrow-up-right",
         type: ev.eventType,

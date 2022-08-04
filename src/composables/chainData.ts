@@ -13,7 +13,7 @@ export type ChainData = {
 const testData = reactive<ChainData>({
   bonds: [
     {
-      id: 14,
+      id: 13,
       active: true,
       currencyRef: 1,
       mintTime: new Date("2022-01-01T00:00:00.000Z"),
@@ -43,7 +43,7 @@ const testData = reactive<ChainData>({
       couponSize: 10,
       faceValue: 100,
       beneficiary: "0x0000000000000000000000000000000000000000",
-      minter: "0x2e7098b8eA74ed30dDF3d239f794385002dd3Ffe",
+      minter: "0x0000000000000000000000000000000000000000",
       owner: "0x2e7098b8eA74ed30dDF3d239f794385002dd3Ffe",
       approvedOperators: [],
       isWalletAssociated: true,
@@ -90,14 +90,21 @@ const testData = reactive<ChainData>({
       bondId: 24,
       eventType: EventType.SERVICE_PAYMENT,
       direction: Direction.INCOMING,
-      timestamp: new Date("2022-08-01T00:00:00.000Z"),
+      timestamp: new Date("2022-08-03T00:00:00.000Z"),
+    },
+    {
+      completed: false,
+      bondId: 24,
+      eventType: EventType.SERVICE_PAYMENT,
+      direction: Direction.INCOMING,
+      timestamp: new Date("2022-08-09T00:00:00.000Z"),
     },
     {
       completed: false,
       bondId: 18,
       eventType: EventType.FACE_PAYMENT,
       direction: Direction.OUTGOING,
-      timestamp: new Date("2022-08-12T00:00:00.000Z"),
+      timestamp: new Date("2022-08-14T00:00:00.000Z"),
     },
   ],
 });

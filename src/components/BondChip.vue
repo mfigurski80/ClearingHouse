@@ -1,5 +1,5 @@
 <template>
-  <a id="panel" :style="style" :href="`./bond/${props.bond.id}`">
+  <a id="chip" :style="style" :href="`./bond/${props.bond.id}`">
     <span class="piece">#{{ label[0] }}</span>
     <span class="piece">
       {{ label[1] }} <small>{{ label[2] }}</small>
@@ -18,7 +18,6 @@ import type { Bond, Currency } from "@/types";
 
 type BondPanelProps = { bond: Bond & { currency: Currency } };
 const props = defineProps<BondPanelProps>();
-console.log(props.bond);
 
 const style = computed(
   () =>
@@ -35,7 +34,7 @@ const label = computed(() => [
 </script>
 
 <style lang="scss" scoped>
-#panel {
+#chip {
   $shading: #ffffff29;
   --completed: 40%;
   border-radius: 13px;
