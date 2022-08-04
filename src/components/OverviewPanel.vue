@@ -4,16 +4,23 @@
       <template #opposite="props">
         <small>{{ props.item.relativeTime }}</small>
       </template>
+      <template #marker="props">
+        <i
+          class="p-timeline-event-market marker pi pi-check"
+          :class="props.item.failed ? 'pi-times failed' : props.item.icon"
+        />
+      </template>
       <template #content="props">
         <div class="event-card">
-          <p>
+          <p class="header">
             <span v-if="props.item.incoming" class="label incoming">
               Incoming
             </span>
             <span v-else class="label outgoing">Outgoing</span>
             {{ props.item.typeLabel }}
           </p>
-          <bond-panel :bond="props.item.bond" />
+          <h6>RELATED TO BOND:</h6>
+          <bond-chip :bond="props.item.bond" />
         </div>
       </template>
     </timeline>
@@ -32,32 +39,45 @@
 <script lang="ts" setup>
 import { computed } from "vue";
 import Timeline from "primevue/timeline";
-import moment from "moment";
 
-import BondPanel from "@/components/BondPanel.vue";
+import { toRelativeDate } from "@/utils";
 import ColumnsLayout from "@/layouts/ColumnsLayout.vue";
+import BondChip from "@/components/BondChip.vue";
 import BondListing from "@/components/BondListing.vue";
-import { useChainData, ChainData } from "@/composables/chainData";
+import { useChainData } from "@/composables/chainData";
 const { chainData } = useChainData();
 
 import { EventType, Direction } from "@/types/enums";
 
 const eventsData = computed(() =>
-  (chainData as ChainData).events
+  chainData.events
     .filter((ev) => !ev.completed)
     .sort((a, b) => a.timestamp - b.timestamp)
     .slice(0, 3)
-    .map((ev) => ({
-      relativeTime: moment(ev.timestamp).fromNow(),
-      direction: ev.direction,
-      typeLabel:
-        ev.eventType === EventType.SERVICE_PAYMENT
-          ? "Service Payment"
-          : "Completion Payment",
-      type: ev.eventType,
-      incoming: ev.direction === Direction.INCOMING,
-      bond: chainData.bonds.find((b) => b.id === ev.bondId),
-    }))
+    .map((ev) => {
+      let bond = chainData.bonds.find((b) => b.id === ev.bondId);
+      bond.currency = chainData.currencies.find(
+        (c) => c.id === bond.currencyRef
+      );
+      return {
+        relativeTime: toRelativeDate(ev.timestamp),
+        failed: ev.timestamp < Date.now(),
+        direction: ev.direction,
+        typeLabel:
+          ev.eventType === EventType.SERVICE_PAYMENT
+            ? "Service Payment"
+            : "Completion Payment",
+        icon:
+          ev.eventType === EventType.FACE_PAYMENT
+            ? "pi-check"
+            : ev.direction === Direction.INCOMING
+            ? "pi-arrow-down-right"
+            : "pi-arrow-up-right",
+        type: ev.eventType,
+        incoming: ev.direction === Direction.INCOMING,
+        bond,
+      };
+    })
 );
 </script>
 
@@ -73,8 +93,24 @@ const eventsData = computed(() =>
     var(--gradient-primary-secondary);
   color: var(--color-background-alt);
   box-shadow: var(--shadow-1);
+  .marker {
+    padding: 0px 5px;
+    border-radius: 50%;
+    border: 2px solid red;
+    border-color: inherit;
+    background: none;
+    font-size: 12px;
+    text-align: center;
+    line-height: 20px;
+    display: inline-block;
+    &.failed {
+      background: var(--color-background-alt);
+      color: var(--color-primary);
+      border-color: var(--color-background-alt);
+    }
+  }
   .event-card {
-    width: 290px;
+    width: 270px;
     margin: 12px 0;
     padding: 16px;
     border-radius: 18px;
@@ -87,7 +123,7 @@ const eventsData = computed(() =>
       display: inline-block;
       border-radius: 12px;
       font-weight: bold;
-      margin-right: 4px;
+      margin: 0px 3px 8px 0px;
       &.incoming {
         background: var(--color-success);
         color: var(--color-background);
@@ -120,7 +156,7 @@ const eventsData = computed(() =>
     }
     .p-timeline-event-separator {
       position: relative;
-      left: calc(50% - 20px);
+      left: calc(50% - 30px);
       color: $p-dim-line;
     }
     &:first-of-type .p-timeline-event-separator::before {

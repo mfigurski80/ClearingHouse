@@ -16,6 +16,12 @@ h2 {
   margin-bottom: 6px;
 }
 
+h5,
+h6 {
+  margin: 4px 0 2px 0;
+  color: var(--color-text-alt);
+}
+
 p {
   line-height: 1.6;
 }

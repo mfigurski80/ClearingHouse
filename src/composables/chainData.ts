@@ -33,10 +33,10 @@ const testData = reactive<ChainData>({
     {
       id: 18,
       active: true,
-      currencyRef: 1,
+      currencyRef: 0,
       mintTime: new Date("2022-01-01T00:00:00.000Z"),
       startTime: new Date("2022-01-01T00:00:00.000Z"),
-      maturityTime: new Date("2023-01-01T00:00:00.000Z"),
+      maturityTime: new Date("2022-06-01T00:00:00.000Z"),
       periodDuration: 60 * 60 * 24,
       periodsCompleted: 14,
       periodsTotal: 100,
@@ -54,9 +54,9 @@ const testData = reactive<ChainData>({
       currencyRef: 1,
       mintTime: new Date("2022-01-01T00:00:00.000Z"),
       startTime: new Date("2022-01-01T00:00:00.000Z"),
-      maturityTime: new Date("2023-01-01T00:00:00.000Z"),
+      maturityTime: new Date("2023-05-01T00:00:00.000Z"),
       periodDuration: 60 * 60 * 24,
-      periodsCompleted: 112,
+      periodsCompleted: 133,
       periodsTotal: 200,
       couponSize: 4,
       faceValue: 0,
@@ -69,8 +69,16 @@ const testData = reactive<ChainData>({
   ],
   currencies: [
     {
+      id: 0,
+      name: "Ethereum",
+      symbol: "ETH",
+      location: "0x0000000000000000000000000000000000000000",
+      type: CurrencyType.ETHER,
+    },
+    {
       id: 1,
       name: "GOLD",
+      symbol: "GLD",
       location: "0x1141d0b1e0f3bbea8f8f8f8f8f8f8f8f8f8f8f8f8f",
       type: CurrencyType.ERC20,
     },
@@ -94,6 +102,6 @@ const testData = reactive<ChainData>({
   ],
 });
 
-export const useChainData = () => {
+export function useChainData(): { chainData: ChainData } {
   return { chainData: testData };
-};
+}

@@ -22,7 +22,8 @@ export interface Bond {
 
 export interface Currency {
   id: number;
-  name?: string;
+  name: string;
+  symbol: string;
   location: address;
   type: CurrencyType;
   erc1155TokenId?: number;
