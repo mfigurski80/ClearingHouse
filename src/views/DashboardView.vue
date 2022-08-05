@@ -4,7 +4,7 @@
       <tab-panel header="Overview">
         <overview-panel />
       </tab-panel>
-      <tab-panel header="Alerts"> </tab-panel>
+      <tab-panel header="Portfolio"> </tab-panel>
       <tab-panel header="Events"> </tab-panel>
       <tab-panel header="Build"> </tab-panel>
     </tab-view>

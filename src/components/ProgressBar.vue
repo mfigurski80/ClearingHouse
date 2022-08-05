@@ -24,7 +24,7 @@ const props = defineProps<ProgressBar>();
   display: inline-block;
   width: 100%;
   margin-top: 6px;
-  padding: 20px 16px 16px;
+  padding: 20px 8px 16px 0px;
   position: relative;
   h6 {
     position: absolute;
@@ -32,7 +32,8 @@ const props = defineProps<ProgressBar>();
   }
   .bar {
     --completed: 30%;
-    min-width: 40px;
+    min-width: 30px;
+    width: 60px;
     height: 8px;
     background: linear-gradient(
         90deg,

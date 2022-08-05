@@ -27,11 +27,11 @@
   </div>
   <columns-layout class="section">
     <div class="column">
-      <h3>Column 1</h3>
+      <h3>ASSETS</h3>
       <bond-listing :bondList="bondList[0]" />
     </div>
     <div class="column">
-      <h3>Column 2</h3>
+      <h3>LIABILITIES</h3>
       <bond-listing :bondList="bondList[1]" />
     </div>
   </columns-layout>
@@ -51,15 +51,22 @@ const { chainData } = useChainData();
 import { EventType, Direction } from "@/types/enums";
 
 const bondList = computed(() =>
-  chainData.bonds.reduce(
-    (acc, bond) => {
-      if (!bond.isWalletAssociated) return acc;
-      // TODO: re-implement condition here
-      acc[bond.minter.startsWith("0x0") ? 0 : 1].push(bond);
-      return acc;
-    },
-    [[], []]
-  )
+  chainData.bonds
+    .map((bond) => ({
+      ...bond,
+      currency: {
+        ...chainData.currencies.find((c) => c.id === bond.currencyRef),
+      },
+    }))
+    .reduce(
+      (acc, bond) => {
+        if (!bond.isWalletAssociated) return acc;
+        // TODO: re-implement condition here
+        acc[bond.minter.startsWith("0x0") ? 0 : 1].push(bond);
+        return acc;
+      },
+      [[], []]
+    )
 );
 
 const eventsData = computed(() =>
@@ -68,10 +75,10 @@ const eventsData = computed(() =>
     .sort((a, b) => a.timestamp - b.timestamp)
     .slice(0, 3)
     .map((ev) => {
-      let bond = chainData.bonds.find((b) => b.id === ev.bondId);
-      bond.currency = chainData.currencies.find(
-        (c) => c.id === bond.currencyRef
-      );
+      let bond = { ...chainData.bonds.find((b) => b.id === ev.bondId) };
+      bond.currency = {
+        ...chainData.currencies.find((c) => c.id === bond.currencyRef),
+      };
       return {
         relativeTime: toRelativeDate(ev.timestamp),
         failed: ev.timestamp < Date.now(),

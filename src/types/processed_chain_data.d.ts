@@ -24,6 +24,7 @@ export interface Currency {
   id: number;
   name: string;
   symbol: string;
+  decimals: number;
   location: address;
   type: CurrencyType;
   erc1155TokenId?: number;

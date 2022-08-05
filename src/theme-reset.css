@@ -360,7 +360,7 @@ i.pi::before {
   background: none;
   width: 0;
   padding-left: 0;
-  padding-right: 0;
+  padding-right: 4px;
 }
 
 .p-datatable .p-datatable-tbody>tr {
@@ -371,6 +371,7 @@ i.pi::before {
 .p-datatable .p-datatable-tbody>tr>td {
   border-color: var(--color-background-alt);
   padding: 0;
+  padding-right: 4px;
   border: 0;
   /* max-width: 0px; */
 }
