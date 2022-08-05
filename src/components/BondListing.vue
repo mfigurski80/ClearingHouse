@@ -1,12 +1,12 @@
 <template>
   <DataTable :value="bonds" class="p-datatable">
-    <Column>
+    <Column bodyClass="warning-bar-col" headerClass="warning-bar-col">
       <template #body="{ data }">
         <div class="warning-bar" :class="{ active: data.warning }" />
       </template>
     </Column>
     <Column header="ID" field="id" />
-    <Column header="Status">
+    <Column header="Status" bodyClass="status-col" headerClass="status-col">
       <template #body="{ data }">
         <span class="status-chip" :class="data.status.toLowerCase()">{{
           data.status
@@ -15,14 +15,17 @@
     </Column>
     <Column header="Payments">
       <template #body="{ data }">
-        {{ data.couponSize }}
-        <small>{{ data.currencySymbol }}</small> /
-        {{ data.periodInterval }}
+        <div>
+          {{ data.couponSize }} <small>{{ data.currencySymbol }}</small> /
+          {{ data.periodInterval }}
+        </div>
       </template>
     </Column>
     <Column header="Face">
       <template #body="{ data }">
-        {{ data.faceValue }} <small>{{ data.currencySymbol }}</small>
+        <div>
+          {{ data.faceValue }} <small>{{ data.currencySymbol }}</small>
+        </div>
       </template>
     </Column>
     <Column header="Progress">
@@ -126,10 +129,11 @@ const bonds: BondListingTableEntry[] = computed(() =>
 
 <style lang="scss" scoped>
 .warning-bar {
+  display: inline-block;
   background-color: transparent;
-  height: 60px;
+  min-height: 70px;
+  height: 100%;
   width: 6px;
-  margin-right: 1px;
   border-radius: 4px 0 0 4px;
   &.active {
     background-color: var(--color-failure);
@@ -163,7 +167,22 @@ const bonds: BondListingTableEntry[] = computed(() =>
 }
 .actions {
   & > * {
-    margin-right: 3px;
+    margin-right: 4px;
+    margin-bottom: 2px;
+    margin-top: 2px;
   }
+}
+</style>
+<style lang="scss">
+.warning-bar-col {
+  // display: block;
+  width: 8px;
+  max-width: 8px;
+  padding-bottom: 0 !important;
+}
+.status-col {
+  width: 65px;
+  max-width: 65px;
+  // padding: 0 4px !important;
 }
 </style>

@@ -375,7 +375,3 @@ i.pi::before {
   border: 0;
   /* max-width: 0px; */
 }
-
-.p-datatable .p-datatable-tbody>tr>td.no-width {
-  max-width: 0;
-}

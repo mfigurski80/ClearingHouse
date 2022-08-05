@@ -33,7 +33,7 @@ const props = defineProps<ProgressBar>();
   .bar {
     --completed: 30%;
     min-width: 30px;
-    width: 60px;
+    width: 100%;
     height: 8px;
     background: linear-gradient(
         90deg,
