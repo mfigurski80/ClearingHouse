@@ -1,11 +1,16 @@
-import { computed, watch } from "vue";
+import { computed } from "vue";
 
 import { useBondListQuery, FetchBondResult } from "@/composables/bondQueries";
 import {
   useCurrencyListQuery,
   FetchCurrencyResult,
 } from "@/composables/currencyQueries";
-import { toReadableInterval, toRelativeDate } from "@/utils";
+import {
+  toReadableInterval,
+  toRelativeDate,
+  toCurrencyFormat,
+  toReadableNumber,
+} from "@/utils";
 
 export enum BondStatus {
   PENDING = "PENDING",
@@ -22,8 +27,8 @@ export interface BondListingTableEntry {
   id: string;
   status?: BondStatus;
   currencySymbol?: string;
-  couponSize?: number;
-  faceValue?: number;
+  couponSize?: string;
+  faceValue?: string;
   periodInterval?: string;
   progress?: number;
   progressLabel?: string;
@@ -58,8 +63,8 @@ function formatBond(
     id: `#${bond.id}`,
     status: status,
     currencySymbol: currency?.symbol || "???",
-    couponSize: bond.couponSize, // TODO: format
-    faceValue: bond.faceValue, // TODO: format
+    couponSize: toCurrencyFormat(bond.couponSize, currency),
+    faceValue: toCurrencyFormat(bond.faceValue, currency),
     periodInterval: toReadableInterval(bond.periodDuration * 1000),
     progress: bond.curPeriod / bond.nPeriods,
     progressLabel: `${bond.curPeriod} / ${bond.nPeriods}`,
