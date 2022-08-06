@@ -1,7 +1,10 @@
+import { computed, Ref } from "vue";
 import { useQuery, useQueries, UseQueryOptions } from "vue-query";
+import type { QueryFunctionContext } from "vue-query/types";
 
 import type { RawCurrency, RawCurrencyDetails, address } from "@/types";
 import { CurrencyType } from "@/types/enums";
+import { counter } from "@/utils";
 
 // DATA STORE
 
@@ -40,9 +43,13 @@ const TEST_RAW_CURRENCY_DETAILS_DATA: { [key: address]: RawCurrencyDetails } = {
 // FETCH INDIVIDUAL RAW CURRENCY
 
 export type FetchCurrencyResult = RawCurrency & RawCurrencyDetails;
-const fetchCurrency = async (ctx: any): Promise<FetchCurrencyResult> => {
-  const id = ctx.queryKey.slice(-1)[0];
-  await new Promise((resolve) => setTimeout(resolve, 1000));
+const fetchCurrency = async (
+  ctx: QueryFunctionContext
+): Promise<FetchCurrencyResult> => {
+  counter("queries");
+  const id = ctx.queryKey.slice(-1)[0] as number;
+  console.log("FETCHING CURRENCY", id);
+  await new Promise((resolve) => setTimeout(resolve, Math.random() * 1000 * 3));
   if (!(id in TEST_RAW_CURRENCY_DATA)) console.error("Currency not found", id);
   const cur = TEST_RAW_CURRENCY_DATA[id];
   if (!(cur.location in TEST_RAW_CURRENCY_DETAILS_DATA))
@@ -68,20 +75,26 @@ export const useCurrencyQuery = (
 };
 
 export const useCurrencyListQuery = (
-  currencyIds: number[],
+  currencyIds: number[] | Ref<number[]>,
   options?: Omit<
     UseQueryOptions<unknown, unknown, unknown, (string | number)[]>,
     "queryFn" | "queryKey"
   >
 ) => {
-  return useQueries(
-    currencyIds.map((currencyId) => ({
-      queryKey: ["currency", currencyId],
-      queryFn: fetchCurrency,
-      cacheTime: 1000 * 60 * 60 * 24 * 365,
-      refetchOnWindowFocus: false,
-      enabled: !!currencyId,
-      ...options,
-    }))
+  const p = computed(() =>
+    ((currencyIds as Ref<number[]>).value || (currencyIds as number[])).map(
+      (currencyId) => {
+        return {
+          queryKey: ["currency", currencyId],
+          queryFn: fetchCurrency,
+          cacheTime: 1000 * 60 * 60 * 24 * 365,
+          refetchOnWindowFocus: false,
+          enabled: currencyId !== undefined,
+          ...options,
+        };
+      }
+    )
   );
+
+  return useQueries(p);
 };

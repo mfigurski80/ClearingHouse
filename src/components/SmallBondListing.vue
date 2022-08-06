@@ -108,6 +108,8 @@ const bonds = useSmallBondListing(props.bondList);
   color: var(--color-background);
   font-size: 12px;
   line-height: 1.2;
+  &.loading {
+  }
   &.pending {
     background: var(--color-secondary);
   }
@@ -120,7 +122,7 @@ const bonds = useSmallBondListing(props.bondList);
   &.default {
     background: var(--color-primary);
   }
-  &.complete {
+  &.done {
     background: var(--color-background-alt);
     color: var(--color-text);
   }
@@ -141,8 +143,9 @@ const bonds = useSmallBondListing(props.bondList);
   padding-bottom: 0 !important;
 }
 .status-col {
-  width: 65px;
-  max-width: 65px;
+  $w: 50px;
+  width: $w;
+  max-width: $w;
   // padding: 0 4px !important;
 }
 </style>

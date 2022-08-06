@@ -1,7 +1,8 @@
 import { useQuery, useQueries, UseQueryOptions } from "vue-query";
+import type { QueryFunctionContext } from "vue-query/types";
 
-import { RawBond, address } from "@/types";
-import { FetchCurrencyResult } from "./currencyQueries";
+import type { RawBond, address } from "@/types";
+import { counter } from "@/utils";
 
 // FAKE DATA STORE
 
@@ -25,7 +26,7 @@ const TEST_RAW_BOND_DATA: { [key: number]: RawBond } = {
     currencyRef: 0,
     nPeriods: 100,
     curPeriod: 14,
-    periodDuration: 60 * 60 * 24,
+    periodDuration: 60 * 60 * 24 * 7,
     couponSize: 10,
     startTime: +new Date("2022-01-01T00:00:00.000Z") / 1000,
     faceValue: 100,
@@ -56,9 +57,12 @@ const TEST_RAW_OWNERSHIP_DATA: { [key: number]: address } = {
 // FETCH INDIVIDUAL RAW BOND
 
 export type FetchBondResult = RawBond & { owner: address };
-const fetchBond = async (ctx: any): Promise<FetchBondResult> => {
-  const id: number = ctx.queryKey.slice(-1)[0];
-  await new Promise((resolve) => setTimeout(resolve, Math.random() * 1000 * 3));
+const fetchBond = async (
+  ctx: QueryFunctionContext
+): Promise<FetchBondResult> => {
+  counter("bondFetches");
+  const id: number = ctx.queryKey.slice(-1)[0] as number;
+  await new Promise((resolve) => setTimeout(resolve, Math.random() * 1000 * 5));
   if (!(id in TEST_RAW_BOND_DATA)) console.error("Bond not found:", id);
   const bond = TEST_RAW_BOND_DATA[id];
   if (!(id in TEST_RAW_OWNERSHIP_DATA)) console.error("Owner not found:", id);

@@ -2,7 +2,7 @@ import { computed, watch } from "vue";
 
 import { useBondListQuery, FetchBondResult } from "@/composables/bondQueries";
 import {
-  useCurrencyQuery,
+  useCurrencyListQuery,
   FetchCurrencyResult,
 } from "@/composables/currencyQueries";
 import { toReadableInterval, toRelativeDate } from "@/utils";
@@ -12,7 +12,7 @@ export enum BondStatus {
   ACTIVE = "ACTIVE",
   FAILING = "FAILING",
   DEFAULT = "DEFAULT",
-  COMPLETE = "COMPLETE",
+  DONE = "DONE",
 }
 export interface BondListingTableEntry {
   isLoading: boolean;
@@ -46,7 +46,7 @@ function formatBond(
   let status = BondStatus.PENDING;
   if (new Date(bond.startTime * 1000) < new Date()) {
     if (bond.flag) status = BondStatus.DEFAULT;
-    else if (bond.curPeriod > bond.nPeriods) status = BondStatus.COMPLETE;
+    else if (bond.curPeriod > bond.nPeriods) status = BondStatus.DONE;
     else if (nextOverdue) status = BondStatus.FAILING;
     else status = BondStatus.ACTIVE;
   }
@@ -63,7 +63,7 @@ function formatBond(
     periodInterval: toReadableInterval(bond.periodDuration * 1000),
     progress: bond.curPeriod / bond.nPeriods,
     progressLabel: `${bond.curPeriod} / ${bond.nPeriods}`,
-    nextDate: status === BondStatus.COMPLETE ? "---" : toRelativeDate(nextDate),
+    nextDate: status === BondStatus.DONE ? "---" : toRelativeDate(nextDate),
     nextOverdue: nextOverdue,
   };
 }
@@ -71,9 +71,14 @@ function formatBond(
 export default function useSmallBondListing(bondIds: number[]) {
   const bondListQuery = useBondListQuery(bondIds);
 
+  const currencyIdsRequired = computed(() =>
+    bondListQuery.map((res) => (res.data as FetchBondResult)?.currencyRef)
+  );
+
+  const currencyListQuery = useCurrencyListQuery(currencyIdsRequired);
+
   const bonds = computed(() =>
     bondListQuery.map((res, i) => {
-      // console.log("MAPPING RES", { ...res });
       const queryState = {
         queryStatus: res.status,
         isSuccess: res.isSuccess,
@@ -86,16 +91,26 @@ export default function useSmallBondListing(bondIds: number[]) {
       if (!bond) {
         return queryState;
       }
-      return { ...queryState, ...formatBond(bond) };
+      return {
+        ...queryState,
+        ...formatBond(
+          bond,
+          currencyListQuery[i].data as FetchCurrencyResult | undefined
+        ),
+      };
     })
   );
 
-  watch(bonds, (res) => {
-    console.log(
-      "BOND LISTING UPDATED",
-      res.map((v) => ({ ...v }))
-    );
-  });
+  // watch(currencyIdsRequired, (res) => {
+  //   console.log("CURRENCY LISTING UPDATED", [...res]);
+  // });
+
+  // watch(currencyListQuery, (res) => {
+  //   console.log(
+  //     "CURRENCIES LOADED UPDATED",
+  //     res.map((v) => ({ ...v }))
+  //   );
+  // });
 
   return bonds;
 }
