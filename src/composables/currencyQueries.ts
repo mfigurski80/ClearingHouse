@@ -3,6 +3,8 @@ import { useQuery, useQueries, UseQueryOptions } from "vue-query";
 import type { RawCurrency, RawCurrencyDetails, address } from "@/types";
 import { CurrencyType } from "@/types/enums";
 
+// DATA STORE
+
 const TEST_RAW_CURRENCY_DATA: { [key: number]: RawCurrency } = {
   0: {
     id: 0,
@@ -35,19 +37,21 @@ const TEST_RAW_CURRENCY_DETAILS_DATA: { [key: address]: RawCurrencyDetails } = {
   },
 };
 
-type FetchCurrencyResult = RawCurrency & RawCurrencyDetails;
-const fetchCurrency = async (id: number): Promise<FetchCurrencyResult> => {
+// FETCH INDIVIDUAL RAW CURRENCY
+
+export type FetchCurrencyResult = RawCurrency & RawCurrencyDetails;
+const fetchCurrency = async (ctx: any): Promise<FetchCurrencyResult> => {
+  const id = ctx.queryKey.slice(-1)[0];
   await new Promise((resolve) => setTimeout(resolve, 1000));
-  if (!(id in TEST_RAW_CURRENCY_DATA)) {
-    throw new Error("Currency not found");
-  }
+  if (!(id in TEST_RAW_CURRENCY_DATA)) console.error("Currency not found", id);
   const cur = TEST_RAW_CURRENCY_DATA[id];
-  if (!(cur.location in TEST_RAW_CURRENCY_DETAILS_DATA)) {
-    throw new Error("Currency details not found");
-  }
+  if (!(cur.location in TEST_RAW_CURRENCY_DETAILS_DATA))
+    console.error("Currency details not found", cur.location);
   // ensure source is immutable
   return { ...cur, ...TEST_RAW_CURRENCY_DETAILS_DATA[cur.location] };
 };
+
+// USEQUERY EXPORTS
 
 export const useCurrencyQuery = (
   currencyId: number,
@@ -56,7 +60,7 @@ export const useCurrencyQuery = (
     "queryFn" | "queryKey"
   >
 ) => {
-  return useQuery(["currency", currencyId], () => fetchCurrency(currencyId), {
+  return useQuery(["currency", currencyId], fetchCurrency, {
     cacheTime: 1000 * 60 * 60 * 24 * 365,
     refetchOnWindowFocus: false,
     ...options,
@@ -73,7 +77,7 @@ export const useCurrencyListQuery = (
   return useQueries(
     currencyIds.map((currencyId) => ({
       queryKey: ["currency", currencyId],
-      queryFn: () => fetchCurrency(currencyId),
+      queryFn: fetchCurrency,
       cacheTime: 1000 * 60 * 60 * 24 * 365,
       refetchOnWindowFocus: false,
       enabled: !!currencyId,

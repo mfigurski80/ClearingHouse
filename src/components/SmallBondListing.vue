@@ -8,14 +8,17 @@
     <Column header="ID" field="id" />
     <Column header="Status" bodyClass="status-col" headerClass="status-col">
       <template #body="{ data }">
-        <span class="status-chip" :class="data.status.toLowerCase()">{{
-          data.status
-        }}</span>
+        <span
+          class="status-chip"
+          v-if="data.isSuccess"
+          :class="data.status.toLowerCase()"
+          >{{ data.status }}</span
+        >
       </template>
     </Column>
     <Column header="Payments">
       <template #body="{ data }">
-        <div>
+        <div v-if="data.isSuccess">
           {{ data.couponSize }} <small>{{ data.currencySymbol }}</small> /
           {{ data.periodInterval }}
         </div>
@@ -23,21 +26,28 @@
     </Column>
     <Column header="Face">
       <template #body="{ data }">
-        <div>
+        <div v-if="data.isSuccess">
           {{ data.faceValue }} <small>{{ data.currencySymbol }}</small>
         </div>
       </template>
     </Column>
     <Column header="Progress">
       <template #body="{ data }">
-        <ProgressBar :progress="data.progress" :label="data.progressLabel" />
+        <ProgressBar
+          :progress="data.progress"
+          :label="data.progressLabel || 'loading'"
+        />
       </template>
     </Column>
     <Column header="Next">
       <template #body="{ data }">
-        <span class="nextAction" :class="{ overdue: data.nextOverdue }">{{
-          data.nextDate
-        }}</span>
+        <span
+          class="nextAction"
+          :class="{ overdue: data.nextOverdue }"
+          v-if="data.isSuccess"
+        >
+          {{ data.nextDate }}
+        </span>
       </template>
     </Column>
     <Column header="Actions">
@@ -62,99 +72,19 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, watch } from "vue";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import Button from "primevue/button";
 
 import ProgressBar from "@/components/ProgressBar.vue";
-import { useBondListQuery } from "@/composables/bondQueries";
-import { toReadableInterval, toRelativeDate } from "@/utils";
+import useSmallBondListing from "@/composables/useSmallBondListing";
 
 interface BondListingProps {
   bondList: number[];
 }
 const props = defineProps<BondListingProps>();
 
-const queryResult = useBondListQuery(props.bondList);
-
-const bonds = computed(() =>
-  queryResult
-    .map((res) => {
-      console.log("MAPPING RES", { ...res });
-      const queryState = {
-        isLoading: res.isLoading,
-        isError: res.isError,
-        error: res.error,
-      };
-      const bond = res.data;
-      if (!bond) {
-        return queryState;
-      }
-      return { ...formatBond(bond), ...queryState };
-    })
-    .filter((i) => !!i.id)
-);
-
-// const bonds = [];
-
-watch(queryResult, (res) => {
-  console.log(
-    "QUERY RESULT UPDATED",
-    res.map((v) => ({ ...v }))
-  );
-});
-
-enum BondStatus {
-  PENDING = "PENDING",
-  ACTIVE = "ACTIVE",
-  FAILING = "FAILING",
-  DEFAULT = "DEFAULT",
-  COMPLETE = "COMPLETE",
-}
-type BondListingTableEntry = {
-  isLoading: boolean;
-  isError: boolean;
-  error: string;
-  warning?: boolean;
-  id?: string;
-  status?: BondStatus;
-  currencySymbol?: string;
-  couponSize?: number;
-  faceValue?: number;
-  periodInterval?: string;
-  progress?: number;
-  progressLabel?: string;
-  nextDate?: string;
-  nextOverdue?: boolean;
-};
-
-const formatBond = (bond): BondListingTableEntry => {
-  const nextDate = new Date(
-    bond.startTime * 1000 + 1000 * bond.periodDuration * bond.curPeriod
-  );
-  const nextOverdue = nextDate < new Date();
-  let status = BondStatus.PENDING;
-  if (new Date(bond.startTime * 1000) < new Date()) {
-    if (bond.flag) status = BondStatus.DEFAULT;
-    else if (bond.curPeriod > bond.nPeriods) status = BondStatus.COMPLETE;
-    else if (nextOverdue) status = BondStatus.FAILING;
-    else status = BondStatus.ACTIVE;
-  }
-  return {
-    warning: status === BondStatus.DEFAULT || status === BondStatus.FAILING,
-    id: `#${bond.id}`,
-    status: status,
-    currencySymbol: bond.currency?.symbol || "???",
-    couponSize: bond.couponSize, // TODO: format
-    faceValue: bond.faceValue, // TODO: format
-    periodInterval: toReadableInterval(bond.periodDuration * 1000),
-    progress: bond.curPeriod / bond.nPeriods,
-    progressLabel: `${bond.curPeriod} / ${bond.nPeriods}`,
-    nextDate: status === BondStatus.COMPLETE ? "---" : toRelativeDate(nextDate),
-    nextOverdue: nextOverdue,
-  };
-};
+const bonds = useSmallBondListing(props.bondList);
 </script>
 
 <style lang="scss" scoped>

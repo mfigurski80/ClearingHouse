@@ -1,6 +1,9 @@
 import { useQuery, useQueries, UseQueryOptions } from "vue-query";
 
 import { RawBond, address } from "@/types";
+import { FetchCurrencyResult } from "./currencyQueries";
+
+// FAKE DATA STORE
 
 const TEST_RAW_BOND_DATA: { [key: number]: RawBond } = {
   13: {
@@ -50,14 +53,20 @@ const TEST_RAW_OWNERSHIP_DATA: { [key: number]: address } = {
   24: "0x2e7098b8eA74ed30dDF3d239f794385002dd3Ffe",
 };
 
-type FetchBondResult = RawBond & { owner: address };
+// FETCH INDIVIDUAL RAW BOND
+
+export type FetchBondResult = RawBond & { owner: address };
 const fetchBond = async (ctx: any): Promise<FetchBondResult> => {
-  const id = ctx.queryKey[-1];
-  await new Promise((resolve) => setTimeout(resolve, 2000));
+  const id: number = ctx.queryKey.slice(-1)[0];
+  await new Promise((resolve) => setTimeout(resolve, Math.random() * 1000 * 3));
+  if (!(id in TEST_RAW_BOND_DATA)) console.error("Bond not found:", id);
   const bond = TEST_RAW_BOND_DATA[id];
+  if (!(id in TEST_RAW_OWNERSHIP_DATA)) console.error("Owner not found:", id);
   // ensure source is immutable
   return { ...bond, owner: TEST_RAW_OWNERSHIP_DATA[id] };
 };
+
+// USEQUERY EXPORTS
 
 export const useBondQuery = (
   bondId: number,
@@ -89,3 +98,8 @@ export const useBondListQuery = (
     }))
   );
 };
+
+// FETCH RAW BOND WITH ASSOCIATED CURRENCY
+
+// export type FetchBondCurrencyResult = FetchBondResult & FetchCurrencyResult;
+// const fetchBondCurrency = async (ctx:any): Promise<FetchBondCurrencyResult>

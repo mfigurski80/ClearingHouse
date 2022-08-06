@@ -44,7 +44,7 @@ import Timeline from "primevue/timeline";
 import { toRelativeDate } from "@/utils";
 import ColumnsLayout from "@/layouts/ColumnsLayout.vue";
 import BondChip from "@/components/BondChip.vue";
-import BondListing from "@/components/BondListing.vue";
+import BondListing from "@/components/SmallBondListing.vue";
 
 import { useChainData } from "@/composables/chainData";
 const { chainData } = useChainData();
