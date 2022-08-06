@@ -28,11 +28,11 @@
   <columns-layout class="section">
     <div class="column">
       <h3>ASSETS</h3>
-      <bond-listing :bondList="bondList[0]" />
+      <bond-listing :bondList="bonds.owned" />
     </div>
     <div class="column">
       <h3>LIABILITIES</h3>
-      <bond-listing :bondList="bondList[1]" />
+      <bond-listing :bondList="bonds.minted" />
     </div>
   </columns-layout>
 </template>
@@ -45,29 +45,13 @@ import { toRelativeDate } from "@/utils";
 import ColumnsLayout from "@/layouts/ColumnsLayout.vue";
 import BondChip from "@/components/BondChip.vue";
 import BondListing from "@/components/BondListing.vue";
+
 import { useChainData } from "@/composables/chainData";
 const { chainData } = useChainData();
+import useBondListCache from "@/composables/useBondListCache";
+const bonds = useBondListCache();
 
 import { EventType, Direction } from "@/types/enums";
-
-const bondList = computed(() =>
-  chainData.bonds
-    .map((bond) => ({
-      ...bond,
-      currency: {
-        ...chainData.currencies.find((c) => c.id === bond.currencyRef),
-      },
-    }))
-    .reduce(
-      (acc, bond) => {
-        if (!bond.isWalletAssociated) return acc;
-        // TODO: re-implement condition here
-        acc[bond.minter.startsWith("0x0") ? 0 : 1].push(bond);
-        return acc;
-      },
-      [[], []]
-    )
-);
 
 const eventsData = computed(() =>
   chainData.events

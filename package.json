@@ -16,7 +16,9 @@
     "primevue": "^3.15.0",
     "vue": "^3.2.13",
     "vue-cookies": "^1.8.1",
-    "vue-router": "^4.0.3"
+    "vue-query": "^1.25.2",
+    "vue-router": "^4.0.3",
+    "zod": "^3.17.10"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.4.0",

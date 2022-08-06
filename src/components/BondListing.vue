@@ -62,18 +62,49 @@
 </template>
 
 <script lang="ts" setup>
-import { computed } from "vue";
+import { computed, watch } from "vue";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import Button from "primevue/button";
 
-import { Bond } from "@/types";
-import { toReadableInterval, toRelativeDate } from "@/utils";
 import ProgressBar from "@/components/ProgressBar.vue";
+import { useBondListQuery } from "@/composables/bondQueries";
+import { toReadableInterval, toRelativeDate } from "@/utils";
 
 interface BondListingProps {
-  bondList: Bond[];
+  bondList: number[];
 }
+const props = defineProps<BondListingProps>();
+
+const queryResult = useBondListQuery(props.bondList);
+
+const bonds = computed(() =>
+  queryResult
+    .map((res) => {
+      console.log("MAPPING RES", { ...res });
+      const queryState = {
+        isLoading: res.isLoading,
+        isError: res.isError,
+        error: res.error,
+      };
+      const bond = res.data;
+      if (!bond) {
+        return queryState;
+      }
+      return { ...formatBond(bond), ...queryState };
+    })
+    .filter((i) => !!i.id)
+);
+
+// const bonds = [];
+
+watch(queryResult, (res) => {
+  console.log(
+    "QUERY RESULT UPDATED",
+    res.map((v) => ({ ...v }))
+  );
+});
+
 enum BondStatus {
   PENDING = "PENDING",
   ACTIVE = "ACTIVE",
@@ -81,50 +112,49 @@ enum BondStatus {
   DEFAULT = "DEFAULT",
   COMPLETE = "COMPLETE",
 }
-interface BondListingTableEntry {
-  warning: boolean;
-  id: string;
-  status: BondStatus;
-  currencySymbol: string;
-  couponSize: number;
-  faceValue: number;
-  periodInterval: string;
-  progress: number;
-  progressLabel: string;
-  nextDate: string;
-  nextOverdue: boolean;
-}
-const props = defineProps<BondListingProps>();
-const bonds: BondListingTableEntry[] = computed(() =>
-  props.bondList.map((bond) => {
-    const nextDate = new Date(
-      +bond.startTime + 1000 * bond.periodDuration * bond.periodsCompleted
-    );
-    const nextOverdue = nextDate < new Date();
-    let status = BondStatus.PENDING;
-    if (bond.startTime < new Date()) {
-      if (!bond.active) status = BondStatus.DEFAULT;
-      else if (bond.periodsCompleted > bond.periodsTotal)
-        status = BondStatus.COMPLETE;
-      else if (nextOverdue) status = BondStatus.FAILING;
-      else status = BondStatus.ACTIVE;
-    }
-    return {
-      warning: status === BondStatus.DEFAULT || status === BondStatus.FAILING,
-      id: `#${bond.id}`,
-      status: status,
-      currencySymbol: bond.currency?.symbol || "???",
-      couponSize: bond.couponSize, // TODO: format
-      faceValue: bond.faceValue, // TODO: format
-      periodInterval: toReadableInterval(bond.periodDuration * 1000),
-      progress: bond.periodsCompleted / bond.periodsTotal,
-      progressLabel: `${bond.periodsCompleted} / ${bond.periodsTotal}`,
-      nextDate:
-        status === BondStatus.COMPLETE ? "---" : toRelativeDate(nextDate),
-      nextOverdue: nextOverdue,
-    };
-  })
-);
+type BondListingTableEntry = {
+  isLoading: boolean;
+  isError: boolean;
+  error: string;
+  warning?: boolean;
+  id?: string;
+  status?: BondStatus;
+  currencySymbol?: string;
+  couponSize?: number;
+  faceValue?: number;
+  periodInterval?: string;
+  progress?: number;
+  progressLabel?: string;
+  nextDate?: string;
+  nextOverdue?: boolean;
+};
+
+const formatBond = (bond): BondListingTableEntry => {
+  const nextDate = new Date(
+    bond.startTime * 1000 + 1000 * bond.periodDuration * bond.curPeriod
+  );
+  const nextOverdue = nextDate < new Date();
+  let status = BondStatus.PENDING;
+  if (new Date(bond.startTime * 1000) < new Date()) {
+    if (bond.flag) status = BondStatus.DEFAULT;
+    else if (bond.curPeriod > bond.nPeriods) status = BondStatus.COMPLETE;
+    else if (nextOverdue) status = BondStatus.FAILING;
+    else status = BondStatus.ACTIVE;
+  }
+  return {
+    warning: status === BondStatus.DEFAULT || status === BondStatus.FAILING,
+    id: `#${bond.id}`,
+    status: status,
+    currencySymbol: bond.currency?.symbol || "???",
+    couponSize: bond.couponSize, // TODO: format
+    faceValue: bond.faceValue, // TODO: format
+    periodInterval: toReadableInterval(bond.periodDuration * 1000),
+    progress: bond.curPeriod / bond.nPeriods,
+    progressLabel: `${bond.curPeriod} / ${bond.nPeriods}`,
+    nextDate: status === BondStatus.COMPLETE ? "---" : toRelativeDate(nextDate),
+    nextOverdue: nextOverdue,
+  };
+};
 </script>
 
 <style lang="scss" scoped>

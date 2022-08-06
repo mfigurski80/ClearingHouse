@@ -1,4 +1,8 @@
+import { CurrencyType, EventType, Direction } from "./enums";
+import { address } from "./processed_chain_data";
+
 // PROCESSED DATA TYPES
+
 export interface Bond {
   id: number;
   active: boolean;

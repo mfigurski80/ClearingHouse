@@ -1,8 +1,10 @@
+import { CurrencyType } from "./enums";
+
+// RAW DATA TYPES
+
 export type address = string;
 
 export interface RawBond {
-  owner?: address;
-  isWalletApprovedOperator?: boolean;
   id: number;
   flag: boolean;
   currencyRef: number;
@@ -14,6 +16,14 @@ export interface RawBond {
   faceValue: number;
   beneficiary: address;
   minter: address;
+  owner?: address;
+  operators?: address[];
+}
+
+export interface WalletBondRelationship {
+  wallet: address;
+  owner: boolean;
+  approvedOperator: boolean;
 }
 
 export interface RawCurrency {
@@ -22,6 +32,13 @@ export interface RawCurrency {
   type: CurrencyType;
   erc1155SmallTokenId: number;
   erc1155TokenId: number;
+}
+
+export interface RawCurrencyDetails {
+  location: address;
+  name: string;
+  symbol: string;
+  decimals: number;
 }
 
 export interface RawCollateral {

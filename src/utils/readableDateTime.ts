@@ -10,7 +10,7 @@ const units = [
 
 export function toReadableInterval(d: number) {
   d = Math.abs(Math.floor(d / 1000));
-  let unit = units[-1];
+  let unit = units[6];
   // unit = units.find((u) => d >= u.value) || units[-1];
   for (let i = 0; i < units.length - 1; i++) {
     if (
