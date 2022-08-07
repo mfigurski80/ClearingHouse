@@ -7,6 +7,6 @@ export function toReadableNumber(n: number): string {
 
 export function toCurrencyFormat(n: number, c: RawCurrencyDetails | undefined) {
   const v = c ? toReadableNumber(n / 10 ** c.decimals) : toReadableNumber(n);
-  console.log(`FORMATTING NUMBER: ${n} => ${v}`);
+  // console.log(`FORMATTING NUMBER: ${n} => ${v}`);
   return v;
 }

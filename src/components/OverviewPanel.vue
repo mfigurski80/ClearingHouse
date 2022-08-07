@@ -50,6 +50,8 @@ import { useChainData } from "@/composables/chainData";
 const { chainData } = useChainData();
 import useBondListCache from "@/composables/useBondListCache";
 const bonds = useBondListCache();
+import useInferredEvents from "@/composables/useInferredEvents";
+// const events = useInferredEvents(bonds, 6);
 
 import { EventType, Direction } from "@/types/enums";
 
