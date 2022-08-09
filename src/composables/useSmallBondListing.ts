@@ -5,12 +5,7 @@ import {
   useCurrencyListQuery,
   FetchCurrencyResult,
 } from "@/composables/currencyQueries";
-import {
-  toReadableInterval,
-  toRelativeDate,
-  toCurrencyFormat,
-  toReadableNumber,
-} from "@/utils";
+import { toReadableInterval, toRelativeDate, toCurrencyFormat } from "@/utils";
 
 export enum BondStatus {
   PENDING = "PENDING",

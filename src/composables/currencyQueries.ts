@@ -1,6 +1,9 @@
 import { computed, Ref } from "vue";
 import { useQuery, useQueries, UseQueryOptions } from "vue-query";
-import type { QueryFunctionContext } from "vue-query/types";
+import type {
+  QueryFunctionContext,
+  QueryObserverResult,
+} from "vue-query/types";
 
 import type { RawCurrency, RawCurrencyDetails, address } from "@/types";
 import { CurrencyType } from "@/types/enums";
@@ -59,6 +62,12 @@ const fetchCurrency = async (
 };
 
 // USEQUERY EXPORTS
+const queryOptions = {
+  cacheTime: Infinity,
+  staleTime: Infinity,
+  refetchOnWindowFocus: false,
+  keepPreviousData: true,
+};
 
 export const useCurrencyQuery = (
   currencyId: number,
@@ -68,14 +77,13 @@ export const useCurrencyQuery = (
   >
 ) => {
   return useQuery(["currency", currencyId], fetchCurrency, {
-    cacheTime: 1000 * 60 * 60 * 24 * 365,
-    refetchOnWindowFocus: false,
+    ...queryOptions,
     ...options,
   });
 };
 
 export const useCurrencyListQuery = (
-  currencyIds: number[] | Ref<number[]>,
+  currencyIds: (number | undefined)[] | Ref<(number | undefined)[]>,
   options?: Omit<
     UseQueryOptions<unknown, unknown, unknown, (string | number)[]>,
     "queryFn" | "queryKey"
@@ -87,14 +95,16 @@ export const useCurrencyListQuery = (
         return {
           queryKey: ["currency", currencyId],
           queryFn: fetchCurrency,
-          cacheTime: 1000 * 60 * 60 * 24 * 365,
-          refetchOnWindowFocus: false,
           enabled: currencyId !== undefined,
+          ...queryOptions,
           ...options,
         };
       }
     )
   );
 
-  return useQueries(p);
+  return useQueries(p) as readonly QueryObserverResult<
+    FetchCurrencyResult,
+    unknown
+  >[];
 };

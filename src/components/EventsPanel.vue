@@ -20,51 +20,59 @@
             {{ props.item.typeLabel }}
           </p>
           <h6>RELATED TO BOND:</h6>
-          <bond-chip :bond="props.item.bond" />
+          <bond-chip :bond="props.item.bond" :currency="props.item.currency" />
         </div>
       </template>
     </timeline>
   </div>
-  <columns-layout class="section">
-    <div class="column">
-      <h3>ASSETS</h3>
-      <bond-listing :bondList="bonds.owned" />
-    </div>
-    <div class="column">
-      <h3>LIABILITIES</h3>
-      <bond-listing :bondList="bonds.minted" />
-    </div>
-  </columns-layout>
 </template>
 
-<script lang="ts" setup>
+<script setup lang="ts">
 import { computed } from "vue";
 import Timeline from "primevue/timeline";
 
-import { toRelativeDate } from "@/utils";
-import ColumnsLayout from "@/layouts/ColumnsLayout.vue";
-import BondChip from "@/components/BondChip.vue";
-import BondListing from "@/components/SmallBondListing.vue";
-
-import { useChainData } from "@/composables/chainData";
-const { chainData } = useChainData();
-import useBondListCache from "@/composables/useBondListCache";
-const bonds = useBondListCache();
-import useInferredEvents from "@/composables/useInferredEvents";
-// const events = useInferredEvents(bonds, 6);
-
 import { EventType, Direction } from "@/types/enums";
+import { toRelativeDate } from "@/utils";
+import BondChip from "@/components/BondChip.vue";
+import {
+  useBondListQueryWithCurrency,
+  FetchBondResult,
+} from "@/composables/bondQueries";
+import useInferredEvents from "@/composables/useInferredEvents";
 
-const eventsData = computed(() =>
-  chainData.events
+const props = defineProps<{
+  ownedBondList: number[];
+  mintedBondList: number[];
+}>();
+
+const { bonds, currencies } = useBondListQueryWithCurrency([
+  ...props.ownedBondList,
+  ...props.mintedBondList,
+]);
+
+const events = useInferredEvents(bonds, 3, Direction.INCOMING);
+
+interface EventDisplay {
+  relativeTime: string;
+  failed: boolean;
+  direction: Direction;
+  typeLabel: string;
+  icon: string;
+  type: EventType;
+  incoming: boolean;
+  bond?: FetchBondResult;
+}
+
+const eventsData: EventDisplay[] = computed(() =>
+  events.value
     .filter((ev) => !ev.completed)
     .sort((a, b) => a.timestamp - b.timestamp)
     .slice(0, 3)
     .map((ev) => {
-      let bond = { ...chainData.bonds.find((b) => b.id === ev.bondId) };
-      bond.currency = {
-        ...chainData.currencies.find((c) => c.id === bond.currencyRef),
-      };
+      let bond = ev.bond;
+      let currency = currencies.find(
+        (c) => c.data?.id === bond.currencyRef
+      )?.data;
       return {
         relativeTime: toRelativeDate(ev.timestamp),
         failed: ev.timestamp < Date.now(),
@@ -80,15 +88,13 @@ const eventsData = computed(() =>
         type: ev.eventType,
         incoming: ev.direction === Direction.INCOMING,
         bond,
+        currency,
       };
     })
 );
 </script>
 
-<style lang="scss" scoped>
-.column {
-  flex: 1 1;
-}
+<style scoped lang="scss">
 .panel {
   width: 100%;
   padding: 20px 30px;

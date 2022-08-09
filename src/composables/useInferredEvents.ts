@@ -1,27 +1,43 @@
-import { reactive } from "vue";
+import { computed, Ref } from "vue";
+import { QueryObserverResult } from "vue-query/types";
 import TinyQueue from "tinyqueue";
 
 import type { FetchBondResult } from "@/composables/bondQueries";
-import type { Event, address } from "@/types";
+import type { FetchCurrencyResult } from "@/composables/currencyQueries";
 import { EventType, Direction } from "@/types/enums";
 
-const inferredEventsCache: Event[] = reactive([]);
+export interface Event {
+  completed: boolean;
+  bondId: number;
+  eventType: EventType;
+  direction: Direction;
+  timestamp: Date;
+  bond?: FetchBondResult;
+  currency?: FetchCurrencyResult;
+}
 
 export default function useInferredEvents(
-  bonds: FetchBondResult[],
+  bonds: QueryObserverResult<FetchBondResult, unknown>[],
   n: number,
-  perspectiveWallet: address
-): Event[] {
-  console.log("Using inferred events", bonds, n, perspectiveWallet);
-  return [...limitGenerator(inferredEvents(bonds, perspectiveWallet), n)];
+  direction: Direction
+) {
+  const events = computed(() => {
+    if (bonds.length === 0 || n === 0) return [];
+    const bData = bonds
+      .map((b) => b.data)
+      .filter((b) => b !== undefined) as FetchBondResult[];
+    return [...limitGenerator(inferredEvents(bData, direction), n)];
+  });
+
+  return events;
 }
 
 function* limitGenerator<T>(gen: Generator<T>, n: number): Generator<T> {
   let i = n;
   for (const item of gen) {
-    if (i <= 0) break;
-    i -= 1;
     yield item;
+    i -= 1;
+    if (i <= 0) break;
   }
 }
 
@@ -32,29 +48,20 @@ function* limitGenerator<T>(gen: Generator<T>, n: number): Generator<T> {
  */
 function* inferredEvents(
   bonds: FetchBondResult[],
-  perspectiveWallet: address
+  direction: Direction
 ): Generator<Event> {
-  type ActionMarker = { i: number; time: number; direction: Direction };
+  type ActionMarker = { i: number; time: number };
   const next_actions: TinyQueue<ActionMarker> = new TinyQueue(
     bonds
       .map((b, i) => ({
         i,
-        time: b.startTime + b.couponSize * b.curPeriod,
-        direction:
-          b.beneficiary === perspectiveWallet || b.owner === perspectiveWallet
-            ? Direction.INCOMING
-            : b.minter === perspectiveWallet
-            ? Direction.OUTGOING
-            : null,
+        time: b.startTime + b.periodDuration * b.curPeriod,
       }))
       .filter(
-        (b, i) =>
-          bonds[i].curPeriod <= bonds[i].nPeriods && b.direction !== null
+        (b, i) => bonds[i].curPeriod <= bonds[i].nPeriods
       ) as ActionMarker[],
     (a, b) => a.time - b.time
   );
-
-  console.log(next_actions);
 
   while (next_actions.length > 0) {
     const cur = next_actions.pop() as ActionMarker;
@@ -63,17 +70,22 @@ function* inferredEvents(
     if (next) lead = next.time - cur.time;
 
     const maxPeriods = bonds[cur.i].nPeriods - bonds[cur.i].curPeriod;
-    const periodsWant = Math.ceil(lead / bonds[cur.i].periodDuration);
+    const periodsWant = bonds[cur.i].periodDuration
+      ? Math.ceil(lead / bonds[cur.i].periodDuration)
+      : Infinity;
     const periodsAllowed = Math.min(periodsWant, maxPeriods);
+
+    // console.table({ ...cur, lead, periodsAllowed });
     for (let i = 0; i < periodsAllowed; i++) {
       yield {
         completed: false,
         bondId: bonds[cur.i].id,
         eventType: EventType.SERVICE_PAYMENT,
-        direction: cur.direction,
+        direction: direction,
         timestamp: new Date(
           1000 * (cur.time + i * bonds[cur.i].periodDuration)
         ),
+        bond: bonds[cur.i],
       };
     }
     if (maxPeriods === periodsAllowed) {
@@ -82,17 +94,17 @@ function* inferredEvents(
         completed: false,
         bondId: bonds[cur.i].id,
         eventType: EventType.FACE_PAYMENT,
-        direction: cur.direction,
+        direction: direction,
         timestamp: new Date(
           1000 * (cur.time + bonds[cur.i].periodDuration * periodsAllowed)
         ),
+        bond: bonds[cur.i],
       };
     } else {
       // re-insert bond marker
       next_actions.push({
         i: cur.i,
         time: cur.time + bonds[cur.i].periodDuration * periodsAllowed,
-        direction: cur.direction,
       });
     }
   }

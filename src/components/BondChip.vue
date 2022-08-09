@@ -11,25 +11,33 @@
 </template>
 
 <script lang="ts" setup>
-import { computed } from "vue";
+import { computed, watch } from "vue";
 
-import { toReadableInterval } from "@/utils";
-import type { Bond, Currency } from "@/types";
+import { toReadableInterval, toCurrencyFormat } from "@/utils";
+import type { FetchBondResult } from "@/composables/bondQueries";
+import type { FetchCurrencyResult } from "@/composables/currencyQueries";
 
-type BondPanelProps = { bond: Bond & { currency: Currency } };
+type BondPanelProps = {
+  bond: FetchBondResult;
+  currency?: FetchCurrencyResult;
+};
 const props = defineProps<BondPanelProps>();
 
 const style = computed(
   () =>
     `--completed: ${Math.round(
-      (100 * props.bond.periodsCompleted) / props.bond.periodsTotal
+      (100 * props.bond.curPeriod) / props.bond.nPeriods
     )}%`
 );
+
 const label = computed(() => [
   props.bond.id,
-  props.bond.couponSize * props.bond.periodsTotal + props.bond.faceValue,
-  props.bond.currency?.symbol || "(??)",
-  toReadableInterval(props.bond.maturityTime - props.bond.startTime),
+  toCurrencyFormat(
+    props.bond.couponSize * props.bond.nPeriods + props.bond.faceValue,
+    props.currency
+  ),
+  props.currency?.symbol || "(??)",
+  toReadableInterval(props.bond.nPeriods * props.bond.periodDuration * 1000),
 ]);
 </script>
 

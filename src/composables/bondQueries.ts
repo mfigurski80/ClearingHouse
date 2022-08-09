@@ -1,8 +1,13 @@
+import { computed, Ref } from "vue";
 import { useQuery, useQueries, UseQueryOptions } from "vue-query";
-import type { QueryFunctionContext } from "vue-query/types";
+import type {
+  QueryFunctionContext,
+  QueryObserverResult,
+} from "vue-query/types";
 
 import type { RawBond, address } from "@/types";
 import { counter } from "@/utils";
+import { useCurrencyListQuery } from "@/composables/currencyQueries";
 
 // FAKE DATA STORE
 
@@ -24,9 +29,9 @@ const TEST_RAW_BOND_DATA: { [key: number]: RawBond } = {
     id: 18,
     flag: false,
     currencyRef: 0,
-    nPeriods: 100,
-    curPeriod: 14,
-    periodDuration: 60 * 60 * 24 * 7,
+    nPeriods: 40,
+    curPeriod: 7,
+    periodDuration: 60 * 60 * 24 * 30,
     couponSize: 10 * 10 ** 18,
     startTime: +new Date("2022-01-01T00:00:00.000Z") / 1000,
     faceValue: 100 * 10 ** 18,
@@ -38,7 +43,7 @@ const TEST_RAW_BOND_DATA: { [key: number]: RawBond } = {
     flag: false,
     currencyRef: 1,
     nPeriods: 200,
-    curPeriod: 133,
+    curPeriod: 30,
     periodDuration: 60 * 60 * 24 * 10,
     couponSize: 4 * 100,
     startTime: +new Date("2022-01-01T00:00:00.000Z") / 1000,
@@ -71,39 +76,59 @@ const fetchBond = async (
 };
 
 // USEQUERY EXPORTS
+const queryOptions = {
+  refetchOnWindowFocus: false,
+  cacheTime: 1000 * 60 * 5,
+  staleTime: 1000 * 60 * 5,
+};
 
 export const useBondQuery = (
-  bondId: number,
+  bondId: number | Ref<number>,
   options?: Omit<
     UseQueryOptions<unknown, unknown, unknown, (string | number)[]>,
     "queryFn" | "queryKey"
   >
 ) => {
-  return useQuery(["bond", bondId], fetchBond, {
-    refetchOnWindowFocus: false,
-    ...options,
-  });
+  return useQuery(
+    ["bond", (bondId as Ref<number>).value || (bondId as number)],
+    fetchBond,
+    {
+      ...queryOptions,
+      ...options,
+    }
+  );
 };
 
 export const useBondListQuery = (
-  bondIds: number[],
+  bondIds: number[] | Ref<number[]>,
   options?: Omit<
     UseQueryOptions<unknown, unknown, unknown, (string | number)[]>,
     "queryFn" | "queryKey"
   >
 ) => {
   return useQueries(
-    bondIds.map((bondId) => ({
+    ((bondIds as Ref<number[]>).value || bondIds).map((bondId) => ({
       queryKey: ["bond", bondId],
       queryFn: fetchBond,
-      refetchOnWindowFocus: false,
+      ...queryOptions,
       enabled: !!bondId,
       ...options,
     }))
-  );
+  ) as readonly QueryObserverResult<FetchBondResult, unknown>[];
 };
 
-// FETCH RAW BOND WITH ASSOCIATED CURRENCY
+export const useBondListQueryWithCurrency = (
+  bondIds: number[] | Ref<number[]>,
+  options?: Omit<
+    UseQueryOptions<unknown, unknown, unknown, (string | number)[]>,
+    "queryFn" | "queryKey"
+  >
+) => {
+  const bondQueries = useBondListQuery(bondIds, options);
+  const currencyIds = computed(() =>
+    bondQueries.map((q) => q.data?.currencyRef)
+  );
+  const currencyQueries = useCurrencyListQuery(currencyIds, options);
 
-// export type FetchBondCurrencyResult = FetchBondResult & FetchCurrencyResult;
-// const fetchBondCurrency = async (ctx:any): Promise<FetchBondCurrencyResult>
+  return { bonds: bondQueries, currencies: currencyQueries };
+};

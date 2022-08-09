@@ -2,7 +2,7 @@
   <container-layout id="dashboard">
     <tab-view>
       <tab-panel header="Overview">
-        <overview-panel />
+        <overview-tab />
       </tab-panel>
       <tab-panel header="Portfolio"> </tab-panel>
       <tab-panel header="Events"> </tab-panel>
@@ -16,7 +16,7 @@ import TabView from "primevue/tabview";
 import TabPanel from "primevue/tabpanel";
 
 import ContainerLayout from "@/layouts/ContainerLayout.vue";
-import OverviewPanel from "@/components/OverviewPanel.vue";
+import OverviewTab from "@/components/OverviewTab.vue";
 // import CoreJSON from "@mfigurski80/bond-token/contracts/Core.json";
 </script>
 
