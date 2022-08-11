@@ -77,7 +77,6 @@ function* inferredEvents(
       ? Math.ceil((lead + 1) / bonds[cur.i].periodDuration)
       : Infinity;
     const periodsAllowed = Math.min(periodsWant, maxPeriods);
-    console.table({ maxPeriods, periodsWant, periodsAllowed, lead });
 
     for (let i = 0; i < periodsAllowed; i++) {
       yield {

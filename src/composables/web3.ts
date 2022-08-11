@@ -1,4 +1,4 @@
-import { ref, onMounted, onUnmounted } from "vue";
+import { ref, readonly, onMounted, onUnmounted } from "vue";
 import { ethers, providers } from "ethers";
 
 import { PromiseWithTimeout } from "@/utils";
@@ -14,42 +14,47 @@ const handleAccountsChanged = () => {
   window.location.reload();
 };
 
-export const status = ref<ConnectionStatus>(ConnectionStatus.DISCONNECTED);
-export const provider = ref<providers.Web3Provider | null>(null);
-export const signer = ref<providers.JsonRpcSigner | null>(null);
-export const wallet = ref<string | null>(null);
+const _status = ref<ConnectionStatus>(ConnectionStatus.DISCONNECTED);
+const _provider = ref<providers.Web3Provider | null>(null);
+const _signer = ref<providers.JsonRpcSigner | null>(null);
+const _wallet = ref<string | null>(null);
+
+export const status = readonly(_status);
+export const provider = readonly(_provider);
+export const signer = readonly(_signer);
+export const wallet = readonly(_wallet);
 
 export const connect = async function (byUser = true) {
   // Check if web3 is available
   if (!window.ethereum) {
     alert("No web3 detected. Please install MetaMask.");
-    status.value = ConnectionStatus.NEED_PROVIDER;
+    _status.value = ConnectionStatus.NEED_PROVIDER;
     return;
   }
   // If it is, set the provider
-  if (!provider.value)
-    provider.value = new ethers.providers.Web3Provider(window.ethereum, "any");
+  if (!_provider.value)
+    _provider.value = new ethers.providers.Web3Provider(window.ethereum, "any");
 
   // wait for user to confirm connection
   if (byUser) {
-    status.value = ConnectionStatus.CONNECTING;
-    await provider.value.send("eth_requestAccounts", []);
+    _status.value = ConnectionStatus.CONNECTING;
+    await _provider.value.send("eth_requestAccounts", []);
   }
 
-  signer.value = provider.value.getSigner();
+  _signer.value = _provider.value.getSigner();
   if (signer.value === undefined) {
-    status.value = ConnectionStatus.DISCONNECTED;
+    _status.value = ConnectionStatus.DISCONNECTED;
     return;
   }
   const address = await PromiseWithTimeout(
-    signer.value.getAddress(),
+    _signer.value.getAddress(),
     1000
   ).catch((err) => {
-    status.value = ConnectionStatus.DISCONNECTED;
+    _status.value = ConnectionStatus.DISCONNECTED;
     throw err;
   });
-  wallet.value = address;
-  status.value = ConnectionStatus.CONNECTED;
+  _wallet.value = address;
+  _status.value = ConnectionStatus.CONNECTED;
   window.ethereum
     .removeListener("accountsChanged", handleAccountsChanged)
     .on("accountsChanged", handleAccountsChanged);
@@ -57,7 +62,7 @@ export const connect = async function (byUser = true) {
 
 export const useWeb3 = () => {
   onMounted(() => {
-    if (status.value !== ConnectionStatus.DISCONNECTED) return;
+    if (_status.value !== ConnectionStatus.DISCONNECTED) return;
     connect(false).catch(() => {
       return;
     });

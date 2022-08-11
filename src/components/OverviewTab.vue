@@ -18,6 +18,9 @@ import EventsPanel from "@/components/EventsPanel.vue";
 import BondListing from "@/components/SmallBondListing.vue";
 
 import useBondListCache from "@/composables/useBondListCache";
+// import { Core } from "@mfigurski80/bond-token";
+// console.log("BOND TOKEN", { ...Core });
+
 const bonds = useBondListCache();
 </script>
 
