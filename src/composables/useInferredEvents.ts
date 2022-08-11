@@ -18,15 +18,17 @@ export interface Event {
 
 export default function useInferredEvents(
   bonds: QueryObserverResult<FetchBondResult, unknown>[],
-  n: number,
+  n: number | Ref<number>,
   direction: Direction
 ) {
   const events = computed(() => {
-    if (bonds.length === 0 || n === 0) return [];
     const bData = bonds
       .map((b) => b.data)
       .filter((b) => b !== undefined) as FetchBondResult[];
-    return [...limitGenerator(inferredEvents(bData, direction), n)];
+    const toGet = typeof n === "number" ? n : n.value;
+    console.log("GETTING N EVENTS:", toGet);
+    if (bData.length === 0 || !toGet || isNaN(toGet)) return [];
+    return [...limitGenerator(inferredEvents(bData, direction), toGet)];
   });
 
   return events;

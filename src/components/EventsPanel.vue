@@ -1,5 +1,5 @@
 <template>
-  <div class="panel">
+  <div class="panel" ref="panel">
     <timeline :value="eventsData" layout="horizontal" class="panel-timeline">
       <template #opposite="props">
         <small>{{ props.item.relativeTime }}</small>
@@ -28,8 +28,9 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, watchEffect, reactive, ref } from "vue";
 import Timeline from "primevue/timeline";
+import { useElementSize } from "@vueuse/core";
 
 import { EventType, Direction } from "@/types/enums";
 import { toRelativeDate } from "@/utils";
@@ -39,6 +40,13 @@ import {
   FetchBondResult,
 } from "@/composables/bondQueries";
 import useInferredEvents from "@/composables/useInferredEvents";
+
+// const panel = ref(null);
+// const { width } = useElementSize(panel);
+// const numEvents = ref(3);
+// watchEffect(() => {
+//   numEvents.value = Math.floor((width.value - 300) / 300);
+// });
 
 const props = defineProps<{
   ownedBondList: number[];
@@ -50,7 +58,7 @@ const { bonds, currencies } = useBondListQueryWithCurrency([
   ...props.mintedBondList,
 ]);
 
-const events = useInferredEvents(bonds, 3, Direction.INCOMING);
+const events = useInferredEvents(bonds, 5, Direction.INCOMING);
 
 interface EventDisplay {
   relativeTime: string;
