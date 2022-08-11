@@ -58,7 +58,13 @@ const { bonds, currencies } = useBondListQueryWithCurrency([
   ...props.mintedBondList,
 ]);
 
-const events = useInferredEvents(bonds, numEvents, Direction.INCOMING);
+const directions = computed(() =>
+  Array(props.ownedBondList.length)
+    .fill(Direction.Incoming)
+    .concat(Array(props.mintedBondList.length).fill(Direction.OUTGOING))
+);
+
+const events = useInferredEvents(bonds, numEvents, directions);
 
 interface EventDisplay {
   relativeTime: string;

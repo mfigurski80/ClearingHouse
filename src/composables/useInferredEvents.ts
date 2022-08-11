@@ -19,15 +19,17 @@ export interface Event {
 export default function useInferredEvents(
   bonds: QueryObserverResult<FetchBondResult, unknown>[],
   n: number | Ref<number>,
-  direction: Direction
+  directions: Direction[] | Ref<Direction[]>
 ) {
   const events = computed(() => {
     const bData = bonds
       .map((b) => b.data)
       .filter((b) => b !== undefined) as FetchBondResult[];
     const toGet = typeof n === "number" ? n : n.value;
+    const directionVal =
+      (directions as Ref<Direction[]>).value || (directions as Direction[]);
     if (bData.length === 0 || !toGet || isNaN(toGet)) return [];
-    return [...limitGenerator(inferredEvents(bData, direction), toGet)];
+    return [...limitGenerator(inferredEvents(bData, directionVal), toGet)];
   });
 
   return events;
@@ -49,7 +51,7 @@ function* limitGenerator<T>(gen: Generator<T>, n: number): Generator<T> {
  */
 function* inferredEvents(
   bonds: FetchBondResult[],
-  direction: Direction
+  direction: Direction[]
 ): Generator<Event> {
   type ActionMarker = { i: number; time: number };
   const next_actions: TinyQueue<ActionMarker> = new TinyQueue(
@@ -77,13 +79,12 @@ function* inferredEvents(
     const periodsAllowed = Math.min(periodsWant, maxPeriods);
     console.table({ maxPeriods, periodsWant, periodsAllowed, lead });
 
-    // console.table({ ...cur, lead, periodsAllowed });
     for (let i = 0; i < periodsAllowed; i++) {
       yield {
         completed: false,
         bondId: bonds[cur.i].id,
         eventType: EventType.SERVICE_PAYMENT,
-        direction: direction,
+        direction: direction[cur.i],
         timestamp: new Date(
           1000 * (cur.time + i * bonds[cur.i].periodDuration)
         ),
@@ -96,7 +97,7 @@ function* inferredEvents(
         completed: false,
         bondId: bonds[cur.i].id,
         eventType: EventType.FACE_PAYMENT,
-        direction: direction,
+        direction: direction[cur.i],
         timestamp: new Date(
           1000 * (cur.time + bonds[cur.i].periodDuration * periodsAllowed)
         ),
