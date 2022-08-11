@@ -26,7 +26,6 @@ export default function useInferredEvents(
       .map((b) => b.data)
       .filter((b) => b !== undefined) as FetchBondResult[];
     const toGet = typeof n === "number" ? n : n.value;
-    console.log("GETTING N EVENTS:", toGet);
     if (bData.length === 0 || !toGet || isNaN(toGet)) return [];
     return [...limitGenerator(inferredEvents(bData, direction), toGet)];
   });
@@ -73,9 +72,10 @@ function* inferredEvents(
 
     const maxPeriods = bonds[cur.i].nPeriods - bonds[cur.i].curPeriod;
     const periodsWant = bonds[cur.i].periodDuration
-      ? Math.ceil(lead / bonds[cur.i].periodDuration)
+      ? Math.ceil((lead + 1) / bonds[cur.i].periodDuration)
       : Infinity;
     const periodsAllowed = Math.min(periodsWant, maxPeriods);
+    console.table({ maxPeriods, periodsWant, periodsAllowed, lead });
 
     // console.table({ ...cur, lead, periodsAllowed });
     for (let i = 0; i < periodsAllowed; i++) {

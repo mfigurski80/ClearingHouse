@@ -41,12 +41,12 @@ import {
 } from "@/composables/bondQueries";
 import useInferredEvents from "@/composables/useInferredEvents";
 
-// const panel = ref(null);
-// const { width } = useElementSize(panel);
-// const numEvents = ref(3);
-// watchEffect(() => {
-//   numEvents.value = Math.floor((width.value - 300) / 300);
-// });
+const panel = ref(null);
+const { width } = useElementSize(panel);
+const numEvents = ref(3);
+watchEffect(() => {
+  numEvents.value = Math.floor((width.value - 200) / 300);
+});
 
 const props = defineProps<{
   ownedBondList: number[];
@@ -58,7 +58,7 @@ const { bonds, currencies } = useBondListQueryWithCurrency([
   ...props.mintedBondList,
 ]);
 
-const events = useInferredEvents(bonds, 5, Direction.INCOMING);
+const events = useInferredEvents(bonds, numEvents, Direction.INCOMING);
 
 interface EventDisplay {
   relativeTime: string;
@@ -75,7 +75,6 @@ const eventsData: EventDisplay[] = computed(() =>
   events.value
     .filter((ev) => !ev.completed)
     .sort((a, b) => a.timestamp - b.timestamp)
-    .slice(0, 3)
     .map((ev) => {
       let bond = ev.bond;
       let currency = currencies.find(

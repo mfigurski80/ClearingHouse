@@ -51,7 +51,6 @@ const fetchCurrency = async (
 ): Promise<FetchCurrencyResult> => {
   counter("queries");
   const id = ctx.queryKey.slice(-1)[0] as number;
-  console.log("FETCHING CURRENCY", id);
   await new Promise((resolve) => setTimeout(resolve, Math.random() * 1000 * 3));
   if (!(id in TEST_RAW_CURRENCY_DATA)) console.error("Currency not found", id);
   const cur = TEST_RAW_CURRENCY_DATA[id];
