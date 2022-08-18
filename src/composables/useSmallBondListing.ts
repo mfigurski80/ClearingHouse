@@ -1,6 +1,9 @@
 import { computed } from "vue";
 
-import { useBondListQuery, FetchBondResult } from "@/composables/bondQueries";
+import {
+  useBondListQuery,
+  FetchBondResult,
+} from "@/composables/useBondQueries";
 import {
   useCurrencyListQuery,
   FetchCurrencyResult,

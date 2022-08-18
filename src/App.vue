@@ -25,13 +25,13 @@ import NavBar from "@/components/NavBar.vue";
     content: "";
     pointer-events: none;
     background: url(@/assets/grain-texture-2.png) left top;
-    background-size: cover;
+    background-size: repeat;
     position: absolute;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100%;
-    opacity: 0.05;
+    opacity: 0.04;
     z-index: -1;
   }
 }

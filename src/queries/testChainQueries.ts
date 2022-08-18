@@ -1,13 +1,7 @@
-import { computed, Ref } from "vue";
-import { useQuery, useQueries, UseQueryOptions } from "vue-query";
-import type {
-  QueryFunctionContext,
-  QueryObserverResult,
-} from "vue-query/types";
+import type { QueryFunctionContext } from "vue-query/types";
 
 import type { RawBond, address } from "@/types";
 import { counter } from "@/utils";
-import { useCurrencyListQuery } from "@/composables/currencyQueries";
 
 // FAKE DATA STORE
 
@@ -62,10 +56,10 @@ const TEST_RAW_OWNERSHIP_DATA: { [key: number]: address } = {
 // FETCH INDIVIDUAL RAW BOND
 
 export type FetchBondResult = RawBond & { owner: address };
-const fetchBond = async (
+export const fetchBond = async (
   ctx: QueryFunctionContext
 ): Promise<FetchBondResult> => {
-  counter("bondFetches");
+  counter("fetch bond");
   const id: number = ctx.queryKey.slice(-1)[0] as number;
   await new Promise((resolve) => setTimeout(resolve, Math.random() * 1000 * 5));
   if (!(id in TEST_RAW_BOND_DATA)) console.error("Bond not found:", id);
@@ -73,62 +67,4 @@ const fetchBond = async (
   if (!(id in TEST_RAW_OWNERSHIP_DATA)) console.error("Owner not found:", id);
   // ensure source is immutable
   return { ...bond, owner: TEST_RAW_OWNERSHIP_DATA[id] };
-};
-
-// USEQUERY EXPORTS
-const queryOptions = {
-  refetchOnWindowFocus: false,
-  cacheTime: 1000 * 60 * 5,
-  staleTime: 1000 * 60 * 5,
-};
-
-export const useBondQuery = (
-  bondId: number | Ref<number>,
-  options?: Omit<
-    UseQueryOptions<unknown, unknown, unknown, (string | number)[]>,
-    "queryFn" | "queryKey"
-  >
-) => {
-  return useQuery(
-    ["bond", (bondId as Ref<number>).value || (bondId as number)],
-    fetchBond,
-    {
-      ...queryOptions,
-      ...options,
-    }
-  );
-};
-
-export const useBondListQuery = (
-  bondIds: number[] | Ref<number[]>,
-  options?: Omit<
-    UseQueryOptions<unknown, unknown, unknown, (string | number)[]>,
-    "queryFn" | "queryKey"
-  >
-) => {
-  return useQueries(
-    ((bondIds as Ref<number[]>).value || bondIds).map((bondId) => ({
-      queryKey: ["bond", bondId],
-      queryFn: fetchBond,
-      ...queryOptions,
-      enabled: !!bondId,
-      ...options,
-    }))
-  ) as readonly QueryObserverResult<FetchBondResult, unknown>[];
-};
-
-export const useBondListQueryWithCurrency = (
-  bondIds: number[] | Ref<number[]>,
-  options?: Omit<
-    UseQueryOptions<unknown, unknown, unknown, (string | number)[]>,
-    "queryFn" | "queryKey"
-  >
-) => {
-  const bondQueries = useBondListQuery(bondIds, options);
-  const currencyIds = computed(() =>
-    bondQueries.map((q) => q.data?.currencyRef)
-  );
-  const currencyQueries = useCurrencyListQuery(currencyIds, options);
-
-  return { bonds: bondQueries, currencies: currencyQueries };
 };

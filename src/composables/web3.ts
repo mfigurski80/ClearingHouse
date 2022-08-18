@@ -1,7 +1,8 @@
-import { ref, readonly, onMounted, onUnmounted } from "vue";
+import { ref, reactive, watch, readonly, onMounted, onUnmounted } from "vue";
 import { ethers, providers } from "ethers";
 
 import { PromiseWithTimeout } from "@/utils";
+import { Core, LBondManager, addresses } from "@mfigurski80/bond-token";
 
 export enum ConnectionStatus {
   NEED_PROVIDER,
@@ -60,6 +61,27 @@ export const connect = async function (byUser = true) {
     .on("accountsChanged", handleAccountsChanged);
 };
 
+const contracts = reactive({} as { [key: string]: ethers.Contract });
+
+watch(
+  signer,
+  (newSigner) => {
+    // if (!newSigner) return;
+    console.log("CREATING NEW CONTRACTS WITH SIGNER", newSigner);
+    const a = Object.values(addresses).find(
+      (v) => v.id === window.ethereum?.networkVersion
+    );
+    if (!a || !a.Core || !a.LBondManager) return;
+    contracts.Core = new ethers.Contract(a.Core, Core, newSigner || undefined);
+    contracts.LBondManager = new ethers.Contract(
+      a.LBondManager,
+      LBondManager,
+      newSigner || undefined
+    );
+  },
+  { immediate: true }
+);
+
 export const useWeb3 = () => {
   onMounted(() => {
     if (_status.value !== ConnectionStatus.DISCONNECTED) return;
@@ -71,5 +93,5 @@ export const useWeb3 = () => {
   onUnmounted(() => {
     window.ethereum?.removeListener("accountsChanged", handleAccountsChanged);
   });
-  return { status, provider, signer, wallet, connect };
+  return { status, provider, signer, wallet, connect, contracts };
 };

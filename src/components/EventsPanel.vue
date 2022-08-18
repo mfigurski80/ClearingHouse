@@ -38,7 +38,7 @@ import BondChip from "@/components/BondChip.vue";
 import {
   useBondListQueryWithCurrency,
   FetchBondResult,
-} from "@/composables/bondQueries";
+} from "@/composables/useBondQueries";
 import useInferredEvents from "@/composables/useInferredEvents";
 
 const panel = ref(null);
