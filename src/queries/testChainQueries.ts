@@ -1,4 +1,5 @@
 import type { QueryFunctionContext } from "vue-query/types";
+import type { ethers } from "ethers";
 
 import type { RawBond, address } from "@/types";
 import { counter } from "@/utils";
@@ -57,9 +58,10 @@ const TEST_RAW_OWNERSHIP_DATA: { [key: number]: address } = {
 
 export type FetchBondResult = RawBond & { owner: address };
 export const fetchBond = async (
+  core: ethers.Contract,
   ctx: QueryFunctionContext
 ): Promise<FetchBondResult> => {
-  counter("fetch bond");
+  counter("test_bond");
   const id: number = ctx.queryKey.slice(-1)[0] as number;
   await new Promise((resolve) => setTimeout(resolve, Math.random() * 1000 * 5));
   if (!(id in TEST_RAW_BOND_DATA)) console.error("Bond not found:", id);

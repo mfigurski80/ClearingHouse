@@ -28,7 +28,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, watchEffect, reactive, ref } from "vue";
+import { computed, watchEffect, ref } from "vue";
 import Timeline from "primevue/timeline";
 import { useElementSize } from "@vueuse/core";
 

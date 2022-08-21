@@ -11,7 +11,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, watch } from "vue";
+import { computed } from "vue";
 
 import { toReadableInterval, toCurrencyFormat } from "@/utils";
 import type { FetchBondResult } from "@/composables/bondQueries";

@@ -8,8 +8,8 @@ const s = z.object({
 });
 export type BondListCache = z.infer<typeof s>;
 const defaultValue: BondListCache = {
-  owned: [13],
-  minted: [18, 24],
+  owned: [],
+  minted: [0],
 };
 
 export default function useBondListCache() {
