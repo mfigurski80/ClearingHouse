@@ -1,4 +1,11 @@
-import { ref, readonly, shallowRef, onMounted, onUnmounted } from "vue";
+import {
+  ref,
+  readonly,
+  shallowRef,
+  markRaw,
+  onMounted,
+  onUnmounted,
+} from "vue";
 import { ethers, providers } from "ethers";
 
 import { PromiseWithTimeout } from "@/utils";
@@ -15,8 +22,8 @@ const handleAccountsChanged = () => {
 };
 
 const _status = ref<ConnectionStatus>(ConnectionStatus.DISCONNECTED);
-// const _provider = ref<providers.Web3Provider | null>(null);
-const _signer = ref<providers.JsonRpcSigner | null>(null);
+// const _provider = shallowRef<providers.Web3Provider | null>(null);
+const _signer = shallowRef<providers.JsonRpcSigner | null>(null);
 const _wallet = ref<string | null>(null);
 
 export const status = readonly(_status);
@@ -33,7 +40,9 @@ export const connect = async function (byUser = true) {
   }
   // If it is, set the provider
   if (!provider.value) {
-    provider.value = new ethers.providers.Web3Provider(window.ethereum, "any");
+    provider.value = markRaw(
+      new ethers.providers.Web3Provider(window.ethereum, "any")
+    );
   }
 
   // wait for user to confirm connection

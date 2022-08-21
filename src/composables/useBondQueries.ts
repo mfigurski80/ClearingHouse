@@ -20,12 +20,12 @@ export const fetchBond = async (
   core: ethers.Contract,
   ctx: QueryFunctionContext
 ): Promise<FetchBondResult> => {
-  console.log("Fetching bond", ctx.queryKey);
   counter("bond");
+  console.log("Fetching bond", ctx.queryKey);
   const id = ctx.queryKey.slice(-1)[0] as number;
   const bond = (await core.getBond(id)) as FetchBondResult;
   console.log("BOND", bond);
-  const owner = (await core.ownerOf(id)) as address;
+  const owner = (await core.ownerOf.call(id)) as address;
   console.log("OWNER", owner);
   bond.owner = owner;
   return bond;
@@ -47,11 +47,11 @@ export const useBondQuery = (
   >
 ) => {
   const { status } = useWeb3();
-  const { Core } = useContracts();
+  const { contracts } = useContracts();
 
   return useQuery(
     ["bond", (bondId as Ref<number>).value || (bondId as number)],
-    (ctx) => fetchBond(Core, ctx),
+    (ctx) => fetchBond(contracts.value.Core, ctx),
     {
       ...queryOptions,
       enabled:
@@ -71,20 +71,22 @@ export const useBondListQuery = (
   >
 ) => {
   const { status } = useWeb3();
-  const { Core } = useContracts();
+  const { contracts } = useContracts();
   console.log(
     "Use bond list query. Enabled:",
-    status.value === ConnectionStatus.CONNECTED
+    true
+    // status.value === ConnectionStatus.CONNECTED
   );
   return useQueries(
     ((bondIds as Ref<number[]>).value || bondIds).map((bondId) => ({
       queryKey: ["bond", bondId],
-      queryFn: (ctx: QueryFunctionContext) => fetchBond(Core, ctx),
+      queryFn: (ctx: QueryFunctionContext) =>
+        fetchBond(contracts.value.Core, ctx),
       ...queryOptions,
       ...options,
       enabled:
         bondId !== undefined &&
-        status.value === ConnectionStatus.CONNECTED &&
+        // status.value === ConnectionStatus.CONNECTED &&
         (options?.enabled ?? true),
     }))
   ) as readonly QueryObserverResult<FetchBondResult, unknown>[];

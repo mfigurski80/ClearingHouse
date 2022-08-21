@@ -9,7 +9,7 @@ const contracts = shallowRef({} as { [key: string]: ethers.Contract });
 watch(
   provider,
   (pr) => {
-    const _pr = pr ?? undefined;
+    const _pr = pr || undefined;
     const a = Object.values(addresses).find(
       (v) => v.id === +window.ethereum?.networkVersion
     );
@@ -26,7 +26,6 @@ watch(
 
 export const useContracts = () => {
   return {
-    Core: contracts.value.Core,
-    LBondManager: contracts.value.LBondManager,
+    contracts,
   };
 };
