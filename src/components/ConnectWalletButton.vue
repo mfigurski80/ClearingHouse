@@ -17,7 +17,9 @@ import { useRouter } from "vue-router";
 import Button from "primevue/button";
 const router = useRouter();
 
-import { status, wallet, connect, ConnectionStatus } from "@/composables/web3";
+import { ConnectionStatus, useWeb3 } from "@/composables/web3";
+
+const { status, wallet, connect } = useWeb3();
 
 const handleConnect = computed(
   () => () => {

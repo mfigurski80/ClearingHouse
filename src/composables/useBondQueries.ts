@@ -12,8 +12,19 @@ import { useCurrencyListQuery } from "@/composables/currencyQueries";
 import type { RawBond, address } from "@/types";
 import { counter } from "@/utils";
 
-// import { fetchBond as fetchTestBond } from "@/queries/testChainQueries";
-
+type HexNumber = { _hex: string; _isBigNumber: boolean };
+type FetchBondResponse = {
+  flag: boolean;
+  currencyRef: number;
+  nPeriods: number;
+  curPeriod: number;
+  couponSize: HexNumber;
+  faceValue: HexNumber;
+  startTime: HexNumber;
+  periodDuration: HexNumber;
+  minter: address;
+  beneficiary: address;
+};
 export type FetchBondResult = RawBond & { owner: address };
 
 export const fetchBond = async (
@@ -23,12 +34,24 @@ export const fetchBond = async (
   counter("bond");
   console.log("Fetching bond", ctx.queryKey);
   const id = ctx.queryKey.slice(-1)[0] as number;
-  const bond = (await core.getBond(id)) as FetchBondResult;
-  console.log("BOND", bond);
-  const owner = (await core.ownerOf.call(id)) as address;
+  const bondResp = (await core.getBond(id)) as FetchBondResponse;
+  console.log("BOND", bondResp);
+  const owner = (await core.ownerOf(id)) as address;
   console.log("OWNER", owner);
-  bond.owner = owner;
-  return bond;
+  return {
+    id,
+    flag: bondResp.flag,
+    currencyRef: bondResp.currencyRef,
+    nPeriods: bondResp.nPeriods,
+    curPeriod: bondResp.curPeriod,
+    couponSize: parseInt(bondResp.couponSize._hex, 16),
+    faceValue: parseInt(bondResp.faceValue._hex, 16),
+    startTime: parseInt(bondResp.startTime._hex, 16),
+    periodDuration: parseInt(bondResp.periodDuration._hex, 16),
+    minter: bondResp.minter,
+    beneficiary: bondResp.beneficiary,
+    owner: owner,
+  };
 };
 
 // USE BOND QUERIES HOOKS
@@ -37,6 +60,7 @@ const queryOptions = {
   refetchOnWindowFocus: false,
   cacheTime: 1000 * 60 * 5,
   staleTime: 1000 * 60 * 5,
+  retry: false,
 };
 
 export const useBondQuery = (
@@ -55,7 +79,7 @@ export const useBondQuery = (
     {
       ...queryOptions,
       enabled:
-        !!bondId &&
+        bondId !== undefined &&
         status.value === ConnectionStatus.CONNECTED &&
         (options?.enabled ?? true),
       ...options,
@@ -72,12 +96,8 @@ export const useBondListQuery = (
 ) => {
   const { status } = useWeb3();
   const { contracts } = useContracts();
-  console.log(
-    "Use bond list query. Enabled:",
-    true
-    // status.value === ConnectionStatus.CONNECTED
-  );
-  return useQueries(
+
+  const queryKeys = computed(() =>
     ((bondIds as Ref<number[]>).value || bondIds).map((bondId) => ({
       queryKey: ["bond", bondId],
       queryFn: (ctx: QueryFunctionContext) =>
@@ -86,10 +106,15 @@ export const useBondListQuery = (
       ...options,
       enabled:
         bondId !== undefined &&
-        // status.value === ConnectionStatus.CONNECTED &&
+        status.value === ConnectionStatus.CONNECTED &&
         (options?.enabled ?? true),
     }))
-  ) as readonly QueryObserverResult<FetchBondResult, unknown>[];
+  );
+
+  return useQueries(queryKeys) as readonly QueryObserverResult<
+    FetchBondResult,
+    unknown
+  >[];
 };
 
 /**

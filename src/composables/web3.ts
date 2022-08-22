@@ -38,6 +38,7 @@ export const connect = async function (byUser = true) {
     _status.value = ConnectionStatus.NEED_PROVIDER;
     return;
   }
+  console.log("CONNECTING");
   // If it is, set the provider
   if (!provider.value) {
     provider.value = markRaw(
@@ -53,6 +54,7 @@ export const connect = async function (byUser = true) {
 
   _signer.value = provider.value.getSigner();
   if (signer.value === undefined) {
+    console.error("Signer is undefined");
     _status.value = ConnectionStatus.DISCONNECTED;
     return;
   }
