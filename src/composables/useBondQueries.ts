@@ -32,11 +32,11 @@ export const fetchBond = async (
   ctx: QueryFunctionContext
 ): Promise<FetchBondResult> => {
   counter("bond");
-  console.log("Fetching bond", ctx.queryKey);
+  // console.log("Fetching bond", ctx.queryKey);
   const id = ctx.queryKey.slice(-1)[0] as number;
   const bondResp = (await core.getBond(id)) as FetchBondResponse;
   const owner = (await core.ownerOf(id)) as address;
-  console.log("BOND", bondResp);
+  // console.log("BOND", bondResp);
   return {
     id,
     flag: bondResp.flag,
