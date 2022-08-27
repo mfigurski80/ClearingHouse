@@ -22,7 +22,7 @@ export function toReadableInterval(d: number) {
       break;
     }
   }
-  const n = Math.floor(d / unit.value);
+  const n = Math.round(d / unit.value);
   return `${n} ${unit.unit}${n === 1 ? "" : "s"}`;
 }
 

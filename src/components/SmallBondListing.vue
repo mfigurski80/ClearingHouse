@@ -1,5 +1,5 @@
 <template>
-  <DataTable :value="bonds" class="p-datatable">
+  <DataTable v-if="bonds.length > 0" :value="bonds" class="p-datatable">
     <Column bodyClass="warning-bar-col" headerClass="warning-bar-col">
       <template #body="{ data }">
         <div class="warning-bar" :class="{ active: data.warning }" />
@@ -69,6 +69,11 @@
       </template>
     </Column>
   </DataTable>
+  <missing-content
+    v-else
+    title="No Bonds to Show"
+    subtitle="When you mint, buy or import bonds, they will show up here."
+  />
 </template>
 
 <script lang="ts" setup>
@@ -77,6 +82,7 @@ import Column from "primevue/column";
 import Button from "primevue/button";
 
 import ProgressBar from "@/components/ProgressBar.vue";
+import MissingContent from "@/components/MissingContent.vue";
 import useSmallBondListing from "@/composables/useSmallBondListing";
 
 interface BondListingProps {

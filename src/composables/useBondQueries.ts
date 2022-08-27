@@ -35,9 +35,8 @@ export const fetchBond = async (
   console.log("Fetching bond", ctx.queryKey);
   const id = ctx.queryKey.slice(-1)[0] as number;
   const bondResp = (await core.getBond(id)) as FetchBondResponse;
-  console.log("BOND", bondResp);
   const owner = (await core.ownerOf(id)) as address;
-  console.log("OWNER", owner);
+  console.log("BOND", bondResp);
   return {
     id,
     flag: bondResp.flag,
@@ -80,6 +79,7 @@ export const useBondQuery = (
       ...queryOptions,
       enabled:
         bondId !== undefined &&
+        !!contracts.value.Core &&
         status.value === ConnectionStatus.CONNECTED &&
         (options?.enabled ?? true),
       ...options,
@@ -107,6 +107,7 @@ export const useBondListQuery = (
       enabled:
         bondId !== undefined &&
         status.value === ConnectionStatus.CONNECTED &&
+        contracts.value.Core !== undefined &&
         (options?.enabled ?? true),
     }))
   );
