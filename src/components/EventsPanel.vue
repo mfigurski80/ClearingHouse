@@ -119,7 +119,7 @@ const eventsData: EventDisplay[] = computed(() =>
   .marker {
     padding: 0px 5px;
     border-radius: 50%;
-    border: 2px solid red;
+    border: 2.5px solid red;
     border-color: inherit;
     background: none;
     font-size: 12px;
@@ -142,9 +142,9 @@ const eventsData: EventDisplay[] = computed(() =>
     box-shadow: var(--shadow-1);
     .label {
       background: gray;
-      padding: 3px 6px 0px 6px;
+      padding: 4px 6px 0px 6px;
       display: inline-block;
-      border-radius: 12px;
+      border-radius: 15px;
       font-weight: bold;
       margin: 0px 3px 8px 0px;
       &.incoming {
