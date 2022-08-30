@@ -78,17 +78,23 @@
       <h2 class="section-header-text" @click="copySectionLink('contracts')">
         Contracts (v0.7)
       </h2>
+      <p>
+        All contracts interactions can be performed, at a low level, from
+        <a href="https://mfigurski80.github.io/karmaToken/"
+          >the web basic interface</a
+        >.
+      </p>
       <columns-layout class="spaced">
         <div class="group dominant">
           <ContractCard
             name="LBondManager"
-            address="0xdeDA2195485D97f8f81d51a32E80096821461ebe"
+            :address="addresses.LBondManager"
             description="Provides a series of utilities for reading and writing bonds to the heavily-compressed BOND data structure."
             abiLink="https://mfigurski80.github.io/karmaToken/contracts/LBondManager.json"
           />
           <ContractCard
             name="BOND Core"
-            address="0x33327636152A4FDb8711B895d790c790268D2023"
+            :address="addresses.Core"
             description="BOND ERC721 protocol exposes the creation and management of tokens, management of collateral, access control, currency listings, while using data compression to ensure minimum gas usage."
             abiLink="https://mfigurski80.github.io/karmaToken/contracts/Core.json"
           />
@@ -105,7 +111,7 @@
       </columns-layout>
       <small class="annotation">
         *Note that no contracts have been deployed onto the main chain yet --
-        addresses listed are locations on a test chain.
+        addresses listed are locations on the Görli test chain
       </small>
     </container-layout>
   </section>
@@ -141,6 +147,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import Button from "primevue/button";
+import { addresses } from "@mfigurski80/bond-token";
 
 import ContainerLayout from "@/layouts/ContainerLayout.vue";
 import ColumnsLayout from "@/layouts/ColumnsLayout.vue";
@@ -148,6 +155,8 @@ import SubscribeForm from "@/components/SubscribeForm.vue";
 import SocialIcons from "@/components/SocialIcons.vue";
 import ContractCard from "@/components/ContractCard.vue";
 import ConnectWalletButton from "@/components/ConnectWalletButton.vue";
+
+console.log(addresses.goerli);
 
 export default defineComponent({
   name: "HomeView",
@@ -160,6 +169,9 @@ export default defineComponent({
     ContractCard,
     ConnectWalletButton,
   },
+  data: () => ({
+    addresses: addresses.goerli,
+  }),
   methods: {
     copySectionLink(sectionId: string) {
       navigator.clipboard.writeText(`${window.location.href}#${sectionId}`);

@@ -5,11 +5,15 @@
       <h3>ASSETS</h3>
       <bond-listing :bondList="bonds.owned" />
       <div class="p-buttonset action-buttons">
-        <Button
-          icon="pi pi-external-link"
-          class="p-button-rounded p-button-outlined"
-          label="Buy"
-        />
+        <a
+          href="https://goerli.pixxiti.com/collections/0xb72864dd103cba1ccbc11c27342baaf8f5a2bbea"
+        >
+          <Button
+            icon="pi pi-external-link"
+            class="p-button-rounded p-button-outlined"
+            label="Buy"
+          />
+        </a>
         <Button
           icon="pi pi-upload"
           class="p-button-text p-button-rounded p-button-secondary upload-button"
@@ -21,11 +25,13 @@
       <h3>LIABILITIES</h3>
       <bond-listing :bondList="bonds.minted" />
       <div class="p-buttonset action-buttons">
-        <Button
-          icon="pi pi-plus"
-          class="p-button-rounded p-button-outlined"
-          label="Mint"
-        />
+        <a href="https://mfigurski80.github.io/karmaToken/interaction.html">
+          <Button
+            icon="pi pi-plus"
+            class="p-button-rounded p-button-outlined"
+            label="Mint"
+          />
+        </a>
         <Button
           icon="pi pi-upload"
           class="p-button-text p-button-rounded p-button-secondary upload-button"

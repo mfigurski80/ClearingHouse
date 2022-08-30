@@ -16,9 +16,15 @@
       <tab-panel header="Overview">
         <overview-tab />
       </tab-panel>
-      <tab-panel header="Portfolio"> </tab-panel>
-      <tab-panel header="Events"> </tab-panel>
-      <tab-panel header="Build"> </tab-panel>
+      <tab-panel header="Portfolio">
+        <missing-content title="Not implemented. Please check back later!" />
+      </tab-panel>
+      <tab-panel header="Events">
+        <missing-content title="Not implemented. Please check back later!" />
+      </tab-panel>
+      <tab-panel header="Mint">
+        <missing-content title="Not implemented. Please check back later!" />
+      </tab-panel>
     </tab-view>
   </container-layout>
 </template>

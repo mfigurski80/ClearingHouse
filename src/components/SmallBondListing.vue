@@ -56,14 +56,17 @@
           <Button
             icon="pi pi-shield"
             class="p-button-rounded p-button-outlined p-button-sm p-button-plain"
+            disabled
           />
           <Button
             icon="pi pi-arrow-up-right"
             class="p-button-rounded p-button-outlined p-button-sm p-button-plain"
+            disabled
           />
           <Button
             icon="pi pi-trash"
             class="p-button-rounded p-button-outlined p-button-sm p-button-plain"
+            disabled
           />
         </div>
       </template>
