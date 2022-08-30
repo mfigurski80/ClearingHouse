@@ -1,7 +1,8 @@
 <template>
   <div class="holder">
     <h3>{{ props.title || "No Content Here" }}</h3>
-    <p>{{ props.subtitle }}</p>
+    <p v-if="props.subtitle">{{ props.subtitle }}</p>
+    <slot />
   </div>
 </template>
 
@@ -19,6 +20,9 @@ const props = defineProps<{ title: string; subtitle: string }>();
   margin-right: auto;
   color: var(--color-text-alt);
   h3 {
+    margin: 10px 0;
+  }
+  p {
     margin: 10px 0;
   }
 }

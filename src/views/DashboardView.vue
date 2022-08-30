@@ -9,7 +9,9 @@
       v-else-if="status !== ConnectionStatus.CONNECTED"
       title="Not Connected"
       subtitle="Please connect a wallet to view the dashboard"
-    />
+    >
+      <ConnectWalletButton />
+    </missing-content>
     <tab-view v-else>
       <tab-panel header="Overview">
         <overview-tab />
@@ -29,6 +31,7 @@ import { useWindowSize } from "@vueuse/core";
 import ContainerLayout from "@/layouts/ContainerLayout.vue";
 import OverviewTab from "@/components/OverviewTab.vue";
 import MissingContent from "@/components/MissingContent.vue";
+import ConnectWalletButton from "@/components/ConnectWalletButton.vue";
 
 import { status, ConnectionStatus } from "@/composables/web3";
 // import CoreJSON from "@mfigurski80/bond-token/contracts/Core.json";
