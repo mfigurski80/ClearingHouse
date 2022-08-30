@@ -78,6 +78,25 @@ i.pi::before {
   width: 100vw;
 }
 
+/* DIALOG */
+
+.p-dialog {
+  border-color: transparent;
+  border-width: 0px;
+  outline: 10000px solid rgba(0, 0, 0, 0.2);
+  max-width: 90%;
+}
+
+.p-dialog .p-dialog-header,
+.p-dialog .p-dialog-content {
+  background: var(--color-background-alt);
+  color: var(--color-text);
+}
+
+.p-dialog-header-icons {
+  padding-left: 20px;
+}
+
 /* CARD */
 
 .p-card {
@@ -90,6 +109,27 @@ i.pi::before {
   padding: 0;
 }
 
+/* INPUT GROUPS AND ADDITIONS */
+
+.p-input-icon-left input {
+  margin-left: -20px;
+  padding-left: 40px;
+}
+
+.p-inputgroup {
+  display: flex;
+  align-items: stretch;
+
+}
+
+.p-inputgroup-addon {
+  background: var(--color-background);
+  /* background: red; */
+  border-color: var(--color-background-alt);
+  min-width: 20px;
+
+  padding: 14px;
+}
 
 /* TEXT INPUTS */
 

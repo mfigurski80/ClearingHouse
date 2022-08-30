@@ -1,57 +1,15 @@
 import { computed, Ref } from "vue";
-import { useQuery, useQueries, UseQueryOptions } from "vue-query";
-import type {
-  QueryFunctionContext,
-  QueryObserverResult,
-} from "vue-query/types";
-import type { ethers } from "ethers";
+import { useQuery, useQueries } from "vue-query";
+import type { QueryObserverResult } from "vue-query/types";
 
 import { useWeb3, ConnectionStatus } from "@/composables/web3";
 import { useContracts } from "@/composables/contracts";
-import { useCurrencyListQuery } from "@/composables/currencyQueries";
-import type { RawBond, address } from "@/types";
-import { counter } from "@/utils";
-
-type HexNumber = { _hex: string; _isBigNumber: boolean };
-type FetchBondResponse = {
-  flag: boolean;
-  currencyRef: number;
-  nPeriods: number;
-  curPeriod: number;
-  couponSize: HexNumber;
-  faceValue: HexNumber;
-  startTime: HexNumber;
-  periodDuration: HexNumber;
-  minter: address;
-  beneficiary: address;
-};
-export type FetchBondResult = RawBond & { owner: address };
-
-export const fetchBond = async (
-  core: ethers.Contract,
-  ctx: QueryFunctionContext
-): Promise<FetchBondResult> => {
-  counter("bond");
-  // console.log("Fetching bond", ctx.queryKey);
-  const id = ctx.queryKey.slice(-1)[0] as number;
-  const bondResp = (await core.getBond(id)) as FetchBondResponse;
-  const owner = (await core.ownerOf(id)) as address;
-  // console.log("BOND", bondResp);
-  return {
-    id,
-    flag: bondResp.flag,
-    currencyRef: bondResp.currencyRef,
-    nPeriods: bondResp.nPeriods,
-    curPeriod: bondResp.curPeriod,
-    couponSize: parseInt(bondResp.couponSize._hex, 16),
-    faceValue: parseInt(bondResp.faceValue._hex, 16),
-    startTime: parseInt(bondResp.startTime._hex, 16),
-    periodDuration: parseInt(bondResp.periodDuration._hex, 16),
-    minter: bondResp.minter,
-    beneficiary: bondResp.beneficiary,
-    owner: owner,
-  };
-};
+import { fetchBond, FetchBondResult } from "@/queries/chainQueries";
+export { FetchBondResult, FetchCurrencyResult } from "@/queries/chainQueries";
+import {
+  useCurrencyQuery,
+  useCurrencyListQuery,
+} from "@/composables/currencyQueries";
 
 // USE BOND QUERIES HOOKS
 
@@ -62,37 +20,41 @@ const queryOptions = {
   retry: false,
 };
 
-export const useBondQuery = (
-  bondId: number | Ref<number>,
-  options?: Omit<
-    UseQueryOptions<unknown, unknown, unknown, (string | number)[]>,
-    "queryFn" | "queryKey"
-  >
-) => {
+/**
+ * Use this hook to fetch a single bond from core contract
+ * @param bondId Ref to bondid to fetch
+ * @returns Fetched Bond Result
+ */
+export const useBondQuery = (bondId: Ref<number | undefined>) => {
   const { status } = useWeb3();
   const { contracts } = useContracts();
 
+  const enabled = computed(() => {
+    return (
+      bondId.value !== undefined &&
+      bondId.value >= 0 &&
+      !!contracts.value.Core &&
+      status.value === ConnectionStatus.CONNECTED
+    );
+  });
+
   return useQuery(
-    ["bond", (bondId as Ref<number>).value || (bondId as number)],
-    (ctx) => fetchBond(contracts.value.Core, ctx),
+    ["bond", bondId],
+    () => fetchBond(contracts.value.Core, bondId.value as number),
     {
       ...queryOptions,
-      enabled:
-        bondId !== undefined &&
-        !!contracts.value.Core &&
-        status.value === ConnectionStatus.CONNECTED &&
-        (options?.enabled ?? true),
-      ...options,
+      enabled,
     }
   );
 };
 
+/**
+ * Use this hook to fetch a list of bonds
+ * @param bondIds List of bond ids to fetch
+ * @returns QueryObserverResult
+ */
 export const useBondListQuery = (
-  bondIds: number[] | Ref<number[]>,
-  options?: Omit<
-    UseQueryOptions<unknown, unknown, unknown, (string | number)[]>,
-    "queryFn" | "queryKey"
-  >
+  bondIds: (number | undefined)[] | Ref<(number | undefined)[]>
 ) => {
   const { status } = useWeb3();
   const { contracts } = useContracts();
@@ -100,15 +62,12 @@ export const useBondListQuery = (
   const queryKeys = computed(() =>
     ((bondIds as Ref<number[]>).value || bondIds).map((bondId) => ({
       queryKey: ["bond", bondId],
-      queryFn: (ctx: QueryFunctionContext) =>
-        fetchBond(contracts.value.Core, ctx),
+      queryFn: () => fetchBond(contracts.value.Core, bondId as number),
       ...queryOptions,
-      ...options,
       enabled:
         bondId !== undefined &&
         status.value === ConnectionStatus.CONNECTED &&
-        contracts.value.Core !== undefined &&
-        (options?.enabled ?? true),
+        contracts.value.Core !== undefined,
     }))
   );
 
@@ -119,23 +78,33 @@ export const useBondListQuery = (
 };
 
 /**
+ * Use this hook to fetch single bond with related currency
+ * @param bondId Id of bond to fetch
+ * @returns Fetched Bond Result
+ */
+export const useBondQueryWithCurrency = (bondId: Ref<number | undefined>) => {
+  // get bond
+  const bondResp = useBondQuery(bondId);
+  // get currency
+  const currencyRef = computed(() => bondResp.data.value?.currencyRef);
+  const currencyResp = useCurrencyQuery(currencyRef);
+
+  return { bond: bondResp, currency: currencyResp };
+};
+
+/**
  * Use this hook to fetch a list of bonds with corresponding currency data
  * @param bondIds Ids of bonds to maintain state on
- * @param options Additional options to pass to useQueries
  * @returns UseQuery Results for each bondId
  */
 export const useBondListQueryWithCurrency = (
-  bondIds: number[] | Ref<number[]>,
-  options?: Omit<
-    UseQueryOptions<unknown, unknown, unknown, (string | number)[]>,
-    "queryFn" | "queryKey"
-  >
+  bondIds: number[] | Ref<number[]>
 ) => {
-  const bondQueries = useBondListQuery(bondIds, options);
+  const bondQueries = useBondListQuery(bondIds);
   const currencyIds = computed(() =>
     bondQueries.map((q) => q.data?.currencyRef)
   );
-  const currencyQueries = useCurrencyListQuery(currencyIds, options);
+  const currencyQueries = useCurrencyListQuery(currencyIds);
 
   return { bonds: bondQueries, currencies: currencyQueries };
 };

@@ -13,6 +13,7 @@
         <Button
           icon="pi pi-upload"
           class="p-button-text p-button-rounded p-button-secondary upload-button"
+          @click="showImportBondDialog"
         />
       </div>
     </div>
@@ -28,24 +29,32 @@
         <Button
           icon="pi pi-upload"
           class="p-button-text p-button-rounded p-button-secondary upload-button"
+          @click="showImportBondDialog"
         />
       </div>
     </div>
   </columns-layout>
+  <Dialog header="Import Bonds" v-model:visible="display">
+    <import-bonds />
+  </Dialog>
 </template>
 
 <script lang="ts" setup>
+import { ref } from "vue";
 import Button from "primevue/button";
+import Dialog from "primevue/dialog";
 
 import ColumnsLayout from "@/layouts/ColumnsLayout.vue";
 import EventsPanel from "@/components/EventsPanel.vue";
 import BondListing from "@/components/SmallBondListing.vue";
+import ImportBonds from "@/components/ImportBonds.vue";
 
 import useBondListCache from "@/composables/useBondListCache";
-// import { Core } from "@mfigurski80/bond-token";
-// console.log("BOND TOKEN", { ...Core });
 
 const bonds = useBondListCache();
+
+const showImportBondDialog = () => (display.value = true);
+const display = ref(false);
 </script>
 
 <style lang="scss" scoped>

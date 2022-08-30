@@ -5,6 +5,7 @@ import VueCookies from "vue-cookies";
 import { VueQueryPlugin } from "vue-query";
 
 import PrimeVue from "primevue/config";
+
 import "primevue/resources/themes/lara-dark-indigo/theme.css";
 import "@/theme-reset.css";
 import "@/styles.css";
