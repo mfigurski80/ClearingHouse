@@ -19,7 +19,7 @@ import type { FetchCurrencyResult } from "@/composables/currencyQueries";
 
 type BondPanelProps = {
   bond: FetchBondResult;
-  currency?: FetchCurrencyResult;
+  currency: FetchCurrencyResult | undefined;
 };
 const props = defineProps<BondPanelProps>();
 

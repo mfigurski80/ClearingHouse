@@ -83,7 +83,7 @@ export default defineComponent({
   font-size: 12px;
   color: var(--color-text-alt);
   padding: 15px 6px;
-  overflow-x: scroll;
+  overflow-x: auto;
   cursor: pointer;
   transition: color 0.2s ease-in-out;
   i {

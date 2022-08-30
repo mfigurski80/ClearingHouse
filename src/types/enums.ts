@@ -23,3 +23,11 @@ export enum EventType {
   SERVICE_PAYMENT,
   FACE_PAYMENT,
 }
+
+export enum Relationship {
+  OWNER = "owner",
+  MINTER = "minter",
+  BENEFICIARY = "beneficiary",
+  OPERATOR = "operator",
+  NONE = "unrelated",
+}

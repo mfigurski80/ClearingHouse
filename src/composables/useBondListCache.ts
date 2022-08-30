@@ -9,7 +9,7 @@ const s = z.object({
 export type BondListCache = z.infer<typeof s>;
 const defaultValue: BondListCache = {
   owned: [],
-  minted: [0, 1],
+  minted: [],
 };
 
 export default function useBondListCache() {
