@@ -1,13 +1,10 @@
-import { computed } from "vue";
+import { computed, Ref } from "vue";
 
 import {
-  useBondListQuery,
+  useBondListQueryWithCurrency,
   FetchBondResult,
-} from "@/composables/useBondQueries";
-import {
-  useCurrencyListQuery,
   FetchCurrencyResult,
-} from "@/composables/currencyQueries";
+} from "@/composables/useBondQueries";
 import { toReadableInterval, toRelativeDate, toCurrencyFormat } from "@/utils";
 
 export enum BondStatus {
@@ -71,14 +68,9 @@ function formatBond(
   };
 }
 
-export default function useSmallBondListing(bondIds: number[]) {
-  const bondListQuery = useBondListQuery(bondIds);
-
-  const currencyIdsRequired = computed(() =>
-    bondListQuery.map((res) => (res.data as FetchBondResult)?.currencyRef)
-  );
-
-  const currencyListQuery = useCurrencyListQuery(currencyIdsRequired);
+export default function useSmallBondListing(bondIds: Ref<number[]>) {
+  const { bonds: bondListQuery, currencies: currencyListQuery } =
+    useBondListQueryWithCurrency(bondIds);
 
   const bonds = computed(() =>
     bondListQuery.map((res, i) => {
@@ -88,7 +80,7 @@ export default function useSmallBondListing(bondIds: number[]) {
         isLoading: res.isLoading,
         isError: res.isError,
         error: res.error,
-        id: "#" + bondIds[i],
+        id: "#" + bondIds.value[i],
       } as BondListingTableEntry;
       const bond = res.data as FetchBondResult;
       if (!bond) {
@@ -103,17 +95,6 @@ export default function useSmallBondListing(bondIds: number[]) {
       };
     })
   );
-
-  // watch(currencyIdsRequired, (res) => {
-  //   console.log("CURRENCY LISTING UPDATED", [...res]);
-  // });
-
-  // watch(currencyListQuery, (res) => {
-  //   console.log(
-  //     "CURRENCIES LOADED UPDATED",
-  //     res.map((v) => ({ ...v }))
-  //   );
-  // });
 
   return bonds;
 }

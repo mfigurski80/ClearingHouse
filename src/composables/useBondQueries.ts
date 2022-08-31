@@ -9,15 +9,15 @@ export { FetchBondResult, FetchCurrencyResult } from "@/queries/chainQueries";
 import {
   useCurrencyQuery,
   useCurrencyListQuery,
-} from "@/composables/currencyQueries";
+} from "@/composables/useCurrencyQueries";
 
 // USE BOND QUERIES HOOKS
 
 const queryOptions = {
   refetchOnWindowFocus: false,
-  cacheTime: 1000 * 60 * 5,
-  staleTime: 1000 * 60 * 5,
-  retry: false,
+  cacheTime: 1000 * 60 * 60 * 24 * 365, // keep for 1 year
+  staleTime: 1000 * 60 * 30, // refetch every 30 minutes
+  retry: false, // don't retry
 };
 
 /**

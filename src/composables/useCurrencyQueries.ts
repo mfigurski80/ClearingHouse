@@ -8,10 +8,10 @@ export { FetchCurrencyResult } from "@/queries/chainQueries";
 
 // USEQUERY EXPORTS
 const queryOptions = {
-  cacheTime: Infinity,
-  staleTime: Infinity,
-  refetchOnWindowFocus: false,
-  keepPreviousData: true,
+  cacheTime: Infinity, // keep forever
+  staleTime: Infinity, // never refetch
+  refetchOnWindowFocus: false, // no
+  keepPreviousData: true, // keeeep
 };
 
 export const useCurrencyQuery = (currencyId: Ref<number | undefined>) => {

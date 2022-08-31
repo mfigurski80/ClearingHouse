@@ -7,7 +7,7 @@
 </template>
 
 <script lang="ts" setup>
-const props = defineProps<{ title: string; subtitle: string }>();
+const props = defineProps<{ title: string; subtitle?: string }>();
 </script>
 
 <style lang="scss" scoped>

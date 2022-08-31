@@ -80,6 +80,7 @@
 </template>
 
 <script lang="ts" setup>
+import { computed } from "vue";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import Button from "primevue/button";
@@ -88,12 +89,10 @@ import ProgressBar from "@/components/ProgressBar.vue";
 import MissingContent from "@/components/MissingContent.vue";
 import useSmallBondListing from "@/composables/useSmallBondListing";
 
-interface BondListingProps {
-  bondList: number[];
-}
-const props = defineProps<BondListingProps>();
+const props = defineProps<{ bondList: number[] }>();
+const bondList = computed(() => props.bondList);
 
-const bonds = useSmallBondListing(props.bondList);
+const bonds = useSmallBondListing(bondList);
 </script>
 
 <style lang="scss" scoped>

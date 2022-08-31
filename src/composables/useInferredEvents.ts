@@ -3,7 +3,7 @@ import { QueryObserverResult } from "vue-query/types";
 import TinyQueue from "tinyqueue";
 
 import type { FetchBondResult } from "@/composables/useBondQueries";
-import type { FetchCurrencyResult } from "@/composables/currencyQueries";
+import type { FetchCurrencyResult } from "@/composables/useCurrencyQueries";
 import { EventType, Direction } from "@/types/enums";
 
 export interface Event {

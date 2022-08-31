@@ -1,4 +1,3 @@
-import type { QueryFunctionContext } from "vue-query/types";
 import type { ethers } from "ethers";
 
 import type {
@@ -60,21 +59,27 @@ export const fetchCurrency = async (
   core: ethers.Contract,
   id: number
 ): Promise<FetchCurrencyResult> => {
+  const cache = localStorage.getItem(`currency-${id}`);
+  if (cache) {
+    return JSON.parse(cache);
+  }
   counter("currency");
-  // console.log("Fetch Currency", id);
+
   const currencyResp = (await core.currencies(id)) as FetchCurrencyResponse;
   const currencyDetails = await fetchCurrencyDetails(
     core,
     currencyResp.location,
     currencyResp.currencyType
   );
-  return {
+  const result = {
     ...currencyDetails,
     id,
     erc1155SmallTokenId: parseInt(currencyResp.ERC1155SmallId._hex, 16),
     erc1155TokenId: parseInt(currencyResp.ERC1155Id._hex, 16),
     type: currencyResp.currencyType,
   };
+  localStorage.setItem(`currency-${id}`, JSON.stringify(result));
+  return result;
 };
 
 export const fetchCurrencyDetails = async (

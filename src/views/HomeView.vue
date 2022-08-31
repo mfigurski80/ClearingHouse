@@ -156,8 +156,6 @@ import SocialIcons from "@/components/SocialIcons.vue";
 import ContractCard from "@/components/ContractCard.vue";
 import ConnectWalletButton from "@/components/ConnectWalletButton.vue";
 
-console.log(addresses.goerli);
-
 export default defineComponent({
   name: "HomeView",
   components: {
