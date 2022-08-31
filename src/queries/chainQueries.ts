@@ -59,10 +59,10 @@ export const fetchCurrency = async (
   core: ethers.Contract,
   id: number
 ): Promise<FetchCurrencyResult> => {
-  const cache = localStorage.getItem(`currency-${id}`);
-  if (cache) {
-    return JSON.parse(cache);
-  }
+  // const cache = localStorage.getItem(`currency-${id}`);
+  // if (cache) {
+  //   return JSON.parse(cache);
+  // }
   counter("currency");
 
   const currencyResp = (await core.currencies(id)) as FetchCurrencyResponse;
@@ -71,15 +71,15 @@ export const fetchCurrency = async (
     currencyResp.location,
     currencyResp.currencyType
   );
-  const result = {
+  return {
     ...currencyDetails,
     id,
     erc1155SmallTokenId: parseInt(currencyResp.ERC1155SmallId._hex, 16),
     erc1155TokenId: parseInt(currencyResp.ERC1155Id._hex, 16),
     type: currencyResp.currencyType,
   };
-  localStorage.setItem(`currency-${id}`, JSON.stringify(result));
-  return result;
+  // localStorage.setItem(`currency-${id}`, JSON.stringify(result));
+  // return result;
 };
 
 export const fetchCurrencyDetails = async (
