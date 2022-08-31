@@ -6,7 +6,7 @@ import { useWeb3, ConnectionStatus } from "@/composables/web3";
 import { useContracts } from "@/composables/contracts";
 import { fetchCurrency, FetchCurrencyResult } from "@/queries/chainQueries";
 import { QueryFunctionContext } from "vue-query/types";
-export { FetchCurrencyResult } from "@/queries/chainQueries";
+export type { FetchCurrencyResult } from "@/queries/chainQueries";
 
 // USEQUERY EXPORTS
 const queryOptions = {

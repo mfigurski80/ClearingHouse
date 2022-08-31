@@ -6,7 +6,10 @@ import { computeCacheKey, pullQueryCache, persistQueryResult } from "@/utils";
 import { useWeb3, ConnectionStatus } from "@/composables/web3";
 import { useContracts } from "@/composables/contracts";
 import { fetchBond, FetchBondResult } from "@/queries/chainQueries";
-export { FetchBondResult, FetchCurrencyResult } from "@/queries/chainQueries";
+export type {
+  FetchBondResult,
+  FetchCurrencyResult,
+} from "@/queries/chainQueries";
 import {
   useCurrencyQuery,
   useCurrencyListQuery,
