@@ -53,10 +53,12 @@ const props = defineProps<{
   mintedBondList: number[];
 }>();
 
-const { bonds, currencies } = useBondListQueryWithCurrency([
+const bondList = computed(() => [
   ...props.ownedBondList,
   ...props.mintedBondList,
 ]);
+
+const { bonds, currencies } = useBondListQueryWithCurrency(bondList);
 
 const directions = computed(() =>
   Array(props.ownedBondList.length)
