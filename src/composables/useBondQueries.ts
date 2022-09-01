@@ -33,9 +33,6 @@ export const useBondQuery = (bondId: Ref<number | undefined>) => {
   const { status } = useWeb3();
   const { contracts } = useContracts();
 
-  // const cacheKey = computed(() => computeCacheKey(["bond", bondId.value]));
-  // const cache = computed(() => pullQueryCache<FetchBondResult>(cacheKey.value));
-
   const enabled = computed(() => {
     return (
       bondId.value !== undefined &&

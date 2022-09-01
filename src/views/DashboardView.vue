@@ -1,7 +1,7 @@
 <template>
   <container-layout id="dashboard">
     <missing-content
-      v-if="width < 1000"
+      v-if="width < 1100"
       title="Screen Size is Too Small"
       subtitle="Please view the dashboard page on a large screen size"
     />
@@ -23,7 +23,7 @@
         <missing-content title="Not implemented. Please check back later!" />
       </tab-panel>
       <tab-panel header="Mint">
-        <missing-content title="Not implemented. Please check back later!" />
+        <mint-tab />
       </tab-panel>
     </tab-view>
   </container-layout>
@@ -36,6 +36,7 @@ import { useWindowSize } from "@vueuse/core";
 
 import ContainerLayout from "@/layouts/ContainerLayout.vue";
 import OverviewTab from "@/components/OverviewTab.vue";
+import MintTab from "@/components/MintTab.vue";
 import MissingContent from "@/components/MissingContent.vue";
 import ConnectWalletButton from "@/components/ConnectWalletButton.vue";
 

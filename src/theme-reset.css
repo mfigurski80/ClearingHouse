@@ -127,8 +127,25 @@ i.pi::before {
   /* background: red; */
   border-color: var(--color-background-alt);
   min-width: 20px;
-
   padding: 14px;
+}
+
+.p-inputgroup-addon:first-child,
+.p-inputgroup button:first-child,
+.p-inputgroup input:first-child,
+.p-inputgroup>.p-inputwrapper:first-child,
+.p-inputgroup>.p-inputwrapper:first-child>.p-inputtext {
+  border-top-left-radius: 16px;
+  border-bottom-left-radius: 16px;
+}
+
+.p-inputgroup-addon:last-child,
+.p-inputgroup button:last-child,
+.p-inputgroup input:last-child,
+.p-inputgroup>.p-inputwrapper:last-child,
+.p-inputgroup>.p-inputwrapper:last-child>.p-inputtext {
+  border-top-right-radius: 16px;
+  border-bottom-right-radius: 16px;
 }
 
 /* TEXT INPUTS */
@@ -310,6 +327,43 @@ i.pi::before {
   background: var(--gradient-primary-secondary);
   filter: brightness(110%);
   transition: filter 0.1s ease-in-out;
+}
+
+.p-selectbutton.p-buttonset {
+  gap: 0;
+}
+
+.p-selectbutton .p-button {
+  background: var(--color-background-alt);
+  border-color: var(--color-background);
+  color: var(--color-text-alt);
+  border-radius: 0;
+  border-width: 1px;
+}
+
+.p-selectbutton .p-button:first-child {
+  border-radius: 15px 0 0 15px;
+}
+
+.p-selectbutton .p-button:last-child {
+  border-radius: 0 15px 15px 0;
+}
+
+.p-selectbutton .p-selectbutton .p-button:not(.p-disabled):not(.p-highlight):hover,
+.p-selectbutton .p-button:not(.p-disabled):not(.p-highlight):hover {
+  background: var(--color-background-alt);
+  color: var(--color-text);
+  border-color: var(--color-text);
+}
+
+.p-selectbutton .p-button.p-highlight {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.p-selectbutton .p-button.p-highlight:hover {
+  background: var(--color-primary-alt);
+  border-color: var(--color-primary-alt);
 }
 
 /* SPLITTER */
