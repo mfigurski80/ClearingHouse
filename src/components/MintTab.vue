@@ -27,34 +27,88 @@
         <div class="prompt">
           <h2>Currency</h2>
         </div>
-        <label class="answer">
+        <div class="answer">
+          <label for="currency">Currency Id to be used</label>
           <div class="p-inputgroup">
             <span class="p-inputgroup-addon">#</span>
             <InputNumber
+              id="currency"
               v-model="formData.currency"
               :min="0"
               :useGrouping="false"
             />
           </div>
-          Currency Id to be used
-        </label>
-      </template>
-
-      <template #period>
-        <div class="prompt">
-          <h2>Period Payments</h2>
-        </div>
-        <div class="answer">
-          <p>PENDINGGG</p>
         </div>
       </template>
 
-      <template #face>
+      <template #payments>
         <div class="prompt">
-          <h2>Face Value</h2>
+          <h2>Payments</h2>
         </div>
         <div class="answer">
-          <p>PENDINGGG</p>
+          <label for="couponSize">Coupon Size</label>
+          <div>
+            <InputNumber
+              id="couponSize"
+              v-model="formData.couponSize"
+              :min="0"
+            />
+          </div>
+          <label for="faceValue">Face Value (repayed at end)</label>
+          <div>
+            <InputNumber id="faceValue" v-model="formData.faceValue" :min="0" />
+          </div>
+        </div>
+      </template>
+
+      <template #duration>
+        <div class="prompt">
+          <h2>Duration</h2>
+        </div>
+        <div class="answer">
+          <label for="periodDuration">Period Duration (seconds)</label>
+          <div>
+            <InputNumber
+              id="periodDuration"
+              v-model="formData.periodDuration"
+              :min="0"
+            />
+          </div>
+          <label for="nPeriods">Number of Periods</label>
+          <div>
+            <InputNumber id="nPeriods" v-model="formData.nPeriods" :min="0" />
+          </div>
+          <label for="startTime">Start Time (seconds)</label>
+          <div>
+            <InputNumber id="startTime" v-model="formData.startTime" :min="0" />
+          </div>
+          <label for="curPeriod">Period to Fast-Forward To (uncommon)</label>
+          <div>
+            <InputNumber id="curPeriod" v-model="formData.curPeriod" :min="0" />
+          </div>
+        </div>
+      </template>
+
+      <template #beneficiary>
+        <div class="prompt">
+          <h2>Beneficiaries</h2>
+        </div>
+        <div class="answer">
+          <label for="beneficiary">Beneficiary of payments</label>
+          <div>
+            <InputText id="beneficiary" v-model="formData.beneficiary" />
+          </div>
+          <label for="owner">Original Owner</label>
+          <div>
+            <InputText id="owner" v-model="formData.owner" />
+          </div>
+        </div>
+      </template>
+
+      <template #submit>
+        <div class="prompt"></div>
+        <div class="answer">
+          <p>SUBMIIIT</p>
         </div>
       </template>
     </FormWizard>
@@ -62,46 +116,71 @@
   <missing-content
     v-if="formData.preset && !questions[formData.preset]"
     title="Not Implemented"
-    subtitle="This preset is not yet implemented. Please use CUSTOM preset instead to set-up this functionality yourself"
+    subtitle="This preset is not yet implemented. Please use the CUSTOM preset instead to set-up this functionality yourself"
   />
 </template>
 
 <script setup lang="ts">
-import { reactive } from "vue";
+import { ref, reactive, watch } from "vue";
 import SelectButton from "primevue/selectbutton";
 import InputNumber from "primevue/inputnumber";
 import InputText from "primevue/inputtext";
+import InputMask from "primevue/inputmask";
 
-import MissingContent from "@/components/MissingContent.vue";
-import FormWizard from "@/components/FormWizard.vue";
+import MissingContent from "@/components/MissingContent";
+import FormWizard from "@/components/FormWizard";
+import { FetchBondResult } from "@/queries/chainQueries";
 
-// STATIC DATA FOR FORM FORMAT
+// STATIC DATA FOR FORM STRUCTURE
 const presets = ["Custom", "Debt", "Short", "Option"];
 const questions = {
-  Custom: ["currency", "period", "face"],
+  Custom: ["currency", "payments", "duration", "beneficiary", "submit"],
 };
-// FORM DATA
+
+// ACTUAL DATA FOR TRACKING USER
 const formData = reactive({
   preset: null,
 });
+// const progress = ref(0);
+// watch(formData, (n, old) => {})
+
+// DERIVED DATA FOR FEEDBACK
+const bond = ref<FetchBondResult>({});
 </script>
 
 <style lang="scss" scoped>
-::v-deep .question {
+.question :deep(.p-button) {
+  background: var(--color-background);
+  border-color: var(--color-background-alt);
+  &:hover {
+    border-color: var(--color-text);
+  }
+  &.p-highlight {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    &:hover {
+      background: var(--color-primary-alt);
+      border-color: var(--color-primary-alt);
+    }
+  }
+  // outline: 10px solid red;
+}
+:deep(.question) {
   // max-width: 1300px;
   width: 80%;
   min-width: 1200px;
   margin: 0px auto;
   display: grid;
-  grid-template-columns: 2fr 3fr 3fr;
+  grid-template-columns: 2fr 400px 3fr;
   & > * {
     padding: 20px;
+    padding-bottom: 0px;
   }
   // align-items: baseline;
   .prompt {
     h2 {
       font-size: 45px;
-      line-height: 42px;
+      line-height: 50px;
       color: var(--color-primary);
       transition: color 0.2s ease-in-out;
     }
@@ -137,6 +216,7 @@ const formData = reactive({
   &:last-child .answer {
     border-bottom-left-radius: 25px;
     border-bottom-right-radius: 25px;
+    padding-bottom: 20px;
     &:after {
       border-bottom-left-radius: 25px;
       border-bottom-right-radius: 25px;
