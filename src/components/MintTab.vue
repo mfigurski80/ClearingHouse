@@ -20,12 +20,15 @@
     </div>
 
     <FormWizard
+      :completedCheck="sectionCompletedCheck"
       :questionIds="questions[formData.preset] ?? []"
+      :showAll="true"
       class="question"
     >
-      <template #currency>
+      <template #currency="{ position, nSteps }">
         <div class="prompt">
           <h2>Currency</h2>
+          <h4>{{ position }} / {{ nSteps }}</h4>
         </div>
         <div class="answer">
           <label for="currency">Currency Id to be used</label>
@@ -41,9 +44,10 @@
         </div>
       </template>
 
-      <template #payments>
+      <template #payments="{ position, nSteps }">
         <div class="prompt">
           <h2>Payments</h2>
+          <h4>{{ position }} / {{ nSteps }}</h4>
         </div>
         <div class="answer">
           <label for="couponSize">Coupon Size</label>
@@ -61,9 +65,10 @@
         </div>
       </template>
 
-      <template #duration>
+      <template #duration="{ position, nSteps }">
         <div class="prompt">
           <h2>Duration</h2>
+          <h4>{{ position }} / {{ nSteps }}</h4>
         </div>
         <div class="answer">
           <label for="periodDuration">Period Duration (seconds)</label>
@@ -89,9 +94,10 @@
         </div>
       </template>
 
-      <template #beneficiary>
+      <template #beneficiary="{ position, nSteps }">
         <div class="prompt">
           <h2>Beneficiaries</h2>
+          <h4>{{ position }} / {{ nSteps }}</h4>
         </div>
         <div class="answer">
           <label for="beneficiary">Beneficiary of payments</label>
@@ -105,10 +111,29 @@
         </div>
       </template>
 
-      <template #submit>
-        <div class="prompt"></div>
+      <template #collateral="{ position, nSteps }">
+        <div class="prompt">
+          <h2>Collateral</h2>
+          <h4>{{ position }} / {{ nSteps }}</h4>
+        </div>
         <div class="answer">
-          <p>SUBMIIIT</p>
+          <missing-content title="Not yet implemented" />
+        </div>
+      </template>
+
+      <template #submit>
+        <div class="prompt" />
+        <div class="answer">
+          <h6>
+            *By performing this action, you agree to the terms outlined by the
+            contract's intended behavior and guarantee you are aware that any or
+            all assets attached as collateral may be lost if the intended
+            behavior, as modified by the parameters inputted by you in this
+            form, are not upheld. Neither the BOND ClearingHouse nor any of its
+            creators are responsible for any loss of assets associated with the
+            financial agreement you are about to create.
+          </h6>
+          <Button type="submit" label="Mint" @click="mint" />
         </div>
       </template>
     </FormWizard>
@@ -121,11 +146,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, watch } from "vue";
+import { ref, reactive } from "vue";
 import SelectButton from "primevue/selectbutton";
 import InputNumber from "primevue/inputnumber";
 import InputText from "primevue/inputtext";
-import InputMask from "primevue/inputmask";
+import Button from "primevue/button";
 
 import MissingContent from "@/components/MissingContent";
 import FormWizard from "@/components/FormWizard";
@@ -134,18 +159,39 @@ import { FetchBondResult } from "@/queries/chainQueries";
 // STATIC DATA FOR FORM STRUCTURE
 const presets = ["Custom", "Debt", "Short", "Option"];
 const questions = {
-  Custom: ["currency", "payments", "duration", "beneficiary", "submit"],
+  Custom: [
+    "currency",
+    "payments",
+    "duration",
+    "beneficiary",
+    "collateral",
+    "submit",
+  ],
+};
+const ex = (x: unknown) => x !== undefined && x !== null;
+const sectionCompletedCheck = {
+  currency: () => ex(formData.currency),
+  payments: () => ex(formData.couponSize) && ex(formData.faceValue),
+  duration: () =>
+    ex(formData.periodDuration) &&
+    ex(formData.nPeriods) &&
+    ex(formData.startTime),
+  beneficiary: () => ex(formData.beneficiary) && ex(formData.owner),
+  collateral: () => true,
 };
 
-// ACTUAL DATA FOR TRACKING USER
+// ACTUAL DATA FOR TRACKING USER && FUNCTIONALITY
 const formData = reactive({
   preset: null,
 });
+const mint = () => {
+  console.log("Minting with data", formData);
+};
 // const progress = ref(0);
 // watch(formData, (n, old) => {})
 
 // DERIVED DATA FOR FEEDBACK
-const bond = ref<FetchBondResult>({});
+// const bond = ref<FetchBondResult>({});
 </script>
 
 <style lang="scss" scoped>
@@ -165,61 +211,76 @@ const bond = ref<FetchBondResult>({});
   }
   // outline: 10px solid red;
 }
-:deep(.question) {
-  // max-width: 1300px;
-  width: 80%;
-  min-width: 1200px;
-  margin: 0px auto;
-  display: grid;
-  grid-template-columns: 2fr 400px 3fr;
-  & > * {
-    padding: 20px;
-    padding-bottom: 0px;
-  }
-  // align-items: baseline;
-  .prompt {
-    h2 {
-      font-size: 45px;
-      line-height: 50px;
-      color: var(--color-primary);
-      transition: color 0.2s ease-in-out;
-    }
-  }
-
-  .answer {
-    background: var(--color-background-alt);
-    position: relative;
+form {
+  padding-top: 50px;
+  padding-bottom: 100px;
+  :deep(.question) {
+    // max-width: 1300px;
+    width: 80%;
+    min-width: 1200px;
+    margin: 0px auto;
+    display: grid;
+    grid-template-columns: 2fr 400px 3fr;
     & > * {
-      margin-bottom: 20px;
+      padding: 20px;
+      padding-bottom: 0px;
     }
-    &:after {
-      content: "";
-      // background: red;
-      display: inline-block;
-      width: 100%;
-      height: 100%;
-      position: absolute;
-      z-index: -1;
-      top: 0;
-      left: 0;
-      box-shadow: var(--shadow-1);
+    // align-items: baseline;
+    .prompt {
+      h2 {
+        font-size: 45px;
+        line-height: 50px;
+        color: var(--color-primary);
+        transition: color 0.2s ease-in-out;
+      }
+      h4 {
+        color: var(--color-text-alt);
+        opacity: 0.3;
+        font-size: 20px;
+        line-height: 20px;
+        margin-top: -5px;
+        transition: opacity 0.15s ease-in-out;
+      }
     }
-  }
-  &:first-child .answer {
-    border-top-left-radius: 25px;
-    border-top-right-radius: 25px;
-    &:after {
+    &:hover .prompt h4 {
+      opacity: 1;
+    }
+
+    .answer {
+      background: var(--color-background-alt);
+      position: relative;
+      & > * {
+        margin-bottom: 20px;
+      }
+      &:after {
+        content: "";
+        // background: red;
+        display: inline-block;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        z-index: -1;
+        top: 0;
+        left: 0;
+        box-shadow: var(--shadow-1);
+      }
+    }
+    &:first-child .answer {
       border-top-left-radius: 25px;
       border-top-right-radius: 25px;
+      &:after {
+        border-top-left-radius: 25px;
+        border-top-right-radius: 25px;
+      }
     }
-  }
-  &:last-child .answer {
-    border-bottom-left-radius: 25px;
-    border-bottom-right-radius: 25px;
-    padding-bottom: 20px;
-    &:after {
+    &:last-child .answer {
       border-bottom-left-radius: 25px;
       border-bottom-right-radius: 25px;
+      padding-bottom: 20px;
+      &:after {
+        border-bottom-left-radius: 25px;
+        border-bottom-right-radius: 25px;
+      }
     }
   }
 }
