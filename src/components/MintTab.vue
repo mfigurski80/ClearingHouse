@@ -1,5 +1,5 @@
 <template>
-  <form id="mint-form">
+  <form id="mint-form" @submit.prevent="mint">
     <div class="question">
       <div class="prompt">
         <h2>Preset</h2>
@@ -22,8 +22,7 @@
     <FormWizard
       :completedCheck="sectionCompletedCheck"
       :questionIds="questions[formData.preset] ?? []"
-      :showAll="true"
-      class="question"
+      innerClass="question"
     >
       <template #currency="{ position, nSteps }">
         <div class="prompt">
@@ -31,16 +30,10 @@
           <h4>{{ position }} / {{ nSteps }}</h4>
         </div>
         <div class="answer">
-          <label for="currency">Currency Id to be used</label>
-          <div class="p-inputgroup">
-            <span class="p-inputgroup-addon">#</span>
-            <InputNumber
-              id="currency"
-              v-model="formData.currency"
-              :min="0"
-              :useGrouping="false"
-            />
-          </div>
+          <currency-select
+            :label="'Currency Id to be used'"
+            v-model="formData.currency"
+          />
         </div>
       </template>
 
@@ -133,7 +126,7 @@
             creators are responsible for any loss of assets associated with the
             financial agreement you are about to create.
           </h6>
-          <Button type="submit" label="Mint" @click="mint" />
+          <Button type="submit" label="Mint" />
         </div>
       </template>
     </FormWizard>
@@ -153,6 +146,7 @@ import InputText from "primevue/inputtext";
 import Button from "primevue/button";
 
 import MissingContent from "@/components/MissingContent";
+import CurrencySelect from "@/components/CurrencySelect";
 import FormWizard from "@/components/FormWizard";
 import { FetchBondResult } from "@/queries/chainQueries";
 
@@ -185,7 +179,7 @@ const formData = reactive({
   preset: null,
 });
 const mint = () => {
-  console.log("Minting with data", formData);
+  console.log("Minting with data", { ...formData });
 };
 // const progress = ref(0);
 // watch(formData, (n, old) => {})
@@ -216,11 +210,11 @@ form {
   padding-bottom: 100px;
   :deep(.question) {
     // max-width: 1300px;
-    width: 80%;
+    width: 60%;
     min-width: 1200px;
     margin: 0px auto;
     display: grid;
-    grid-template-columns: 2fr 400px 3fr;
+    grid-template-columns: 1fr 398px 1fr;
     & > * {
       padding: 20px;
       padding-bottom: 0px;
@@ -231,7 +225,6 @@ form {
         font-size: 45px;
         line-height: 50px;
         color: var(--color-primary);
-        transition: color 0.2s ease-in-out;
       }
       h4 {
         color: var(--color-text-alt);

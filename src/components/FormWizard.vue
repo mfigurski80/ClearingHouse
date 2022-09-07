@@ -1,5 +1,9 @@
 <template>
-  <div v-for="i in toRender" :key="props.questionIds[i - 1]" v-bind="$attrs">
+  <div
+    v-for="i in toRender"
+    :key="props.questionIds[i - 1]"
+    :class="innerClass"
+  >
     <slot
       :name="props.questionIds[i - 1]"
       :position="i"
@@ -16,7 +20,8 @@ import { computed } from "vue";
 const props = defineProps<{
   questionIds: unknown[];
   completedCheck: { [String]: () => boolean };
-  showAll: boolean;
+  showAll?: boolean;
+  innerClass?: string;
 }>();
 
 const toRender = computed(() => {
@@ -26,7 +31,7 @@ const toRender = computed(() => {
     toRender++;
     if (id in props.completedCheck && !props.completedCheck[id]()) break;
   }
-  console.log("toRender", toRender);
+  // console.log("toRender", toRender);
   return toRender;
 });
 </script>

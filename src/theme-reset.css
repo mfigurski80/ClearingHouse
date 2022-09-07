@@ -27,18 +27,29 @@
   --mobile-breakpoint: 1000px;
 }
 
+/* TEXT & COLORS */
+
+.p-error {
+  color: var(--color-failure);
+}
+
 /* ICONS */
 
 i.pi {
   font-family: inherit;
   position: relative;
   font-size: inherit;
+  line-height: inherit;
 }
 
 i.pi::before {
   font-family: "primeicons";
   font-style: normal;
   font-weight: normal;
+}
+
+i.pi.pi-spinner {
+  height: 18px;
 }
 
 /* SIDEBAR */
@@ -116,33 +127,44 @@ i.pi::before {
   padding-left: 40px;
 }
 
+.p-input-icon-right input {
+  padding-right: 40px;
+  margin-right: -20px;
+  height: 50px;
+}
+
 .p-inputgroup {
   display: flex;
   align-items: stretch;
+  /* border: 2px solid red; */
 }
 
 .p-inputgroup-addon {
   background: var(--color-background);
   /* background: red; */
   border-color: var(--color-background-alt);
+  border-radius: 0;
   min-width: 20px;
   padding: 14px;
 }
 
+
 .p-inputgroup-addon:first-child,
 .p-inputgroup button:first-child,
-.p-inputgroup input:first-child,
+.p-inputgroup>input:first-child,
 .p-inputgroup>.p-inputwrapper:first-child,
-.p-inputgroup>.p-inputwrapper:first-child>.p-inputtext {
+.p-inputgroup>.p-inputwrapper:first-child .p-inputtext,
+.p-inputgroup>[class*='p-input-icon-']:first-child input {
   border-top-left-radius: 16px;
   border-bottom-left-radius: 16px;
 }
 
 .p-inputgroup-addon:last-child,
 .p-inputgroup button:last-child,
-.p-inputgroup input:last-child,
+.p-inputgroup>input:last-child,
 .p-inputgroup>.p-inputwrapper:last-child,
-.p-inputgroup>.p-inputwrapper:last-child>.p-inputtext {
+.p-inputgroup>.p-inputwrapper:last-child .p-inputtext,
+.p-inputgroup>[class*='p-input-icon-']:last-child input {
   border-top-right-radius: 16px;
   border-bottom-right-radius: 16px;
 }
@@ -279,12 +301,12 @@ i.pi::before {
 }
 
 .p-button.p-button-icon-only.p-button-sm {
-  width: 2rem;
-  height: 2rem;
-  padding-top: 1px;
-  padding-left: 1px;
-  padding-right: 2px;
-  line-height: 2rem;
+  width: 32px;
+  height: 32px;
+  padding-top: 2px;
+  /* padding-left: 1px; */
+  /* padding-right: 2px; */
+  line-height: 32px;
 }
 
 .p-button.p-button-icon-only>.p-button-label {

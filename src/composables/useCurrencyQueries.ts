@@ -14,6 +14,7 @@ const queryOptions = {
   staleTime: Infinity, // never refetch
   refetchOnWindowFocus: false, // no
   keepPreviousData: true, // keeeep
+  retry: false, // don't retry
 };
 
 export const useCurrencyQuery = (currencyId: Ref<number | undefined>) => {
