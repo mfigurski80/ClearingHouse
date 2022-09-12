@@ -4,7 +4,8 @@
     <InputNumber
       id="duration"
       class="duration"
-      v-model="input.DurationMultiplier"
+      :modelValue="props.modelValue?.duration"
+      @update:modelValue="updateDuration"
       :useGrouping="false"
       :min="0"
       :placeholder="props.placeholder ?? 10"
@@ -12,13 +13,14 @@
     <Dropdown
       :options="multiplierOptions"
       optionLabel="label"
-      v-model="input.multiplier"
+      :modelValue="multiplierValue"
+      @update:modelValue="updateMultiplier"
     />
   </div>
 </template>
 
 <script lang="ts" setup>
-import { watch, reactive } from "vue";
+import { computed } from "vue";
 import InputNumber from "primevue/inputnumber";
 import Dropdown from "primevue/dropdown";
 
@@ -31,7 +33,10 @@ enum DurationMultiplier {
 }
 const props = defineProps<{
   label?: string;
-  modelValue?: { duration: number; multiplier: DurationMultiplier };
+  modelValue?: {
+    duration: number;
+    multiplier: DurationMultiplier;
+  };
   placeholder?: number;
 }>();
 const emit = defineEmits(["update:modelValue"]);
@@ -43,12 +48,27 @@ const multiplierOptions = [
   { label: "Months", value: DurationMultiplier.MONTH },
   { label: "Years", value: DurationMultiplier.YEAR },
 ];
-const input = reactive(
-  props.modelValue || { multiplier: DurationMultiplier.DAY }
-);
-watch(input, (n) => {
-  emit("update:modelValue", n);
+const multiplierValue = computed(() => {
+  let value = props.modelValue?.multiplier ?? DurationMultiplier.DAY;
+  return {
+    label: multiplierOptions.find((o) => o.value === value)?.label,
+    value,
+  };
 });
+
+const updateDuration = (duration: number) => {
+  emit("update:modelValue", {
+    duration,
+    multiplier: props.modelValue?.multiplier ?? DurationMultiplier.DAY,
+  });
+};
+
+const updateMultiplier = (multiplier: { label: string; value: number }) => {
+  emit("update:modelValue", {
+    duration: props.modelValue?.duration,
+    multiplier: multiplier.value,
+  });
+};
 </script>
 
 <style scoped lang="scss">

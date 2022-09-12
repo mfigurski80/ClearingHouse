@@ -178,9 +178,9 @@ import Button from "primevue/button";
 import Calendar from "primevue/calendar";
 
 import MissingContent from "@/components/MissingContent";
-import CurrencySelect from "@/components/CurrencySelect";
-import DurationInput from "@/components/DurationInput";
-import AddressInput from "@/components/AddressInput";
+import CurrencySelect from "@/components/inputs/CurrencySelect";
+import DurationInput from "@/components/inputs/DurationInput";
+import AddressInput from "@/components/inputs/AddressInput";
 import FormWizard from "@/components/FormWizard";
 import { CurrencyType } from "@/types/enums";
 
