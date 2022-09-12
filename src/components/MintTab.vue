@@ -127,14 +127,11 @@
           <h4>{{ position }} / {{ nSteps }}</h4>
         </div>
         <div class="answer">
-          <label for="beneficiary">Beneficiary of payments</label>
-          <div>
-            <InputText id="beneficiary" v-model="formData.beneficiary" />
-          </div>
-          <label for="owner">Original Owner</label>
-          <div>
-            <InputText id="owner" v-model="formData.owner" />
-          </div>
+          <AddressInput
+            v-model="formData.beneficiary"
+            label="Beneficiary of Payments"
+          />
+          <AddressInput v-model="formData.owner" label="Initial Owner" />
         </div>
       </template>
 
@@ -173,7 +170,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from "vue";
+import { reactive } from "vue";
 import SelectButton from "primevue/selectbutton";
 import InputNumber from "primevue/inputnumber";
 import InputText from "primevue/inputtext";
@@ -183,9 +180,8 @@ import Calendar from "primevue/calendar";
 import MissingContent from "@/components/MissingContent";
 import CurrencySelect from "@/components/CurrencySelect";
 import DurationInput from "@/components/DurationInput";
+import AddressInput from "@/components/AddressInput";
 import FormWizard from "@/components/FormWizard";
-import { FetchBondResult } from "@/queries/chainQueries";
-
 import { CurrencyType } from "@/types/enums";
 
 // STATIC DATA FOR FORM STRUCTURE
