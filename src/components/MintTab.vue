@@ -23,6 +23,7 @@
       :completedCheck="sectionCompletedCheck"
       :questionIds="questions[formData.preset] ?? []"
       innerClass="question"
+      :showAll="false"
     >
       <template #currency="{ position, nSteps }">
         <div class="prompt">
@@ -34,6 +35,18 @@
             :label="'Currency Id to be used'"
             v-model="formData.currency"
           />
+          <h5
+            class="warning"
+            v-if="
+              formData.currency?.type === CurrencyType.ERC721 ||
+              formData.currency?.type === CurrencyType.ERC1155NFT
+            "
+          >
+            Warning: Look Out! This currency may have only a single instance of
+            the token -- this is an NFT. Make sure you are minting with the
+            correct currency, or ensure you will only have to pay once to
+            complete the bond!
+          </h5>
         </div>
       </template>
 
@@ -48,12 +61,22 @@
             <InputNumber
               id="couponSize"
               v-model="formData.couponSize"
-              :min="0"
+              mode="decimal"
+              :prefix="`${formData.currency?.symbol ?? '??'} `"
+              :maxFractionDigits="formData.currency?.decimals || 18"
+              :placeholder="`${formData.currency?.symbol ?? '??'} 100`"
             />
           </div>
           <label for="faceValue">Face Value (repayed at end)</label>
           <div>
-            <InputNumber id="faceValue" v-model="formData.faceValue" :min="0" />
+            <InputNumber
+              id="faceValue"
+              v-model="formData.faceValue"
+              mode="decimal"
+              :prefix="`${formData.currency?.symbol ?? '??'} `"
+              :maxFractionDigits="formData.currency?.decimals || 18"
+              :placeholder="`${formData.currency?.symbol ?? '??'} 1000`"
+            />
           </div>
         </div>
       </template>
@@ -64,25 +87,36 @@
           <h4>{{ position }} / {{ nSteps }}</h4>
         </div>
         <div class="answer">
-          <label for="periodDuration">Period Duration (seconds)</label>
-          <div>
-            <InputNumber
-              id="periodDuration"
-              v-model="formData.periodDuration"
-              :min="0"
-            />
-          </div>
+          <DurationInput
+            v-model="formData.periodDuration"
+            label="Period Duration"
+          />
           <label for="nPeriods">Number of Periods</label>
           <div>
-            <InputNumber id="nPeriods" v-model="formData.nPeriods" :min="0" />
+            <InputNumber
+              id="nPeriods"
+              v-model="formData.nPeriods"
+              :min="0"
+              :placeholder="36"
+            />
           </div>
-          <label for="startTime">Start Time (seconds)</label>
+          <label for="startTime">Start Date/Time</label>
           <div>
-            <InputNumber id="startTime" v-model="formData.startTime" :min="0" />
+            <Calendar
+              id="startTime"
+              v-model="formData.startTime"
+              :showTime="true"
+              dateFormat="yy/mm/dd"
+            />
           </div>
           <label for="curPeriod">Period to Fast-Forward To (uncommon)</label>
           <div>
-            <InputNumber id="curPeriod" v-model="formData.curPeriod" :min="0" />
+            <InputNumber
+              id="curPeriod"
+              v-model="formData.curPeriod"
+              :min="0"
+              :placeholder="0"
+            />
           </div>
         </div>
       </template>
@@ -144,11 +178,15 @@ import SelectButton from "primevue/selectbutton";
 import InputNumber from "primevue/inputnumber";
 import InputText from "primevue/inputtext";
 import Button from "primevue/button";
+import Calendar from "primevue/calendar";
 
 import MissingContent from "@/components/MissingContent";
 import CurrencySelect from "@/components/CurrencySelect";
+import DurationInput from "@/components/DurationInput";
 import FormWizard from "@/components/FormWizard";
 import { FetchBondResult } from "@/queries/chainQueries";
+
+import { CurrencyType } from "@/types/enums";
 
 // STATIC DATA FOR FORM STRUCTURE
 const presets = ["Custom", "Debt", "Short", "Option"];
@@ -162,7 +200,7 @@ const questions = {
     "submit",
   ],
 };
-const ex = (x: unknown) => x !== undefined && x !== null;
+const ex = (x: unknown) => x !== undefined && x !== null && x !== "";
 const sectionCompletedCheck = {
   currency: () => ex(formData.currency),
   payments: () => ex(formData.couponSize) && ex(formData.faceValue),

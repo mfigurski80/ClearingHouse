@@ -45,6 +45,10 @@ section {
   padding: 40px 0 50px 0;
 }
 
+.warning {
+  color: var(--color-failure);
+}
+
 @media only screen and (max-width: 1000px) {
   h1 {
     font-size: 50px;

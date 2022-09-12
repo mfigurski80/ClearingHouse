@@ -7,8 +7,8 @@
         id="currency"
         :min="0"
         :useGrouping="false"
-        v-bind="$attrs"
-        :modelValue="props.modelValue"
+        v-model="currencyIdInput"
+        :placeholder="0"
       />
       <i
         class="pi pi-spin pi-spinner"
@@ -27,18 +27,26 @@
 </template>
 
 <script lang="ts" setup>
-import { computed } from "vue";
+import { watch, ref } from "vue";
 import InputNumber from "primevue/inputnumber";
 
 import CurrencyChip from "@/components/CurrencyChip";
-import MissingContent from "@/components/MissingContent";
-import { useCurrencyQuery } from "@/composables/useCurrencyQueries";
+import {
+  FetchCurrencyResponse,
+  useCurrencyQuery,
+} from "@/composables/useCurrencyQueries";
 
 const props = defineProps<{
   label?: string;
-  modelValue?: number;
+  modelValue?: FetchCurrencyResponse;
 }>();
+const emit = defineEmits(["update:modelValue"]);
 
-const currencyId = computed(() => props.modelValue);
-const currencyResponse = useCurrencyQuery(currencyId);
+const currencyIdInput = ref<undefined | number>(props.modelValue?.id);
+const currencyResponse = useCurrencyQuery(currencyIdInput);
+
+watch(currencyResponse.data, (n) => {
+  // console.log("Currency changed", { ...n });
+  emit("update:modelValue", n);
+});
 </script>

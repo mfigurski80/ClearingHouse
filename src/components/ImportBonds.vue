@@ -107,9 +107,6 @@ hr {
 label {
   color: var(--color-text-alt);
 }
-.warning {
-  color: var(--color-failure);
-}
 .preview {
   // border: 1px solid var(--color-text-alt);
   border-radius: 12px;

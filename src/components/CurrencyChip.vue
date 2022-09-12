@@ -3,9 +3,9 @@
     <h5>#{{ props.currency?.id ?? "??" }}</h5>
     <h5>
       {{ props.currency?.name || "???" }}
-      <small
-        ><code>{{ props.currency?.symbol || "??" }}</code></small
-      >
+      <small>
+        <code>{{ props.currency?.symbol || "??" }}</code>
+      </small>
     </h5>
     <h5 v-if="props.price">{{ props.price }} $</h5>
   </a>

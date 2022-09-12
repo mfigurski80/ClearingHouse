@@ -148,6 +148,11 @@ i.pi.pi-spinner {
   padding: 14px;
 }
 
+.p-inputgroup input,
+.p-inputgroup input:last-child,
+.p-inputgroup input:first-child {
+  border-radius: 0;
+}
 
 .p-inputgroup-addon:first-child,
 .p-inputgroup button:first-child,
@@ -175,6 +180,8 @@ i.pi.pi-spinner {
   color: var(--color-text);
   background: var(--color-background);
   border-color: var(--color-background-alt);
+  border-radius: 14px;
+  padding: 12px 12px;
   padding-top: 14px;
 }
 
@@ -234,6 +241,21 @@ i.pi.pi-spinner {
 
 .p-multiselect-panel .p-multiselect-items .p-multiselect-item:focus {
   box-shadow: inset 0 0 0 0.15rem #eee3;
+}
+
+/* DROPDOWN INPUT */
+
+.p-dropdown {
+  background: var(--color-background);
+  border-color: var(--color-background-alt);
+}
+
+.p-dropdown:not(.p-disabled):hover {
+  border-color: var(--color-primary);
+}
+
+.p-dropdown-panel .p-dropdown-items {
+  padding: 0
 }
 
 /* CHECKBOX */
