@@ -6,7 +6,7 @@
     <a href="https://discord.com">
       <i class="pi pi-discord" />
     </a>
-    <a href="https://github.com/mfigurski80">
+    <a href="https://github.com/mfigurski80/karmaToken">
       <i class="pi pi-github" />
     </a>
   </div>

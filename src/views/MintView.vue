@@ -217,11 +217,6 @@ const formData = reactive({
 const mint = () => {
   console.log("Minting with data", { ...formData });
 };
-// const progress = ref(0);
-// watch(formData, (n, old) => {})
-
-// DERIVED DATA FOR FEEDBACK
-// const bond = ref<FetchBondResult>({});
 </script>
 
 <style lang="scss" scoped>
