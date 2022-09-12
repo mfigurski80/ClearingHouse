@@ -25,13 +25,13 @@
       <h3>LIABILITIES</h3>
       <bond-listing :bondList="bonds.minted" />
       <div class="p-buttonset action-buttons">
-        <a href="https://mfigurski80.github.io/karmaToken/interaction.html">
+        <router-link to="../mint">
           <Button
             icon="pi pi-plus"
             class="p-button-rounded p-button-outlined"
             label="Mint"
           />
-        </a>
+        </router-link>
         <Button
           icon="pi pi-upload"
           class="p-button-text p-button-rounded p-button-secondary upload-button"

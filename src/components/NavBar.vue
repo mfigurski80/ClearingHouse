@@ -24,6 +24,9 @@
           <router-link to="/dashboard">
             <i class="pi pi-chart-bar" />
           </router-link>
+          <router-link to="/mint">
+            <i class="pi pi-plus" />
+          </router-link>
           <router-link to="/not-implemented">
             <i class="pi pi-search" />
           </router-link>
