@@ -46,7 +46,12 @@ const currencyIdInput = ref<undefined | number>(props.modelValue?.id);
 const currencyResponse = useCurrencyQuery(currencyIdInput);
 
 watch(currencyResponse.data, (n) => {
-  // console.log("Currency changed", { ...n });
   emit("update:modelValue", n);
+});
+
+watch(currencyIdInput, (n) => {
+  if (n === undefined) {
+    emit("update:modelValue", undefined);
+  }
 });
 </script>

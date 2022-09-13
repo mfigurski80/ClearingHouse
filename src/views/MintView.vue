@@ -154,11 +154,12 @@
               contract's intended behavior and guarantee you are aware that any
               or all assets attached as collateral may be lost if the intended
               behavior, as modified by the parameters inputted by you in this
-              form, are not upheld. Neither the BOND ClearingHouse nor any of
-              its creators are responsible for any loss of assets associated
-              with the financial agreement you are about to create.
+              form, is not upheld. Neither the BOND ClearingHouse nor any of its
+              creators are responsible for any loss of assets associated with
+              the financial agreement you are about to create.
             </h6>
-            <Button type="submit" label="Mint" />
+            <Button type="submit" label="Mint" :loading="isLoading" />
+            <h5 v-if="isError" class="warning">Error: {{ error }}</h5>
           </div>
         </template>
       </FormWizard>
@@ -173,6 +174,7 @@
 
 <script setup lang="ts">
 import { reactive } from "vue";
+import { useRouter } from "vue-router";
 import SelectButton from "primevue/selectbutton";
 import InputNumber from "primevue/inputnumber";
 import Button from "primevue/button";
@@ -184,7 +186,12 @@ import CurrencySelect from "@/components/inputs/CurrencySelect";
 import DurationInput from "@/components/inputs/DurationInput";
 import AddressInput from "@/components/inputs/AddressInput";
 import FormWizard from "@/components/FormWizard";
+
 import { CurrencyType } from "@/types/enums";
+import { useBondMintMutation } from "@/composables/useMutations";
+import { useContracts } from "@/composables/contracts";
+import { fetchBondFormat } from "@/queries/chainQueries";
+const { contracts } = useContracts();
 
 // STATIC DATA FOR FORM STRUCTURE
 const presets = ["Custom", "Debt", "Short", "Option"];
@@ -214,8 +221,31 @@ const sectionCompletedCheck = {
 const formData = reactive({
   preset: null,
 });
-const mint = () => {
-  console.log("Minting with data", { ...formData });
+
+// FUNCTIONS FOR MINTING -- RECEIVING
+const router = useRouter();
+const { isLoading, isError, error, mutate } = useBondMintMutation({
+  onSuccess: (res) => {
+    console.log(res);
+    // register new bond id
+    // router.push("/dashboard");
+  },
+});
+const mint = async () => {
+  const format = await fetchBondFormat(contracts.value.LBondManager, {
+    flag: false,
+    currencyRef: formData.currency.id,
+    nPeriods: formData.nPeriods,
+    curPeriod: formData.curPeriod ?? 0,
+    startTime: Math.floor(formData.startTime.getTime() / 1000),
+    periodDuration:
+      formData.periodDuration.duration * formData.periodDuration.multiplier,
+    couponSize: formData.couponSize * 10 ** formData.currency.decimals,
+    faceValue: formData.faceValue * 10 ** formData.currency.decimals,
+    beneficiary: formData.beneficiary,
+    owner: formData.owner,
+  });
+  mutate(format);
 };
 </script>
 

@@ -8,6 +8,7 @@
       </small>
     </h5>
     <h5 v-if="props.price">{{ props.price }} $</h5>
+    <h5 v-else>{{ currencyTypeDisplay[props.currency?.type] }}</h5>
   </a>
 </template>
 
@@ -17,6 +18,14 @@ const props = defineProps<{
   currency?: FetchCurrencyResult;
   price?: number;
 }>();
+
+const currencyTypeDisplay = [
+  "Native",
+  "ERC20",
+  "ERC721",
+  "ERC1155",
+  "ERC1155NFT",
+];
 </script>
 
 <style scoped lang="scss">

@@ -20,6 +20,20 @@ export interface RawBond {
   operators?: address[];
 }
 
+export interface RawMintBond {
+  flag: boolean;
+  currencyRef: number;
+  nPeriods: number;
+  curPeriod: number;
+  startTime: number;
+  periodDuration: number;
+  couponSize: number;
+  faceValue: number;
+  beneficiary: address;
+  minter: address;
+  owner: address;
+}
+
 export interface WalletBondRelationship {
   wallet: address;
   owner: boolean;

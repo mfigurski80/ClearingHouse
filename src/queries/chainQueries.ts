@@ -2,6 +2,7 @@ import type { ethers } from "ethers";
 
 import type {
   RawBond,
+  RawMintBond,
   RawCurrency,
   RawCurrencyDetails,
   address,
@@ -103,4 +104,26 @@ export const fetchCurrencyDetails = async (
       symbol: "--",
       decimals: 0,
     };
+};
+
+export const fetchBondFormat = async (
+  manager: ethers.Contract,
+  bond: RawMintBond
+): Promise<[string, string]> => {
+  return await Promise.all([
+    manager.buildAlpha(
+      bond.flag,
+      bond.couponSize.toString(),
+      bond.nPeriods,
+      bond.curPeriod,
+      bond.currencyRef,
+      bond.beneficiary
+    ),
+    manager.buildBeta(
+      bond.faceValue.toString(),
+      bond.startTime,
+      bond.periodDuration,
+      bond.minter
+    ),
+  ]);
 };
