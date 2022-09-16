@@ -37,7 +37,6 @@ export const fetchBond = async (
   id: number
 ): Promise<FetchBondResult> => {
   counter("bond");
-  // console.log("Fetch Bond", id);
   const bondResp = (await core.getBond(id)) as FetchBondResponse;
   const owner = (await core.ownerOf(id)) as address;
   return {
@@ -60,12 +59,7 @@ export const fetchCurrency = async (
   core: ethers.Contract,
   id: number
 ): Promise<FetchCurrencyResult> => {
-  // const cache = localStorage.getItem(`currency-${id}`);
-  // if (cache) {
-  //   return JSON.parse(cache);
-  // }
   counter("currency");
-
   const currencyResp = (await core.currencies(id)) as FetchCurrencyResponse;
   const currencyDetails = await fetchCurrencyDetails(
     core,
@@ -79,8 +73,6 @@ export const fetchCurrency = async (
     erc1155TokenId: parseInt(currencyResp.ERC1155Id._hex, 16),
     type: currencyResp.currencyType,
   };
-  // localStorage.setItem(`currency-${id}`, JSON.stringify(result));
-  // return result;
 };
 
 export const fetchCurrencyDetails = async (
@@ -88,7 +80,7 @@ export const fetchCurrencyDetails = async (
   address: address,
   type: CurrencyType
 ): Promise<RawCurrencyDetails> => {
-  // console.log("Fetch Currency Details", address, type);
+  counter("currencyDetails");
   if (type === CurrencyType.ETHER)
     return {
       location: address,
@@ -111,7 +103,7 @@ export const fetchBondFormat = async (
   manager: ethers.Contract,
   bond: RawMintBond
 ): Promise<[string, string]> => {
-  console.log("Fetch Bond Format", bond, manager);
+  counter("bondFormat");
   return await Promise.all([
     manager.buildAlpha(
       bond.flag,

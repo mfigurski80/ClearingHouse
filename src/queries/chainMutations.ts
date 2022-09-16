@@ -11,7 +11,7 @@ export const sendMintBond = async (
   beta: string
 ): Promise<TransactionResult> => {
   const tx: ethers.ContractTransaction = await core.mintBond(alpha, beta);
-  console.log("SENT TRANSACTION", tx);
+  // console.log("SENT TRANSACTION", tx);
   const receipt = await tx.wait();
   return { tx, receipt };
 };

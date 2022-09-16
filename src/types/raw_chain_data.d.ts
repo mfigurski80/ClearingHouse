@@ -30,7 +30,7 @@ export interface RawMintBond {
   couponSize: number;
   faceValue: number;
   beneficiary: address;
-  minter: address;
+  minter?: address;
   owner: address;
 }
 

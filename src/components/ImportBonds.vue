@@ -70,8 +70,8 @@ const error = computed(() => {
   if (relationship.value === Relationship.NONE)
     return "Your wallet is not related to this bond";
   if (
-    bondSearchSearch.value in bondListCache.owned ||
-    bondSearchSearch.value in bondListCache.minted
+    bondListCache.owned.includes(bondSearchSearch.value) ||
+    bondListCache.minted.includes(bondSearchSearch.value)
   )
     return "You already have this bond registered";
   return "";

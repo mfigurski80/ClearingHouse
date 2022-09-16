@@ -1,7 +1,10 @@
 import { RawCurrencyDetails } from "@/types";
 
 export function toReadableNumber(n: number): string {
-  const v = n.toPrecision(3).replace(/\.0+/, "");
+  const v = n
+    .toPrecision(3)
+    .replace(/\.?0+$/, "")
+    .replace(/\.?0+(?=e)/, "");
   return v;
 }
 

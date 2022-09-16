@@ -190,6 +190,7 @@ import FormWizard from "@/components/FormWizard";
 
 import { CurrencyType } from "@/types/enums";
 import { useBondMintMutation } from "@/composables/useMutations";
+import useBondListCache from "@/composables/useBondListCache";
 
 // STATIC DATA FOR FORM STRUCTURE
 const presets = ["Custom", "Debt", "Short", "Option"];
@@ -221,6 +222,9 @@ const formData = reactive({
 });
 
 // FUNCTIONS FOR MINTING -- RECEIVING
+const router = useRouter();
+const bondListCache = useBondListCache();
+
 const mint = () =>
   mutate({
     flag: false,
@@ -239,12 +243,11 @@ const mint = () =>
 const onFormat = (fmt: [string, string]) => {
   console.log("FORMATTED BOND", fmt);
 };
-
-const router = useRouter();
 const onSuccess = (res) => {
-  console.log(res);
-  // TODO: register new bond id
-  alert("successfully minted");
+  const transfers = res.receipt.events.filter((e) => e.event === "Transfer");
+  const bondId = parseInt(transfers[0].args.tokenId._hex, 16);
+  alert(`successfully minted bond with id #${bondId}`);
+  bondListCache.minted.push(bondId);
   router.push("/dashboard");
 };
 
