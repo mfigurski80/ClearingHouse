@@ -23,12 +23,12 @@ const handleAccountsChanged = () => {
 
 const _status = ref<ConnectionStatus>(ConnectionStatus.DISCONNECTED);
 // const _provider = shallowRef<providers.Web3Provider | null>(null);
-const _signer = shallowRef<providers.JsonRpcSigner | null>(null);
+// const _signer = shallowRef<providers.JsonRpcSigner | null>(null);
 const _wallet = ref<string | null>(null);
 
 export const status = readonly(_status);
 export const provider = shallowRef<providers.Web3Provider | null>(null);
-export const signer = readonly(_signer);
+export const signer = shallowRef<providers.JsonRpcSigner | null>(null);
 export const wallet = readonly(_wallet);
 
 export const connect = async function (byUser = true) {
@@ -51,14 +51,14 @@ export const connect = async function (byUser = true) {
     await provider.value.send("eth_requestAccounts", []);
   }
 
-  _signer.value = provider.value.getSigner();
+  signer.value = provider.value.getSigner();
   if (signer.value === undefined) {
     console.error("ERR CONNECTING: Signer is undefined");
     _status.value = ConnectionStatus.DISCONNECTED;
     return;
   }
   const address = await PromiseWithTimeout(
-    _signer.value.getAddress(),
+    signer.value.getAddress(),
     1000
   ).catch((err) => {
     _status.value = ConnectionStatus.DISCONNECTED;

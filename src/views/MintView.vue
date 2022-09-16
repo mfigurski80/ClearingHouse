@@ -164,6 +164,7 @@
         </template>
       </FormWizard>
     </form>
+
     <missing-content
       v-if="formData.preset && !questions[formData.preset]"
       title="Not Implemented"
@@ -189,9 +190,6 @@ import FormWizard from "@/components/FormWizard";
 
 import { CurrencyType } from "@/types/enums";
 import { useBondMintMutation } from "@/composables/useMutations";
-import { useContracts } from "@/composables/contracts";
-import { fetchBondFormat } from "@/queries/chainQueries";
-const { contracts } = useContracts();
 
 // STATIC DATA FOR FORM STRUCTURE
 const presets = ["Custom", "Debt", "Short", "Option"];
@@ -223,16 +221,8 @@ const formData = reactive({
 });
 
 // FUNCTIONS FOR MINTING -- RECEIVING
-const router = useRouter();
-const { isLoading, isError, error, mutate } = useBondMintMutation({
-  onSuccess: (res) => {
-    console.log(res);
-    // register new bond id
-    // router.push("/dashboard");
-  },
-});
-const mint = async () => {
-  const format = await fetchBondFormat(contracts.value.LBondManager, {
+const mint = () =>
+  mutate({
     flag: false,
     currencyRef: formData.currency.id,
     nPeriods: formData.nPeriods,
@@ -245,8 +235,23 @@ const mint = async () => {
     beneficiary: formData.beneficiary,
     owner: formData.owner,
   });
-  mutate(format);
+
+const onFormat = (fmt: [string, string]) => {
+  console.log("FORMATTED BOND", fmt);
 };
+
+const router = useRouter();
+const onSuccess = (res) => {
+  console.log(res);
+  // TODO: register new bond id
+  alert("successfully minted");
+  router.push("/dashboard");
+};
+
+const { isLoading, isError, error, mutate } = useBondMintMutation(
+  { onSuccess },
+  onFormat
+);
 </script>
 
 <style lang="scss" scoped>

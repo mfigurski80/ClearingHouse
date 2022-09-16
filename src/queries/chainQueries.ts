@@ -106,10 +106,12 @@ export const fetchCurrencyDetails = async (
     };
 };
 
+export type FormattedBond = [string, string];
 export const fetchBondFormat = async (
   manager: ethers.Contract,
   bond: RawMintBond
 ): Promise<[string, string]> => {
+  console.log("Fetch Bond Format", bond, manager);
   return await Promise.all([
     manager.buildAlpha(
       bond.flag,

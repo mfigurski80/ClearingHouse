@@ -1,23 +1,23 @@
 import { useMutation, UseMutationOptions } from "vue-query";
 
 import { useContracts } from "@/composables/contracts";
+import { fetchBondFormat, FormattedBond } from "@/queries/chainQueries";
 import { sendMintBond, TransactionResult } from "@/queries/chainMutations";
-
-export type BondMintMutationParameters = [string, string];
+import type { RawMintBond } from "@/types";
 
 export const useBondMintMutation = (
-  args: UseMutationOptions<
-    TransactionResult,
-    unknown,
-    BondMintMutationParameters,
-    undefined
-  >
+  args?: UseMutationOptions<TransactionResult, unknown, RawMintBond, undefined>,
+  withFormat?: (fmt: FormattedBond) => undefined
 ) => {
   const { contracts } = useContracts();
 
   return useMutation(
-    (bond: BondMintMutationParameters) =>
-      sendMintBond(contracts.value.Core, bond[0], bond[1]),
+    async (bond: RawMintBond) => {
+      const fmt = await fetchBondFormat(contracts.value.LBondManager, bond);
+      // console.log("FORMAT", fmt);
+      withFormat && (await withFormat(fmt));
+      return sendMintBond(contracts.value.Core, fmt[0], fmt[1]);
+    },
     { ...args }
   );
 };
