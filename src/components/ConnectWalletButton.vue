@@ -14,25 +14,20 @@
 <script lang="ts" setup>
 import { computed } from "vue";
 import { useRouter } from "vue-router";
-import Button from "primevue/button";
 const router = useRouter();
+
+import Button from "primevue/button";
 
 import { ConnectionStatus, useWeb3 } from "@/composables/web3";
 
 const { status, wallet, connect } = useWeb3();
 
-const handleConnect = computed(
-  () => () => {
-    if (status.value === ConnectionStatus.CONNECTED) {
-      router.push("/dashboard");
-    } else {
-      connect().then(() => {
-        router.push("/dashboard");
-      });
-    }
-  },
-  [status]
-);
+const handleConnect = async () => {
+  if (status.value !== ConnectionStatus.CONNECTED) {
+    await connect();
+  }
+  router.push("/dashboard");
+};
 
 const buttonLabel = computed(() => {
   return status.value === ConnectionStatus.CONNECTED

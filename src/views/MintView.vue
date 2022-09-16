@@ -176,6 +176,13 @@
 <script setup lang="ts">
 import { reactive } from "vue";
 import { useRouter } from "vue-router";
+import mixpanel from "mixpanel-browser";
+import TrackEvent from "@/types/trackEvent";
+
+import { CurrencyType } from "@/types/enums";
+import { useBondMintMutation } from "@/composables/useMutations";
+import useBondListCache from "@/composables/useBondListCache";
+
 import SelectButton from "primevue/selectbutton";
 import InputNumber from "primevue/inputnumber";
 import Button from "primevue/button";
@@ -187,10 +194,6 @@ import CurrencySelect from "@/components/inputs/CurrencySelect";
 import DurationInput from "@/components/inputs/DurationInput";
 import AddressInput from "@/components/inputs/AddressInput";
 import FormWizard from "@/components/FormWizard";
-
-import { CurrencyType } from "@/types/enums";
-import { useBondMintMutation } from "@/composables/useMutations";
-import useBondListCache from "@/composables/useBondListCache";
 
 // STATIC DATA FOR FORM STRUCTURE
 const presets = ["Custom", "Debt", "Short", "Option"];
@@ -248,6 +251,9 @@ const onSuccess = (res) => {
   const bondId = parseInt(transfers[0].args.tokenId._hex, 16);
   alert(`successfully minted bond with id #${bondId}`);
   bondListCache.minted.push(bondId);
+  mixpanel.track(TrackEvent.MintBond, {
+    bondId,
+  });
   router.push("/dashboard");
 };
 

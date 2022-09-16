@@ -7,6 +7,8 @@ import {
   onUnmounted,
 } from "vue";
 import { ethers, providers } from "ethers";
+import mixpanel from "mixpanel-browser";
+import TrackEvent from "@/types/trackEvent";
 
 import { PromiseWithTimeout } from "@/utils";
 
@@ -66,6 +68,8 @@ export const connect = async function (byUser = true) {
   });
   _wallet.value = address;
   _status.value = ConnectionStatus.CONNECTED;
+  mixpanel.track(TrackEvent.CONNECT_WALLET, { address });
+  mixpanel.identify(address);
   console.log("CONNECTED AS", address);
   window.ethereum
     .removeListener("accountsChanged", handleAccountsChanged)

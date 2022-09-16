@@ -42,6 +42,8 @@
 import { ref, computed } from "vue";
 import InputNumber from "primevue/inputnumber";
 import Button from "primevue/button";
+import mixpanel from "mixpanel-browser";
+import TrackEvent from "@/types/trackEvent";
 
 import BondChip from "@/components/BondChip.vue";
 import { Relationship } from "@/types/enums";
@@ -90,7 +92,9 @@ const importBond = () => {
     bondListCache.owned.push(bondSearchSearch.value);
   bondSearchSearch.value = undefined;
   bondSearchInput.value = undefined;
-  return;
+  mixpanel.track(TrackEvent.IMPORT_BOND, {
+    bondId: bondSearchSearch.value,
+  });
 };
 </script>
 

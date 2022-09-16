@@ -21,7 +21,6 @@ createApp(App)
 import mixpanel from "mixpanel-browser";
 
 mixpanel.init("474d64726279eb58b293df0cd59b67a8", {
-  debug: false,
+  debug: true,
   ignore_dnt: true,
 });
-mixpanel.track("Setup");
