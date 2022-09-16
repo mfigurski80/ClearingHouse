@@ -8,8 +8,6 @@
 
 <script lang="ts" setup>
 import NavBar from "@/components/NavBar.vue";
-
-// global state provider
 </script>
 
 <style lang="scss">
