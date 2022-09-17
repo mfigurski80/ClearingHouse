@@ -68,7 +68,7 @@ export const connect = async function (byUser = true) {
   });
   _wallet.value = address;
   _status.value = ConnectionStatus.CONNECTED;
-  mixpanel.track(TrackEvent.CONNECT_WALLET, { address });
+  if (byUser) mixpanel.track(TrackEvent.CONNECT_WALLET, { address });
   mixpanel.identify(address);
   console.log("CONNECTED AS", address);
   window.ethereum

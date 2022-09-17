@@ -1,4 +1,7 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
+import mixpanel from "mixpanel-browser";
+
+import TrackEvent from "@/types/trackEvent";
 import HomeView from "@/views/HomeView.vue";
 
 const routes: Array<RouteRecordRaw> = [
@@ -42,6 +45,18 @@ const routes: Array<RouteRecordRaw> = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
+});
+
+router.afterEach((to, from, failture) => {
+  mixpanel.track(TrackEvent.NAVIGATE, {
+    to: to.name,
+    from: from.name,
+    path: to.fullPath,
+  });
+  if (failture) {
+    console.error("Router error:", failture);
+    mixpanel.track(TrackEvent.NAVIGATION_ERROR, { error: failture });
+  }
 });
 
 export default router;
