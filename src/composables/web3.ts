@@ -36,8 +36,10 @@ export const wallet = readonly(_wallet);
 export const connect = async function (byUser = true) {
   // Check if web3 is available
   if (!window.ethereum) {
-    alert("No web3 detected. Please install MetaMask.");
-    _status.value = ConnectionStatus.NEED_PROVIDER;
+    if (byUser) {
+      alert("No web3 detected. Please install MetaMask.");
+      _status.value = ConnectionStatus.NEED_PROVIDER;
+    }
     return;
   }
   // If it is, set the provider
