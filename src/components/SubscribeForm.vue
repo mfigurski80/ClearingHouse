@@ -74,6 +74,9 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import mixpanel from "mixpanel-browser";
+import TrackEvent from "@/types/trackEvent";
+
 import InputText from "primevue/inputtext";
 import MultiSelect from "primevue/multiselect";
 import Textarea from "primevue/textarea";
@@ -131,18 +134,27 @@ export default defineComponent({
   methods: {
     handleSubmit() {
       this.state = FormState.LOADING;
-      let payload = JSON.stringify({
+      const data = {
         name: this.name,
         email: this.email,
         categories: this.categoriesChosen.map((c) => c.value),
         isTestUser: this.isTestUser,
         message: this.message,
         time: new Date().toISOString(),
+      };
+      mixpanel.identify(data.email);
+      mixpanel.people.union({
+        name: data.name,
+        email: data.email,
+        categories: data.categories,
+        isTestUser: data.isTestUser,
+        createdAt: Date.now(),
       });
+      mixpanel.track(TrackEvent.SUBSCRIBE_FORM_SUBMIT);
       fetch("https://getform.io/f/dda2d02f-e219-4356-9b93-04791bb1a963", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: payload,
+        body: JSON.stringify(data),
       }).then((resp) => {
         if (resp.ok) {
           this.state = FormState.DONE;
