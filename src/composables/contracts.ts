@@ -12,7 +12,10 @@ watchEffect(() => {
   const a = Object.values(addresses).find(
     (v) => v.id === +window.ethereum?.networkVersion
   );
-  if (!a || !a.Core || !a.LBondManager) return;
+  if (!a || !a.Core || !a.LBondManager) {
+    contracts.value = {};
+    return;
+  }
 
   console.groupCollapsed("Loading contracts");
   console.log("USING CORE AT", a.Core);
